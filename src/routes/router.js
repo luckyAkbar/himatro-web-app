@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const db = require('../../db/connection')
+const { getAbsentHandler } = require('../handler/getAbsentHandler')
 
 router.get('/', (req, res) => {
   res.render('homePage')
@@ -13,11 +14,10 @@ router.get('/tentang', (req, res) => {
   res.render('methodUnsupported')
 })
 
-router.get('/absensi', (req, res) => {
-  res.render('underDevelopment')
-}).all('/absensi', (req, res) => {
-  res.render('methodUnsupported')
-})
+router.get('/absensi', getAbsentHandler)
+  .all('/absensi', (req, res) => {
+    res.render('methodUnsupported')
+  })
 
 router.get('/tahap-pengembangan', (req, res) => {
   res.render('underDevelopment')
