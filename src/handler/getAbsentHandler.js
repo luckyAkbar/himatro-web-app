@@ -1,6 +1,7 @@
 const getAbsentHandler = (req, res) => {
-  console.log('hit absen')
-  res.render('absent')
+  if(req.query.mode === 'read') {
+    res.send('silahkan isi post body request')
+  }
 }
 
 module.exports = { getAbsentHandler }
