@@ -16,11 +16,12 @@ router.get('/tentang', (req, res) => {
   res.render('methodUnsupported')
 })
 
-router.get('/absensi', getAbsentHandler)
+router.get('/absensi/:absentId', getAbsentHandler)
   .post('/absensi', postAbsentHandler)
   .all('/absensi', (req, res) => {
     res.status(403).render('methodUnsupported')
   })
+
 
 router.get('/tahap-pengembangan', (req, res) => {
   res.render('underDevelopment')
