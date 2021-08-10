@@ -1,7 +1,7 @@
 const { referensiIdGenerator } = require('../util/referensiIdGenerator')
 const { createNewAbsent } = require('./createNewAbsent')
 const { postAbsentDataValidator, validateAbsentRefData } = require('./validator');
-const { absentFiller } = require('./absentFiller')
+const { absentFiller } = require('../util/absentFiller')
 const { testQuery } = require('../../db/connection')
 
 const postAbsentHandler = async (req, res) => {
@@ -28,7 +28,7 @@ const postAbsentHandler = async (req, res) => {
   }
 
   if (req.query.mode === 'post') {
-    if (!absentDataValidator(req)) {  
+    if (!absentDataValidator(req)) {
       res.status(400).json({ error: "Data Absent Invalid" })
       return
     }
