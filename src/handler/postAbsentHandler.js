@@ -1,6 +1,6 @@
 const { referensiIdGenerator } = require('../util/referensiIdGenerator')
-const { createNewAbsent } = require('./createNewAbsent')
-const { postAbsentDataValidator, validateAbsentRefData } = require('./validator');
+const { createNewAbsent } = require('../util/createNewAbsent')
+const { postAbsentDataValidator, validateAbsentRefData } = require('../util/validator');
 const { absentFiller } = require('../util/absentFiller')
 const { testQuery } = require('../../db/connection')
 
