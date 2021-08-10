@@ -19,7 +19,7 @@ router.get('/tentang', (req, res) => {
 router.get('/absensi', getAbsentHandler)
   .post('/absensi', postAbsentHandler)
   .all('/absensi', (req, res) => {
-    res.render('methodUnsupported')
+    res.status(403).render('methodUnsupported')
   })
 
 router.get('/tahap-pengembangan', (req, res) => {
