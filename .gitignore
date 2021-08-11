@@ -5,3 +5,4 @@ views/test/
 db/data/
 log.txt
 test.js
+nodemon.json
