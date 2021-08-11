@@ -16,6 +16,18 @@ const npmValidator = (npm) => {
   return true
 }
 
+const showValueValidator = (show) => {
+  if (comparator.test(show)) {
+    return false
+  }
+
+  if (isNaN(show)) {
+    return 'all'
+  }
+
+  return 'all'
+}
+
 const namaValidator = (nama) => {
   if (comparator.test(nama)){
     return false
@@ -110,4 +122,11 @@ const postAbsentDataValidator = (refId, npm, nama, keterangan) => {
   return true
 }
 
-module.exports = { npmValidator, namaValidator, namaKegiatanValidator, tanggalValidator, validateAbsentRefData, postAbsentDataValidator }
+module.exports = { npmValidator,
+   namaValidator,
+   namaKegiatanValidator,
+   tanggalValidator,
+   validateAbsentRefData,
+   refIdValidator,
+   showValueValidator,
+   postAbsentDataValidator, }
