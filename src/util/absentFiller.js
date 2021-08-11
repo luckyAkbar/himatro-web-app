@@ -41,7 +41,6 @@ const checkRefIdExists = async (refId, tableName, rowName) => {
 
   try {
     const { rows } = await testQuery(query, params)
-    console.log('check if ref id exist', rows[0].count)
 
     if (rows[0].count < 1) {
       return false
@@ -132,4 +131,4 @@ const absentFiller = async (req, res)=> {
 */
 }
 
-module.exports = { absentFiller }
+module.exports = { absentFiller, checkRefIdExists }
