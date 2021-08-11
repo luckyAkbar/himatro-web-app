@@ -16,7 +16,7 @@ app.on('uncaughtException', () => {
   app.close()
 })
 
-process.on('EADDRINUSE', () => {
+app.on('EADDRINUSE', () => {
   console.log('Restarting due to address error')
   process.exit(-1)
 })
