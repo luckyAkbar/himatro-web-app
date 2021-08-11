@@ -51,7 +51,7 @@ async function testQuery(query, params) {
     client.release(true)
 
     const duration = Date.now() - start
-    console.log('executed query', query, res.rows, duration, 'ms');
+    console.log('executed query', query, 'returned', res.rowCount, 'in', duration, 'ms');
 
     return res
   } catch(e) {
