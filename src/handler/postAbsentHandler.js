@@ -13,15 +13,12 @@ const postAbsentHandler = async (req, res) => {
         res.status(400).json({error: "Data Kegiatan / Rapat Invalid"})
         return
       }
-      console.log('harusnya ini dulu');
     } catch (e) {
       console.log('cannot validate absent ref data', e)
     }
 
     try {
-      console.log('apalagi ini');
       await createNewAbsentRecord(req, res)
-      console.log('bukan ini');
     } catch (e) {
       console.log('cannot create new absent record', e)
     }
@@ -88,13 +85,3 @@ const createNewAbsentRecord = async (req, res) => {
 }
 
 module.exports = { postAbsentHandler }
-
-/*
-let query = `SELECT * FROM kegiatan WHERE nama_kegiatan = '${namaKegiatan}' AND tanggal_pelaksanaan = '${tanggalPelaksanaan}'::date`
-
-const { rowCount } = await testQuery(query)
-
-if (rowCount === 0) {
-
-}
-*/
