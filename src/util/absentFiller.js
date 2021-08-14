@@ -1,5 +1,6 @@
 const { testQuery } = require('../../db/connection')
 const { AbsentFillerNotRegisteredError } = require('../classes/AbsentFillerNotRegisteredError')
+const { getTimeStamp } = require('./getTimeStamp')
 
 const table_name = 'absensi'
 const ref_id_field = 'referensi_id'
@@ -52,9 +53,9 @@ const checkRefIdExists = async (refId, tableName, rowName) => {
   }
 }
 
-const insertKehadiranRecord = async (npm, refId, keterangan) => {
-  const query = `UPDATE absensi SET keterangan = $1 WHERE npm = $2 AND referensi_id = $3`
-  const params = [keterangan, npm, refId]
+const insertKehadiranRecord = async (npm, refId, now, keterangan) => {
+  const query = `UPDATE absensi SET keterangan = $1, waktu_pengisian = $2 WHERE npm = $3 AND referensi_id = $4`
+  const params = [keterangan, now, npm, refId]
 
   try {
     await testQuery(query, params)
@@ -65,11 +66,9 @@ const insertKehadiranRecord = async (npm, refId, keterangan) => {
   }
 }
 
-const absentFiller = async (req, res)=> {
-  const { refId, nama, npm, keterangan } = req.body
-
+const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
   try {
-    const isAbsentFormExists = await checkRefIdExists(refId, 'absensi', 'referensi_id')
+    const isAbsentFormExists = await checkRefIdExists(absentId, 'absensi', 'referensi_id')
 
     if (!isAbsentFormExists) {
       res.status(404).json({ error: 'Absent Form Not Found' })
@@ -81,7 +80,7 @@ const absentFiller = async (req, res)=> {
   }
 
   try {
-    const result = await checkAlreadyFilled(refId, npm, nama)
+    const result = await checkAlreadyFilled(absentId, npm, nama)
 
     if(result instanceof AbsentFillerNotRegisteredError) {
       res.status(400).json({ error: 'NPM not registered' })
@@ -90,11 +89,14 @@ const absentFiller = async (req, res)=> {
     }
 
     if (result === false) {
+      const now = getTimeStamp()
       try {
-        const isSuccess = await insertKehadiranRecord(npm, refId, keterangan)
+        const isSuccess = await insertKehadiranRecord(npm, absentId, now, keterangan)
 
         if (isSuccess === 'Success') {
-          res.status(200).json({ message: 'Success. Your attendance has been recorded' })
+          res.status(200).render('successAbsent', {
+            nama: nama
+          })
         }
 
         if (isSuccess === 'Failed') {

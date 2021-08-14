@@ -15,7 +15,7 @@ router.get('/tentang', (req, res) => {
   res.render('methodUnsupported')
 })
 
-router.get('/absensi/:absentId', getAbsentHandler)
+router.get('/absensi', getAbsentHandler)
   .post('/absensi', postAbsentHandler)
   .all('/absensi', (req, res) => {
     res.status(403).render('methodUnsupported')

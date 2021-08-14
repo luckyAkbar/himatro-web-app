@@ -1,12 +1,22 @@
+require('dotenv').config()
+
 const { referensiIdGenerator } = require('../util/referensiIdGenerator')
 const { createNewAbsent } = require('../util/createNewAbsent')
-const { postAbsentDataValidator, validateAbsentRefData } = require('../util/validator');
+const { postAbsentDataValidator, validateAbsentRefData, modeValidator } = require('../util/validator');
 const { absentFiller } = require('../util/absentFiller')
 const { testQuery } = require('../../db/connection')
 
 const postAbsentHandler = async (req, res) => {
+
   if (req.query.mode === 'create') {
     try {
+      const { password } = req.body
+
+      if (password !== process.env.PASSWORD) {
+        res.sendStatus(403)
+        return
+      }
+
       const validate = await absentRefValidator(req)
 
       if (!validate) {
@@ -24,24 +34,30 @@ const postAbsentHandler = async (req, res) => {
     }
   }
 
-  if (req.query.mode === 'post') {
-    if (!absentDataValidator(req)) {
+  if (req.body.mode === 'post') {
+    const { absentId, npm, nama, keterangan, mode } = req.body
+
+    if (!modeValidator(mode)) {
+      console.log(modeValidator(mode));
+      res.sendStatus(404)
+      return
+    }
+    
+    if (!absentDataValidator(absentId, npm, nama, keterangan)) {
       res.status(400).json({ error: "Data Absent Invalid" })
       return
     }
 
     try {
-      await absentFiller(req, res)
+      await absentFiller(absentId, npm, nama, keterangan, res)
     } catch(e) {
       console.log(e);
     }
   }
 }
 
-const absentDataValidator = (req) => {
-  const { refId, npm, nama, keterangan } = req.body
-
-  return postAbsentDataValidator(refId, npm, nama, keterangan)
+const absentDataValidator = (absentId, npm, nama, keterangan) => {
+  return postAbsentDataValidator(absentId, npm, nama, keterangan)
 }
 
 const absentRefValidator = async (req) => {

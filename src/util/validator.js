@@ -1,15 +1,20 @@
 const comparator = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/
 const timeFormatComparator = /[!@#$%^&*()_+\=\[\]{};'"\\|,<>\/?]+/
 const keteranganComparator = /[h,i]/
+const namaComparator = /[!@#$%^&*()_+\-=\[\]{};:"\\|,<>\/?]+/
 
 const npmValidator = (npm) => {
-  if (npm.length > 10) {
-    return false
-  }
+  try {
+    if (npm.length > 10) {
+      return false
+    }
 
-  const test = parseInt(npm)
+    const test = parseInt(npm)
 
-  if (isNaN(test)){
+    if (isNaN(test)){
+      return false
+    }
+  } catch (e) {
     return false
   }
 
@@ -17,24 +22,31 @@ const npmValidator = (npm) => {
 }
 
 const showValueValidator = (show) => {
-  if (comparator.test(show)) {
-    return false
-  }
+  try {
+    if (comparator.test(show)) {
+      return false
+    }
 
-  if (isNaN(show)) {
-    return 'all'
+    if (isNaN(show)) {
+      return 'all'
+    }
+  } catch (e) {
+    return false
   }
 
   return 'all'
 }
 
 const namaValidator = (nama) => {
-  if (comparator.test(nama)){
-    return false
-  }
+  try {
+    if (namaComparator.test(nama)){
+      return false
+    }
 
-  if (nama.length > 255) {
-    console.log('nama too long')
+    if (nama.length > 255) {
+      return false
+    }
+  } catch (e) {
     return false
   }
 
@@ -42,28 +54,36 @@ const namaValidator = (nama) => {
 }
 
 const namaKegiatanValidator = (namaKegiatan) => {
-  if (comparator.test(namaKegiatan)) {
-    return false
-  }
+  try {
+    if (comparator.test(namaKegiatan)) {
+      return false
+    }
 
-  if(namaKegiatan.length > 255) {
+    if(namaKegiatan.length > 255) {
+      return false
+    }
+  } catch (e) {
     return false
   }
   return true
 }
 
 const tanggalValidator = (tanggal) => {
-  if (timeFormatComparator.test(tanggal)) {
-    return false
-  }
+  try {
+    if (timeFormatComparator.test(tanggal)) {
+      return false
+    }
 
-  const testDate = new Date(tanggal)
+    const testDate = new Date(tanggal)
 
-  if (testDate.toString() === 'Invalid Date') {
-    return false
-  }
+    if (testDate.toString() === 'Invalid Date') {
+      return false
+    }
 
-  if (tanggal.length > 255) {
+    if (tanggal.length > 255) {
+      return false
+    }
+  } catch (e) {
     return false
   }
 
@@ -71,15 +91,19 @@ const tanggalValidator = (tanggal) => {
 }
 
 const keteranganValidator = (keterangan) => {
-  if (keterangan.length !== 1) {
-    return false
-  }
+  try {
+    if (keterangan.length !== 1) {
+      return false
+    }
 
-  if (comparator.test(keterangan)) {
-    return false
-  }
+    if (comparator.test(keterangan)) {
+      return false
+    }
 
-  if (keterangan.search(keteranganComparator) !== 0) {
+    if (keterangan.search(keteranganComparator) !== 0) {
+      return false
+    }
+  } catch (e) {
     return false
   }
 
@@ -87,11 +111,31 @@ const keteranganValidator = (keterangan) => {
 }
 
 const refIdValidator = (refId) => {
-  if (refId.length !== 10) {
+  try {
+    if (refId.length !== 10) {
+      return false
+    }
+
+    if (comparator.test(refId)) {
+      return false
+    }
+  } catch (e) {
     return false
   }
 
-  if (comparator.test(refId)) {
+  return true
+}
+
+const modeValidator = (mode) => {
+  try {
+    if (comparator.test(mode)) {
+      return false
+    }
+
+    if (!(mode === 'view' || mode === 'input' || mode === 'post' || mode === 'create')) {
+      return false
+    }
+  } catch (e) {
     return false
   }
 
@@ -99,15 +143,19 @@ const refIdValidator = (refId) => {
 }
 
 const validateAbsentRefData = (namaKegiatan, tanggalPelaksanaan, tanggalBerakhir) => {
-  if (!namaKegiatanValidator(namaKegiatan)) {
-    return false
-  }
+  try {
+    if (!namaKegiatanValidator(namaKegiatan)) {
+      return false
+    }
 
-  if (!tanggalValidator(tanggalPelaksanaan)) {
-    return false
-  }
+    if (!tanggalValidator(tanggalPelaksanaan)) {
+      return false
+    }
 
-  if (!tanggalValidator(tanggalBerakhir)) {
+    if (!tanggalValidator(tanggalBerakhir)) {
+      return false
+    }
+  } catch (e) {
     return false
   }
 
@@ -115,7 +163,11 @@ const validateAbsentRefData = (namaKegiatan, tanggalPelaksanaan, tanggalBerakhir
 }
 
 const postAbsentDataValidator = (refId, npm, nama, keterangan) => {
-  if (!(npmValidator(npm) && namaValidator(nama) && keteranganValidator(keterangan) && refIdValidator(refId))) {
+  try {
+    if (!(npmValidator(npm) && namaValidator(nama) && keteranganValidator(keterangan) && refIdValidator(refId))) {
+      return false
+    }
+  } catch {
     return false
   }
 
@@ -128,5 +180,6 @@ module.exports = { npmValidator,
    tanggalValidator,
    validateAbsentRefData,
    refIdValidator,
+   modeValidator,
    showValueValidator,
    postAbsentDataValidator, }
