@@ -27,7 +27,7 @@ const getAbsentHandler = async (req, res) => {
 
   if (mode === 'input') {
     try {
-      const isAbsentFormExists = await checkRefIdExists(absentId, 'absensi', 'referensi_id')
+      const isAbsentFormExists = await checkRefIdExists(absentId.toLowerCase(), 'absensi', 'referensi_id')
 
       if (!isAbsentFormExists) {
         res.status(400).json({ error: 'Absent form doesn\'t exist or already closed!' })
@@ -35,7 +35,7 @@ const getAbsentHandler = async (req, res) => {
       }
 
       res.render('inputAbsensi', {
-        absentId: absentId
+        absentId: absentId.toLowerCase()
       })
       return
     } catch (e) {
@@ -55,6 +55,7 @@ const getAbsentHandler = async (req, res) => {
 }
 
 const getAbsentFormResult = async (absentId, show, res) => {
+  absentId = absentId.toLowerCase()
   let query = `SELECT * FROM absensi WHERE referensi_id = $1 ORDER BY npm`
   let params = [absentId]
   let data = {
@@ -82,7 +83,6 @@ const getAbsentFormResult = async (absentId, show, res) => {
       }
       result.push(data)
     }
-    console.log(result[0].nama);
 
     res.status(200).render('viewAbsent', {
       namaKegiatan: 'Rapat Pengurus Himatro',
