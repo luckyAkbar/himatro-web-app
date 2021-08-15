@@ -12,6 +12,12 @@
   <style>
   body {margin: 0;}
   main {margin: 5px;}
+
+  /* self styling */
+  .judul-konten {
+    text-align: center;
+  }
+  /* end self styling */
   /* navbar header */
   .navbar-image {
     height: 30px;
@@ -38,7 +44,10 @@
 
   ul.topnav li a.active {background-color: #04AA6D;}
 
-  ul.topnav li.right {float: right;}
+  .center {
+    width: 100%;
+  }
+
 
   @media screen and (max-width: 600px) {
     ul.topnav li.right,
@@ -173,35 +182,129 @@
     margin-bottom:0;
   }
   /* end footer styling */
-    #customers {
+    #table-absensi {
       font-family: Arial, Helvetica, sans-serif;
       border-collapse: collapse;
       width: 100%;
     }
 
-    #customers td, #customers th {
+    #table-absensi td, #table-absensi th {
       border: 1px solid #ddd;
       padding: 8px;
     }
 
-    #customers tr:nth-child(even){background-color: #f2f2f2;}
+    #table-absensi tr:nth-child(even){background-color: #f2f2f2;}
 
-    #customers tr:hover {background-color: #ddd;}
+    #table-absensi tr:hover {background-color: #ddd;}
 
-    #customers th {
+    #table-absensi th {
       padding-top: 12px;
       padding-bottom: 12px;
       text-align: left;
       background-color: #04AA6D;
       color: white;
     }
+
+
+    /* sort menu radio button */
+    .container {
+      display: inline-block;
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size: 22px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* Hide the browser's default radio button */
+    .container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* Create a custom radio button */
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      background-color: #eee;
+      border-radius: 50%;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+      background-color: #ccc;
+    }
+
+    /* When the radio button is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+      background-color: #2196F3;
+    }
+
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    /* Show the indicator (dot/circle) when checked */
+    .container input:checked ~ .checkmark:after {
+      display: block;
+    }
+
+    /* Style the indicator (dot/circle) */
+    .container .checkmark:after {
+     	top: 9px;
+    	left: 9px;
+    	width: 8px;
+    	height: 8px;
+    	border-radius: 50%;
+    	background: white;
+    }
+
+    #sortButton {
+      background-color: white; /* Green */
+      border: none;
+      color: black;
+      padding: 4px 8px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      border: 2px solid #4CAF50;
+    }
+
+    #sortButton:hover {background-color: #e7e7e7;}
+
+    a {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: black;
+    }
   </style>
 </head>
+
 <body>
   <header>
     <nav>
       <ul class="topnav">
-        <li class="right"><a href="#"><img class="navbar-image" src="images/favicon.png" alt="logo himatro"></a></li>
+        <li class="center"><a href="#"><img class="navbar-image" src="images/favicon.png" alt="logo himatro"></a></li>
       </ul>
     </nav>
   </header>
@@ -213,7 +316,16 @@
       </section>
     </div>
 
-    <table id="customers">
+    <div class="absenst-sorting-menu">
+      <h6>Sort By: </h6>
+      <div class="sortButton">
+        <button id="sortButton"><a href="/absensi?absentId=<%=absentId%>&mode=view&sortBy=npm">NPM</a></button>
+        <button id="sortButton"><a href="/absensi?absentId=<%=absentId%>&mode=view&sortBy=keterangan">Keterangan</a></button>
+        <button id="sortButton"><a href="/absensi?absentId=<%=absentId%>&mode=view&sortBy=waktu_pengisian">Waktu Pengisian</a></button>
+      </div>
+    </div>
+
+    <table id="table-absensi">
       <tr>
         <th>NPM</th>
         <th>Nama</th>
