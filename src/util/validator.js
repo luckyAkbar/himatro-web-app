@@ -2,6 +2,7 @@ const comparator = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/
 const timeFormatComparator = /[!@#$%^&*()_+\=\[\]{};'"\\|,<>\/?]+/
 const keteranganComparator = /[h,i]/
 const namaComparator = /[!@#$%^&*()_+\-=\[\]{};:"\\|,<>\/?]+/
+const sortByComparator = /[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/
 
 const npmValidator = (npm) => {
   try {
@@ -13,6 +14,23 @@ const npmValidator = (npm) => {
 
     if (isNaN(test)){
       return false
+    }
+  } catch (e) {
+    return false
+  }
+
+  return true
+}
+
+const sortByValidator = (sortBy) => {
+  try {
+    if (sortByComparator.test(sortBy)) {
+      return false
+    }
+
+    if (sortBy !== 'npm' || sortBy !== 'keterangan' || sortBy !== 'waktu_pengisian') {
+      console.log('exec');
+      return 'npm'
     }
   } catch (e) {
     return false
@@ -181,5 +199,6 @@ module.exports = { npmValidator,
    validateAbsentRefData,
    refIdValidator,
    modeValidator,
+   sortByValidator,
    showValueValidator,
    postAbsentDataValidator, }
