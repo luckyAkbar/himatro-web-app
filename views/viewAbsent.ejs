@@ -11,12 +11,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <style>
   body {margin: 0;}
-  main {margin: 5px;}
+  main {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
 
   /* self styling */
   .judul-konten {
     text-align: center;
   }
+
+  .absent-sorting-menu {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+  }
+
   /* end self styling */
   /* navbar header */
   .navbar-image {
@@ -28,9 +38,8 @@
     padding: 0;
     overflow: hidden;
     background-color: #333;
+    width: 100%;
   }
-
-  ul.topnav li {float: left;}
 
   ul.topnav li a {
     display: block;
@@ -48,11 +57,6 @@
     width: 100%;
   }
 
-
-  @media screen and (max-width: 600px) {
-    ul.topnav li.right,
-    ul.topnav li {float: none;}
-  }
   /* end navbar */
 
   /* searcj bar styling */
@@ -186,11 +190,14 @@
       font-family: Arial, Helvetica, sans-serif;
       border-collapse: collapse;
       width: 100%;
+      max-width: 800px;
+      margin: auto;
     }
 
     #table-absensi td, #table-absensi th {
-      border: 1px solid #ddd;
-      padding: 8px;
+      border: 2px solid rgb(83, 143, 46);
+      padding-top: 4px;
+      padding-bottom: 4px;
     }
 
     #table-absensi tr:nth-child(even){background-color: #f2f2f2;}
@@ -200,11 +207,14 @@
     #table-absensi th {
       padding-top: 12px;
       padding-bottom: 12px;
-      text-align: left;
+      text-align: center;
       background-color: #04AA6D;
       color: white;
     }
 
+    td {
+      text-align: center;
+    }
 
     /* sort menu radio button */
     .container {
@@ -316,7 +326,7 @@
       </section>
     </div>
 
-    <div class="absenst-sorting-menu">
+    <div class="absent-sorting-menu">
       <h6>Sort By: </h6>
       <div class="sortButton">
         <button id="sortButton"><a href="/absensi?absentId=<%=absentId%>&mode=view&sortBy=npm">NPM</a></button>
@@ -326,11 +336,11 @@
     </div>
 
     <table id="table-absensi">
-      <tr>
+      <tr id="sticky-th">
         <th>NPM</th>
         <th>Nama</th>
-        <th>Keterangan</th>
-        <th>Waktu Pengisian</th>
+        <th>Ket.</th>
+        <th>Waktu</th>
       </tr>
       <% dataHasilAbsensi.forEach((data) => {%>
         <tr>
