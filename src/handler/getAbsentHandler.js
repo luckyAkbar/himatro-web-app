@@ -91,7 +91,7 @@ const getAbsentFormResult = async (absentId, show, req, res) => {
       data = {
         nama: rows[i].nama,
         npm: rows[i].npm,
-        waktuPengisian: rows[i].waktu_pengisian,
+        waktuPengisian: String(rows[i].waktu_pengisian).slice(16,24),
         keterangan: rows[i].keterangan
       }
       result.push(data)
