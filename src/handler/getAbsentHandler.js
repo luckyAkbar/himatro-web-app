@@ -1,6 +1,7 @@
+require('dotenv').config()
 const { testQuery } = require('../../db/connection')
 const { checkRefIdExists } = require('../util/absentFiller')
-const { refIdValidator, showValueValidator, modeValidator } = require('../util/validator')
+const { refIdValidator, showValueValidator, modeValidator, sortByValidator } = require('../util/validator')
 
 const getAbsentHandler = async (req, res) => {
   const { absentId } = req.query
@@ -10,10 +11,10 @@ const getAbsentHandler = async (req, res) => {
     mode = 'input'
   }
 
-  if (absentId === undefined || absentId === '') {
+  if (!absentId) {
     res.status(200)
     res.render('absensi')
-    return
+    return false
   }
 
   const isAbsentIdValid = refIdValidator(absentId)
@@ -22,7 +23,7 @@ const getAbsentHandler = async (req, res) => {
 
   if(!(isAbsentIdValid && isShowValid && isModeValid)) {
     res.status(400).json({ error: 'Query Data Invalid' })
-    return
+    return false
   }
 
   if (mode === 'input') {
@@ -43,20 +44,32 @@ const getAbsentHandler = async (req, res) => {
     }
   } else if (mode === 'view') {
     try {
-      const absentFormResult = await getAbsentFormResult(absentId, show, res)
+      const absentFormResult = await getAbsentFormResult(absentId, show, req, res)
     } catch (e) {
       console.log(e)
     }
   } else {
     res.sendStatus(400)
   }
-
-
 }
 
-const getAbsentFormResult = async (absentId, show, res) => {
+const getAbsentFormResult = async (absentId, show, req, res) => {
   absentId = absentId.toLowerCase()
-  let query = `SELECT * FROM absensi WHERE referensi_id = $1 ORDER BY npm`
+  let sortBy = req.query.sortBy
+  console.log(sortBy);
+
+  if (req.query.sortBy) {
+    if (!sortByValidator(sortBy)) {
+      res.status(400).json({ error: 'Query Data Invalid' })
+      return
+    }
+  } else {
+    sortBy = 'npm'
+  }
+
+  console.log(sortBy);
+
+  let query = `SELECT * FROM absensi WHERE referensi_id = $1 ORDER BY ${sortBy}`
   let params = [absentId]
   let data = {
     nama: '',
@@ -67,7 +80,7 @@ const getAbsentFormResult = async (absentId, show, res) => {
   let result = []
 
   if (show !== 'all' && show >= 0 && show !== '') {
-    query += ` LIMIT $2`
+    query += ` LIMIT $3`
     params.push(show)
   }
 
@@ -85,13 +98,30 @@ const getAbsentFormResult = async (absentId, show, res) => {
     }
 
     res.status(200).render('viewAbsent', {
-      namaKegiatan: 'Rapat Pengurus Himatro',
+      namaKegiatan: 'Lokakarya Himatro',
       dataHasilAbsensi: result,
-      jumlah: result.length
+      jumlah: result.length,
+      absentId: absentId
     })
   } catch (e) {
+    console.log(e);
     res.sendStatus(500)
   }
+}
+
+const getUrl = (req) => {
+  const protocol = req.protocol
+  const host = req.hostname
+  const port = process.env.SERVER_PORT
+  const path = req.path
+  const absentId = req.query.absentId
+  const show = req.query.show
+
+  if (show) {
+    return `${protocol}://${host}:${port}${path}?absentId=${absentId}&show=${show}&sortBy=`
+  }
+
+  return `${protocol}://${host}:${port}${path}?absentId=${absentId}`
 }
 
 module.exports = { getAbsentHandler }
