@@ -95,7 +95,8 @@ const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
 
         if (isSuccess === 'Success') {
           res.status(200).render('successAbsent', {
-            nama: nama
+            nama: nama,
+            absentId: absentId
           })
         }
 
