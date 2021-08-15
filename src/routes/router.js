@@ -40,8 +40,7 @@ router.get('/login', (req, res) => {
 })
 
 router.get('/hei', async (req, res) => {
-  const { rows } = await db.query('SELECT * FROM test')
-  res.status(200).send(rows)
+  res.send(req.hostname)
 })
 
 router.all('*', (req, res) => {
