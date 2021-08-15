@@ -1,8 +1,9 @@
+const date = require('date-and-time')
+
 const getTimeStamp = () => {
   const now = new Date()
 
-  const timestamp = new Date(`${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`)
-  
+  const timestamp = date.format(now, 'YYYY/MM/DD HH:mm:ss')
   return timestamp
 }
 
