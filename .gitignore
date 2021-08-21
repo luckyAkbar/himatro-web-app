@@ -6,6 +6,6 @@ db/data/
 log.txt
 test.js
 nodemon.json
-./uploads
+uploads/
 key.sql
 sqlInitSDMAbsent.js
