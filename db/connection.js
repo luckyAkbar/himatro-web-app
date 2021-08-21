@@ -8,12 +8,10 @@ const config = {
 }
 /*
 const pool = new Pool(config)
-
 pool.on('error', (err, client) => {
   console.log('Unexpected error from client [/db/koneksi.js]')
   process.exit(-1)
 });
-
 pool.on('connect', () => {
   console.log('Connected to the Database [/db/koneksi.js]')
 })
