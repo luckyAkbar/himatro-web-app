@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" type="image" href="images/favicon.ico">
+  <link rel="icon" type="image" href="/images/favicon.ico">
   <title>Himatro Web App</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,7 @@
   <header>
     <nav>
       <ul class="topnav">
-        <li class="center"><a href="#"><img class="navbar-image" src="images/favicon.png" alt="logo himatro"></a></li>
+        <li class="center"><a href="#"><img class="navbar-image" src="/images/favicon.png" alt="logo himatro"></a></li>
       </ul>
     </nav>
   </header>
@@ -24,38 +24,29 @@
   <main>
     <div class="judul-konten">
       <section>
-        <h4>Hasil Absensi Kegiatan <%= namaKegiatan %></h4>
+        <h4>Hasil Absensi <%= namaKegiatan %></h4>
       </section>
     </div>
 
-    <div class="absent-sorting-menu">
-      <h6>Sort By: </h6>
-      <div class="sortButton">
-        <button id="sortButton"><a href="/absensi?absentId=<%=absentId%>&mode=view&sortBy=divisi">Divisi</a></button>
-        <button id="sortButton"><a href="/absensi?absentId=<%=absentId%>&mode=view&sortBy=keterangan">Keterangan</a></button>
-        <button id="sortButton"><a href="/absensi?absentId=<%=absentId%>&mode=view&sortBy=waktu_pengisian">Waktu Pengisian</a></button>
-      </div>
-    </div>
-    <% let i = 0 %>
     <table id="table-absensi">
       <tr id="sticky-th">
-        <th>No</th>
         <th>NPM</th>
         <th>Nama</th>
-        <th>Divisi</th>
-        <th>Ket.</th>
-        <th>Waktu</th>
+        <th>Bukti</th>
+        <th>Kelompok</th>
       </tr>
       <% dataHasilAbsensi.forEach((data) => {%>
         <tr>
-          <td><%= i+1 %></td>
-          <td><%= data.npm %></td>
-          <td><%= data.nama %></td>
-          <td><%= data.divisi %></td>
-          <td><%= data.keterangan ? data.keterangan : '?' %></td>
-          <td><%= data.waktuPengisian ? data.waktuPengisian : '?' %></td>
+          <td style="min-width:100px"><%= data.npm %></td>
+          <td style="min-width:100px"><%= data.nama %></td>
+          <% if (data.resume) { %>
+          <td style="min-width:100px"><a href="<%= `/kaderisasi/sdm/absensi/bukti?presensiId=${presensiId}&npm=${data.npm}` %>">bukti</a></td>
+          <% } else { %>
+          <td style="min-width:100px">?</td>
+          <% } %>
+          <td style="min-width:100px"><%= data.kelompok ? data.kelompok : '?' %></td>
         </tr>
-      <% i++});%>
+      <%});%>
     </table>
   </main>
 

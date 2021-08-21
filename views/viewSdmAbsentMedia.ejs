@@ -10,6 +10,94 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="/css/main.css">
+
+    <style media="screen">
+      .imageCaptionContainer {
+        width: 70%;
+        margin: auto;
+      }
+
+      .photo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin: auto;
+      }
+
+      figcaption {
+        width: 80%;
+        max-width: 640px;
+        display: block;
+        margin: auto;
+      }
+
+      .resume {
+        text-align: justify;
+        word-spacing: 2px;
+        font-family: "Times New Roman", serif;
+        font-size: 24px;
+      }
+
+      @media only screen and (max-width: 800px) {
+        .photo {
+          max-width: 500px;
+        }
+      }
+
+      @media only screen and (max-width: 700px) {
+        .photo {
+          max-width: 400px;
+        }
+      }
+
+      @media only screen and (max-width: 600px) {
+        .photo {
+          max-width: 300px;
+        }
+      }
+
+      @media only screen and (max-width: 500px) {
+        .photo {
+          max-width: 300px;
+        }
+      }
+
+      @media only screen and (max-width: 400px) {
+        .photo {
+          max-width: 200px;
+        }
+
+        .resume {
+          font-size: 18px;
+        }
+
+        .judul {
+          font-size: 20px;
+        }
+      }
+
+      @media only screen and (max-width: 300px) {
+        .photo {
+          max-width: 100px;
+        }
+
+        .resume {
+          font-size: 16px;
+        }
+
+        .figcaption {
+          width: 100%;
+        }
+
+        .imageCaptionContainer {
+          width: 95%;
+        }
+
+        .judul {
+          font-size: 16px;
+        }
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -23,12 +111,14 @@
     <main>
       <div class="judul-konten">
         <section>
-          <h4>Terimakasih <%= nama %>, kehadiran Anda sudah tercatat.</h4>
+          <h4 class="judul">Bukti kehadiran <%= nama %></h4>
         </section>
       </div>
 
-      <h6>Lihat hasil: </h6>
-      <button type="button" name="button"><a href="<%= link %>">Hasil</a></button>
+    <figure class="imageCaptionContainer">
+      <img class="photo" src="<%= imageSrc %>" alt="Image from <%= nama %>">
+      <figcaption class="resume"><%= resume %></figcaption>
+    </figure>
     </main>
     <div class="footer-dark">
       <footer>

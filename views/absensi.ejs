@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <link rel="icon" type="image" href="images/favicon.ico">
+    <link rel="icon" type="image" href="/images/favicon.ico">
     <title>Himatro Web App</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -182,7 +182,7 @@
     <header>
       <nav>
         <ul class="topnav">
-          <li class="center"><a href="/"><img class="navbar-image" src="images/favicon.png" alt="logo himatro"></a></li>
+          <li class="center"><a href="/"><img class="navbar-image" src="/images/favicon.png" alt="logo himatro"></a></li>
         </ul>
       </nav>
     </header>
@@ -190,14 +190,14 @@
     <main>
       <div class="judul-konten">
         <section>
-          <h3>Silahkan masukan kode absensi dari kegiatan yang akan anda hadiri</h3>
+          <h3><%= judulHalaman %></h3>
         </section>
       </div>
 
       <div class="search-bar">
         <section>
-          <form class="example" action="/absensi">
-           <input type="text" placeholder="Search.." name="absentId">
+          <form class="example" action="<%= action %>">
+           <input type="text" placeholder="Search.." name="<%= fieldName %>">
            <button type="submit"><i class="fa fa-search"></i></button>
           </form>
         </section>
