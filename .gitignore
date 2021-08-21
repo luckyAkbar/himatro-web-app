@@ -6,3 +6,5 @@ db/data/
 log.txt
 test.js
 nodemon.json
+./uploads
+key.sql
