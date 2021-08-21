@@ -28,9 +28,8 @@ const sortByValidator = (sortBy) => {
       return false
     }
 
-    if (sortBy !== 'npm' || sortBy !== 'keterangan' || sortBy !== 'waktu_pengisian') {
-      console.log('exec');
-      return 'npm'
+    if (sortBy !== 'divisi' || sortBy !== 'keterangan' || sortBy !== 'waktu_pengisian') {
+      return 'divisi'
     }
   } catch (e) {
     return false
