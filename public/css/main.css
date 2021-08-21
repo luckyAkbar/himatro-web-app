@@ -178,7 +178,7 @@ form.example::after {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
 }
 
