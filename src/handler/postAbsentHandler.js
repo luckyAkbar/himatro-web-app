@@ -1,10 +1,20 @@
 require('dotenv').config()
 
-const { referensiIdGenerator } = require('../util/referensiIdGenerator')
-const { createNewAbsent } = require('../util/createNewAbsent')
-const { postAbsentDataValidator, validateAbsentRefData, modeValidator } = require('../util/validator');
+const { referensiIdGenerator } = require('../util/generator')
 const { absentFiller } = require('../util/absentFiller')
 const { testQuery } = require('../../db/connection')
+const { isExpired } = require('../util/getTimeStamp')
+
+const {
+  createNewAbsent,
+  createNewKegiatan
+} = require('../util/createNewAbsent')
+
+const {
+  postAbsentDataValidator,
+  validateAbsentRefData,
+  modeValidator
+} = require('../util/validator');
 
 const postAbsentHandler = async (req, res) => {
 
@@ -20,17 +30,24 @@ const postAbsentHandler = async (req, res) => {
       const validate = await absentRefValidator(req)
 
       if (!validate) {
-        res.status(400).json({error: "Data Kegiatan / Rapat Invalid"})
+        res.status(400).render('errorPage', {
+          errorMessage: 'Data Kegiatan / Rapat Invalid'
+        })
         return
       }
     } catch (e) {
+      res.sendStatus(500)
       console.log('cannot validate absent ref data', e)
     }
 
+    const { ref } = req.query
+    const refId = referensiIdGenerator(ref)
+
     try {
-      await createNewAbsentRecord(req, res)
+      await createNewAbsentRecord(refId, req, res)
     } catch (e) {
-      console.log('cannot create new absent record', e)
+      //res.sendStatus(500)
+      console.log('cannot create new absent / kegiatan record', e)
     }
   }
 
@@ -42,9 +59,11 @@ const postAbsentHandler = async (req, res) => {
       res.sendStatus(404)
       return
     }
-    
+
     if (!absentDataValidator(absentId, npm, nama, keterangan)) {
-      res.status(400).json({ error: "Data Absent Invalid" })
+      res.status(400).render('errorPage', {
+        errorMessage: 'Data Absen Invalid'
+      })
       return
     }
 
@@ -63,6 +82,10 @@ const absentDataValidator = (absentId, npm, nama, keterangan) => {
 const absentRefValidator = async (req) => {
   const { namaKegiatan, tanggalPelaksanaan, tanggalBerakhir } = req.body
 
+  if (!/:/g.test(tanggalBerakhir)) {
+    tanggalBerakhir += ' 23:59:00'
+  }
+
   if (!validateAbsentRefData(namaKegiatan, tanggalPelaksanaan, tanggalBerakhir)) {
     return false
   }
@@ -70,18 +93,18 @@ const absentRefValidator = async (req) => {
   return true
 }
 
-const createNewAbsentRecord = async (req, res) => {
+const createNewAbsentRecord = async (refId, req, res) => {
   const { ref } = req.query
 
   if (ref === 'keg') {
     //look at the bottom
-    const referensiId = referensiIdGenerator(ref)
-
     try {
-      await createNewAbsent(res, referensiId)
-      res.json({ refId: `${referensiId}` })
+      await createNewAbsent(res, refId)
+      await createNewKegiatan(refId, req.body)
+      res.json({ refId: `${refId}` })
     } catch(e) {
       res.status(500).json({ error: "Server Error" })
+      return
     }
     return
   }
