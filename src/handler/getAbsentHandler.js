@@ -1,19 +1,31 @@
 require('dotenv').config()
+
 const { testQuery } = require('../../db/connection')
-const { checkRefIdExists } = require('../util/absentFiller')
-const { refIdValidator, showValueValidator, modeValidator, sortByValidator } = require('../util/validator')
+const { getNamaKegiatan } = require('../util/getNamaKegiatan')
+
+const {
+  checkRefIdExists,
+  checkIsExpired
+} = require('../util/absentFiller')
+
+const {
+  refIdValidator,
+  showValueValidator,
+  modeValidator,
+  sortByValidator
+} = require('../util/validator')
 
 const getAbsentHandler = async (req, res) => {
   const { absentId } = req.query
-  let { show, mode } = req.query
-
-  if (mode === undefined || mode === '') {
-    mode = 'input'
-  }
+  let { show, mode='input' } = req.query
 
   if (!absentId) {
     res.status(200)
-    res.render('absensi')
+    res.render('absensi', {
+      judulHalaman: 'Silahkan masukan kode absensi dari kegiatan yang akan anda hadiri',
+      action: '/absensi',
+      fieldName: 'absentId'
+    })
     return false
   }
 
@@ -22,16 +34,28 @@ const getAbsentHandler = async (req, res) => {
   const isModeValid = modeValidator(mode)
 
   if(!(isAbsentIdValid && isShowValid && isModeValid)) {
-    res.status(400).json({ error: 'Query Data Invalid' })
+    res.status(400).render('errorPage', {
+      errorMessage: 'Query Data Invalid'
+    })
     return false
   }
 
   if (mode === 'input') {
     try {
       const isAbsentFormExists = await checkRefIdExists(absentId.toLowerCase(), 'absensi', 'referensi_id')
+      const isExpired = await checkIsExpired(absentId)
 
       if (!isAbsentFormExists) {
-        res.status(400).json({ error: 'Absent form doesn\'t exist or already closed!' })
+        res.status(404).render('errorPage', {
+          errorMessage: 'Absent form doesn\'t exist'
+        })
+        return
+      }
+
+      if (isExpired) {
+        res.status(404).render('errorPage', {
+          errorMessage: 'Sorry, absent form already closed.',
+        })
         return
       }
 
@@ -44,30 +68,40 @@ const getAbsentHandler = async (req, res) => {
     }
   } else if (mode === 'view') {
     try {
+      const isAbsentFormExists = await checkRefIdExists(absentId.toLowerCase(), 'absensi', 'referensi_id')
+
+      if (!isAbsentFormExists) {
+        res.status(400).render('errorPage', {
+          errorMessage: 'Absent form doesn\'t exist or already closed!'
+        })
+        return
+      }
+
       const absentFormResult = await getAbsentFormResult(absentId, show, req, res)
     } catch (e) {
       console.log(e)
     }
   } else {
-    res.sendStatus(400)
+    res.status(418).render('errorPage', {
+      errorMessage: 'Error: I\'m tea pot'
+    })
   }
 }
 
 const getAbsentFormResult = async (absentId, show, req, res) => {
   absentId = absentId.toLowerCase()
   let sortBy = req.query.sortBy
-  console.log(sortBy);
 
   if (req.query.sortBy) {
     if (!sortByValidator(sortBy)) {
-      res.status(400).json({ error: 'Query Data Invalid' })
+      res.status(400).render('errorPage', {
+        errorMessage: 'Query Data Invalid'
+      })
       return
     }
   } else {
-    sortBy = 'npm'
+    sortBy = 'waktu_pengisian'
   }
-
-  console.log(sortBy);
 
   let query = `SELECT * FROM absensi WHERE referensi_id = $1 ORDER BY ${sortBy}`
   let params = [absentId]
@@ -75,7 +109,8 @@ const getAbsentFormResult = async (absentId, show, req, res) => {
     nama: '',
     npm: '',
     waktuPengisian: '',
-    keterangan: ''
+    keterangan: '',
+    divisi: ''
   }
   let result = []
 
@@ -92,13 +127,14 @@ const getAbsentFormResult = async (absentId, show, req, res) => {
         nama: rows[i].nama,
         npm: rows[i].npm,
         waktuPengisian: String(rows[i].waktu_pengisian).slice(16,24),
-        keterangan: rows[i].keterangan
+        keterangan: rows[i].keterangan,
+        divisi: rows[i].divisi
       }
       result.push(data)
     }
 
     res.status(200).render('viewAbsent', {
-      namaKegiatan: 'Lokakarya Himatro',
+      namaKegiatan: await getNamaKegiatan(absentId),
       dataHasilAbsensi: result,
       jumlah: result.length,
       absentId: absentId
