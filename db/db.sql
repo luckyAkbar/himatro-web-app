@@ -14,6 +14,9 @@ DROP TABLE IF EXISTS pengurus;
 DROP TABLE IF EXISTS jabatan;
 DROP TABLE IF EXISTS divisi;
 DROP TABLE IF EXISTS departemen;
+DROP TABLE IF EXISTS kehadiran_sdm;
+DROP TABLE IF EXISTS sdm_kaderisasi;
+DROP TABLE IF EXISTS gambar;
 
 CREATE TABLE departemen (
   departemen_id VARCHAR(10) PRIMARY KEY,
@@ -49,7 +52,7 @@ CREATE TABLE kegiatan (
   kegiatan_id VARCHAR(10) PRIMARY KEY,
   nama_kegiatan VARCHAR(255) NOT NULL,
   tanggal_pelaksanaan TIMESTAMPTZ NOT NULL,
-  progja_id VARCHAR(10) REFERENCES program_kerja(progja_id),
+  --progja_id VARCHAR(10) REFERENCES program_kerja(progja_id),
   tanggal_berakhir TIMESTAMPTZ NOT NULL -- cari cara implement default dijadiin jam 23.59
 );
 
@@ -97,7 +100,7 @@ CREATE TABLE absensi (
   nama VARCHAR(255) NOT NULL, -- Default ambil dari query npm ke anggota biasa, ambil namanya
   waktu_pengisian TIMESTAMPTZ DEFAULT NULL,
   keterangan CHAR(1) DEFAULT NULL,
-  role CHAR(1) DEFAULT NULL
+  divisi VARCHAR(70) NOT NULL
 );
 
 CREATE TABLE mahasiswa_baru (
@@ -148,4 +151,24 @@ CREATE TABLE anggota_kehormatan (
 CREATE TABLE penganggung_jawab (
   npm VARCHAR(11) REFERENCES pengurus(npm) NOT NULL,
   referensi_id VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE sdm_kaderisasi (
+  sdm_id VARCHAR(10) PRIMARY KEY,
+  judul_kegiatan VARCHAR(255) NOT NULL,
+  catatan VARCHAR(255) NOT NULL,
+  presensi VARCHAR(10) UNIQUE NOT NULL
+);
+
+CREATE TABLE kehadiran_sdm (
+  presensi VARCHAR(10) NOT NULL,
+  nama VARCHAR(255) NOT NULL,
+  npm VARCHAR(11) NOT NULL,
+  gambar_id VARCHAR(10) DEFAULT NULL,
+  resume TEXT DEFAULT NULL
+);
+
+CREATE TABLE gambar (
+  gambar_id VARCHAR(10) PRIMARY KEY,
+  nama_gambar VARCHAR(35) NOT NULL
 );
