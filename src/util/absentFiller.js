@@ -36,6 +36,25 @@ const checkAlreadyFilled = async (ref_id, npm, nama) => {
   }
 }
 
+const checkIsExpired = async (absentId) => {
+  const query = 'select tanggal_berakhir from kegiatan where kegiatan_id = $1'
+  const params = [absentId]
+
+  try {
+    const { rows } = await testQuery(query, params)
+    const result = await testQuery('select now()')
+
+    if (rows[0].tanggal_berakhir < result.rows[0].now) {
+      return true
+    }
+
+    return false
+  } catch (e) {
+    console.log(e)
+    throw new Error('Failed to compare time')
+  }
+}
+
 const checkRefIdExists = async (refId, tableName, rowName) => {
   const query = `SELECT COUNT(1) FROM ${tableName} WHERE ${rowName} = $1`
   const params = [refId]
@@ -69,21 +88,33 @@ const insertKehadiranRecord = async (npm, refId, now, keterangan) => {
 const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
   try {
     const isAbsentFormExists = await checkRefIdExists(absentId, 'absensi', 'referensi_id')
+    const isExpired = await checkIsExpired(absentId)
 
     if (!isAbsentFormExists) {
-      res.status(404).json({ error: 'Absent Form Not Found' })
+      res.status(404).render('errorPage', {
+        errorMessage: 'Absent Form Not Found'
+      })
+      return
+    }
+
+    if (isExpired) {
+      res.status(404).render('errorPage', {
+        errorMessage: 'Sorry, this absent already closed.'
+      })
       return
     }
 
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 
   try {
     const result = await checkAlreadyFilled(absentId, npm, nama)
 
     if(result instanceof AbsentFillerNotRegisteredError) {
-      res.status(400).json({ error: 'NPM not registered' })
+      res.status(400).render('errorPage', {
+        errorMessage: 'NPM not registered'
+      })
       res.end()
       return
     }
@@ -96,12 +127,14 @@ const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
         if (isSuccess === 'Success') {
           res.status(200).render('successAbsent', {
             nama: nama,
-            absentId: absentId
+            link: `/absensi?absentId=${absentId}&mode=view&sortBy=waktu_pengisian`
           })
         }
 
         if (isSuccess === 'Failed') {
-          res.status(500).json({ error: 'Failed. Please contact administrator for this error.'})
+          res.status(500).render('errorPage', {
+            errorMessage: 'Failed. Please contact administrator for this error.'
+          })
         }
       } catch (e) {
         console.log(e)
@@ -109,29 +142,17 @@ const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
     }
 
     if (result === true) {
-      res.status(403).json({ error: 'Can\'t change attendance record.' })
+      res.status(403).render('errorPage', {
+        errorMessage: 'Can\'t change attendance record.'
+      })
     }
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
-
-
-/*
-  if (!result) {
-    try {
-      const query = `UPDATE ${table_name} SET ${kehadiran_field} ${comparation_operator} $1 WHERE ${ref_id_field} ${comparation_operator} $2 ${logical_and_operator} ${npm_field} ${comparation_operator} $3`
-      const params = ['t', `${ref_id}`, `${npm}`]
-
-      await db.query(query, params)
-      return 'berhasil'
-    }catch(e){
-      console.log(e)
-      return 'gagal'
-    }
-  }
-
-  return 'sudah absen'
-*/
 }
 
-module.exports = { absentFiller, checkRefIdExists }
+module.exports = {
+  absentFiller,
+  checkRefIdExists,
+  checkIsExpired
+}
