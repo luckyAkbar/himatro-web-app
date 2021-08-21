@@ -4,26 +4,21 @@ const readDataCsv = (filePath) => {
   let result = []
 
   const csv = load(filePath)
+  let dataObject = {}
 
-  csv.forEach((chunks) => {
-    let { nama1, npm1, nama2, npm2 } = chunks
-    let dataObject = {}
+  csv.forEach(({
+     npm,
+     nama,
+     divisi
+  }) => {
 
-    if(nama1){
-      dataObject = {
-        nama: nama1,
-        npm: npm1
-      }
-      result.push(dataObject)
+    dataObject = {
+      nama,
+      npm,
+      divisi
     }
 
-    if(nama2) {
-      dataObject = {
-        nama: nama2,
-        npm: npm2
-      }
-      result.push(dataObject)
-    }
+    result.push(dataObject)
   })
 
   return result
