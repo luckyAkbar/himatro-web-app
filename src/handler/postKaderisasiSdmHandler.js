@@ -1,5 +1,5 @@
 const { load } = require('csv-load-sync')
-
+const chalk = require('chalk')
 const { namaFormatter } = require('../util/namaFormatter')
 const { sdmUIDGenerator } = require('../util/generator')
 const { testQuery } = require('../../db/connection')
@@ -8,7 +8,6 @@ const { readDataCsv } = require('../util/readDataCsv')
 const { createNewKegiatan } = require('../util/createNewAbsent')
 
 const kaderisasiSdmHandler = async (req, res) => {
-
   const { namaKegiatan, catatan } = req.body
 
   if (!namaKegiatanValidator(namaKegiatan)) {
@@ -54,7 +53,7 @@ const kaderisasiSdmHandler = async (req, res) => {
       })
     }
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
     res.status(500).json({ error: 'Server error, please contact admin to resolve' })
   }
 }
@@ -77,14 +76,14 @@ const initNewAbsentRecord = async (opt, data) => {
         nama: item.nama,
         npm: item.npm
       })
-    });
+    })
 
     mabaTI.forEach((item) => {
       dataMabaFull.push({
         nama: item.nama,
         npm: item.npm
       })
-    });
+    })
 
     try {
       for (let i = 0; i < dataMabaFull.length; i++) {
@@ -92,17 +91,18 @@ const initNewAbsentRecord = async (opt, data) => {
             ${recordName[0]},
             ${recordName[1]},
             ${recordName[2]})
-          VALUES (
-            '${refId}',
-            '${namaFormatter(dataMabaFull[i].nama)}',
-            '${dataMabaFull[i].npm}'
-          );`
-        const finished = testQuery(query)
+          VALUES ($1, $2, $3)`
+          const params = [
+            refId,
+            namaFormatter(dataMabaFull[i].nama),
+            dataMabaFull[i].npm
+          ]
+        const finished = await testQuery(query, params)
       }
 
       return true
     } catch (e) {
-      console.log(e)
+      console.log(chalk.red(e))
     }
   }
 }
