@@ -7,7 +7,6 @@ const namaFormatter = (nama) => {
   }
 
   nama = nama.join(" ")
-  console.log(nama);
   return nama
 }
 
