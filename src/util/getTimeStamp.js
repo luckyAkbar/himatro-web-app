@@ -7,4 +7,12 @@ const getTimeStamp = () => {
   return timestamp
 }
 
-module.exports = { getTimeStamp }
+const getSecondsAfterEpoch = () => {
+  const now = new Date()
+  return Math.floor(now / 1000)
+}
+
+module.exports = {
+  getTimeStamp,
+  getSecondsAfterEpoch
+}
