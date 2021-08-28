@@ -39,9 +39,29 @@ const imageIdGenerator = () => {
   })}`
 }
 
+const sessionGenerator = () => {
+  return `${generateUniqueId({
+    length: 10,
+    excludeSymbols: excludedSymbols,
+    useLetters: true,
+    useNumbers: true
+  })}`
+}
+
+const sessionIdGenerator = () => {
+  return `${generateUniqueId({
+    length: 5,
+    excludeSymbols: excludedSymbols,
+    useLetters: true,
+    useNumbers: true
+  })}`
+}
+
 module.exports = {
   referensiIdGenerator,
   uploadedImageNameGenerator,
   sdmUIDGenerator,
-  imageIdGenerator
+  imageIdGenerator,
+  sessionGenerator,
+  sessionIdGenerator
  }
