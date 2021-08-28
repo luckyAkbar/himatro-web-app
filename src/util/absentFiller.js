@@ -1,3 +1,5 @@
+const chalk = require('chalk')
+
 const { testQuery } = require('../../db/connection')
 const { AbsentFillerNotRegisteredError } = require('../classes/AbsentFillerNotRegisteredError')
 const { getTimeStamp } = require('./getTimeStamp')
@@ -18,7 +20,7 @@ const checkAlreadyFilled = async (ref_id, npm, nama) => {
     const { rows } = await testQuery(query, params)
 
     if (rows.length === 0) {
-      console.log(`${npm} ini tidak terdaftar`)
+      console.log(chalk.red(`${npm} ini tidak terdaftar`))
       throw new AbsentFillerNotRegisteredError(`User ${npm} is not registered`)
     }
 
@@ -32,7 +34,7 @@ const checkAlreadyFilled = async (ref_id, npm, nama) => {
       return e
     }
 
-    console.log(e)
+    console.log(chalk.red(e))
   }
 }
 
@@ -50,8 +52,26 @@ const checkIsExpired = async (absentId) => {
 
     return false
   } catch (e) {
-    console.log(e)
-    throw new Error('Failed to compare time')
+    console.log(chalk.red(e))
+    throw new Error('Failed to compare time (is expired)')
+  }
+}
+
+const checkIsAlreadyOpen = async (refId) => {
+  const query = 'SELECT tanggal_pelaksanaan FROM kegiatan WHERE kegiatan_id = $1'
+  const params = [refId]
+
+  try {
+    const { rows } = await testQuery(query, params)
+    const now = await testQuery('select now()')
+
+    if (rows[0].tanggal_pelaksanaan > now.rows[0].now) {
+      return false
+    }
+    return true
+  } catch (e) {
+    console.log(chalk.red(e))
+    throw new Error('Failed to compare time (already open)')
   }
 }
 
@@ -68,7 +88,7 @@ const checkRefIdExists = async (refId, tableName, rowName) => {
 
     return true
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
   }
 }
 
@@ -80,7 +100,7 @@ const insertKehadiranRecord = async (npm, refId, now, keterangan) => {
     await testQuery(query, params)
     return 'Success'
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
     return 'Failed'
   }
 }
@@ -105,7 +125,7 @@ const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
     }
 
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
   }
 
   try {
@@ -137,7 +157,7 @@ const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
           })
         }
       } catch (e) {
-        console.log(e)
+        console.log(chalk.red(e))
       }
     }
 
@@ -147,12 +167,13 @@ const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
       })
     }
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
   }
 }
 
 module.exports = {
   absentFiller,
   checkRefIdExists,
-  checkIsExpired
+  checkIsExpired,
+  checkIsAlreadyOpen
 }
