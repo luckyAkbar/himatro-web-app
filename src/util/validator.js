@@ -3,6 +3,8 @@ const timeFormatComparator = /[!@#$%^&*()_+\=\[\]{};'"\\|,<>\/?]+/
 const keteranganComparator = /[h,i]/
 const namaComparator = /[!@#$%^&*()_+\-=\[\]{};:"\\|,<>\/?]+/
 const sortByComparator = /[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/
+const emailComparator = /[!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?]+/
+const letterComparator = /[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]/
 
 const npmValidator = (npm) => {
   try {
@@ -143,6 +145,46 @@ const refIdValidator = (refId) => {
   return true
 }
 
+const emailValidator = (email) => {
+  try {
+    const emailParts = email.split('@')
+    const serverEmail = emailParts[1].split('.')
+
+    if (emailParts[0].length > 105 || emailParts[1].length > 105) {
+      return false
+    }
+
+    if (emailParts[0].length === 0 || emailParts[1].length === 1) {
+      return false
+    }
+
+    if (serverEmail[0].length === 0 || serverEmail[1].length === 0) {
+      return false
+    }
+
+    if (!(/[.]/.test(emailParts[1]))) {
+      return false
+    }
+
+    if (!(/@/.test(email))) {
+      return false
+    }
+
+    if (emailComparator.test(email)) {
+      return false
+    }
+
+    if (!letterComparator.test(email)) {
+      return false
+    }
+
+  } catch (e) {
+    return false
+  }
+
+  return true
+}
+
 const modeValidator = (mode) => {
   try {
     if (comparator.test(mode)) {
@@ -200,4 +242,6 @@ module.exports = { npmValidator,
    modeValidator,
    sortByValidator,
    showValueValidator,
-   postAbsentDataValidator, }
+   postAbsentDataValidator,
+   emailValidator,
+}
