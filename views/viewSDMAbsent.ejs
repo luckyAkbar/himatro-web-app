@@ -27,16 +27,18 @@
         <h4>Hasil Absensi <%= namaKegiatan %></h4>
       </section>
     </div>
+    <% let i = 0; %>
 
     <table id="table-absensi">
       <tr id="sticky-th">
+        <th>No</th>
         <th>NPM</th>
         <th>Nama</th>
         <th>Bukti</th>
-        <th>Kelompok</th>
       </tr>
       <% dataHasilAbsensi.forEach((data) => {%>
         <tr>
+          <td><%= i+1 %></td>
           <td style="min-width:100px"><%= data.npm %></td>
           <td style="min-width:100px"><%= data.nama %></td>
           <% if (data.resume) { %>
@@ -44,7 +46,7 @@
           <% } else { %>
           <td style="min-width:100px">?</td>
           <% } %>
-          <td style="min-width:100px"><%= data.kelompok ? data.kelompok : '?' %></td>
+          <% i++ %>
         </tr>
       <%});%>
     </table>
