@@ -1,11 +1,13 @@
 require('dotenv').config()
+const chalk = require('chalk')
 
 const { testQuery } = require('../../db/connection')
 const { getNamaKegiatan } = require('../util/getNamaKegiatan')
 
 const {
   checkRefIdExists,
-  checkIsExpired
+  checkIsExpired,
+  checkIsAlreadyOpen
 } = require('../util/absentFiller')
 
 const {
@@ -43,7 +45,6 @@ const getAbsentHandler = async (req, res) => {
   if (mode === 'input') {
     try {
       const isAbsentFormExists = await checkRefIdExists(absentId.toLowerCase(), 'absensi', 'referensi_id')
-      const isExpired = await checkIsExpired(absentId)
 
       if (!isAbsentFormExists) {
         res.status(404).render('errorPage', {
@@ -51,6 +52,17 @@ const getAbsentHandler = async (req, res) => {
         })
         return
       }
+
+      const isAlreadyOpen = await checkIsAlreadyOpen(absentId.toLowerCase())
+
+      if (!isAlreadyOpen) {
+        res.status(403).render('errorPage', {
+          errorMessage: 'Sorry, this form is still locked'
+        })
+        return
+      }
+
+      const isExpired = await checkIsExpired(absentId.toLowerCase())
 
       if (isExpired) {
         res.status(404).render('errorPage', {
@@ -64,7 +76,7 @@ const getAbsentHandler = async (req, res) => {
       })
       return
     } catch (e) {
-      console.log(e)
+      console.log(chalk.red(e))
     }
   } else if (mode === 'view') {
     try {
@@ -79,11 +91,11 @@ const getAbsentHandler = async (req, res) => {
 
       const absentFormResult = await getAbsentFormResult(absentId, show, req, res)
     } catch (e) {
-      console.log(e)
+      console.log(chalk.red(e))
     }
   } else {
     res.status(418).render('errorPage', {
-      errorMessage: 'Error: I\'m tea pot'
+      errorMessage: 'Error: I\'m a tea pot'
     })
   }
 }
@@ -140,7 +152,7 @@ const getAbsentFormResult = async (absentId, show, req, res) => {
       absentId: absentId
     })
   } catch (e) {
-    console.log(e);
+    console.log(chalk.red(e));
     res.sendStatus(500)
   }
 }
