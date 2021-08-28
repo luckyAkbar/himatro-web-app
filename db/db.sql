@@ -17,6 +17,8 @@ DROP TABLE IF EXISTS departemen;
 DROP TABLE IF EXISTS kehadiran_sdm;
 DROP TABLE IF EXISTS sdm_kaderisasi;
 DROP TABLE IF EXISTS gambar;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS sessions;
 
 CREATE TABLE departemen (
   departemen_id VARCHAR(10) PRIMARY KEY,
@@ -171,4 +173,16 @@ CREATE TABLE kehadiran_sdm (
 CREATE TABLE gambar (
   gambar_id VARCHAR(10) PRIMARY KEY,
   nama_gambar VARCHAR(35) NOT NULL
+);
+
+CREATE TABLE users (
+  email VARCHAR(255) PRIMARY KEY,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE sessions (
+  sessionid VARCHAR(10) PRIMARY KEY,
+  session VARCHAR(200) UNIQUE NOT NULL,
+  useragent VARCHAR(200) NOT NULL,
+  expired BIGINT NOT NULL
 );
