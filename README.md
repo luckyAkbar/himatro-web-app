@@ -12,3 +12,4 @@ to do list:
 4. CODE REFACTOR:((
 5. REUSABLE CODE:(
 6. sql view kok gadigunain astagaaa:)
+7. refactor getAbsentHandler (unnesecary if else statement)
