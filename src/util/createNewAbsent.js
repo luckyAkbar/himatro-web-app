@@ -1,3 +1,5 @@
+const chalk = require('chalk')
+
 const { testQuery } = require('../../db/connection')
 const { readDataCsv } = require('./readDataCsv')
 
@@ -20,7 +22,7 @@ const initNewAbsentRecord = async (res, referensiId) => {
     res.status(201)
   } catch(e) {
     res.status(500)
-    console.log(e)
+    console.log(chalk.red(e))
   }
 }
 
@@ -29,7 +31,7 @@ const createNewAbsent = async (res, referensiId) => {
     await initNewAbsentRecord(res, referensiId)
     //db.query('SELECT * FROM absensi'))
   } catch(e) {
-    console.log(e)
+    console.log(chalk.red(e))
   }
 }
 
@@ -56,7 +58,7 @@ const createNewKegiatan = async (refId, {
     await testQuery(query, params)
     return
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
     throw new Error('Failed to create new kegiatan')
   }
 }

@@ -1,4 +1,5 @@
 require('dotenv').config()
+const chalk = require('chalk')
 
 const multer = require('multer')
 const { getTimeStamp } = require('../util/getTimeStamp')
@@ -49,7 +50,7 @@ const multerErrorChecker = (res, err) => {
     res.status(400).json({ error: err.message })
     return true
   } else if (err) {
-    console.log(err);
+    console.log(chalk.red(err))
     res.status(500).json({ error: 'Server failure. Please contact admin to resolve.' })
     return true
   }
