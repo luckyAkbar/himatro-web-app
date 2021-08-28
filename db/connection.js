@@ -1,4 +1,6 @@
 require('dotenv').config()
+
+const chalk = require('chalk')
 const { Pool } = require('pg')
 
 const config = {
@@ -23,18 +25,6 @@ newPool.on('error', (err, client) => {
   //process.exit(-1)
 });
 
-newPool.on('connect', () => {
-  console.log('Connected to the Database [/db/koneksi.js]')
-})
-
-newPool.on('remove', () => {
-  console.log('client removed')
-})
-
-newPool.on('acquire', () => {
-  console.log('client acquired')
-})
-
 newPool.on('ECONNREFUSED', () => {
   console.log('Connection refused')
 })
@@ -49,11 +39,11 @@ async function testQuery(query, params) {
     client.release(true)
 
     const duration = Date.now() - start
-    console.log('executed query', query, 'returned', res.rowCount, 'in', duration, 'ms');
+    console.log(chalk.yellow('executed query', query, 'returned', res.rowCount, 'in', duration, 'ms'));
 
     return res
   } catch(e) {
-    console.log('err connection.js', e)
+    console.log(chalk.red('err connection.js', e))
   }
 }
 
