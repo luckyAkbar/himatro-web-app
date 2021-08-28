@@ -1,14 +1,17 @@
+const chalk = require('chalk')
+
 const { testQuery } = require('../../db/connection')
 const { getNamaKegiatan } = require('../util/getNamaKegiatan')
 
 const {
   refIdValidator,
   modeValidator
-} = require ('../util/validator')
+} = require('../util/validator')
 
 const {
   checkRefIdExists,
-  checkIsExpired
+  checkIsExpired,
+  checkIsAlreadyOpen
 } = require('../util/absentFiller')
 
 const tableName = 'kehadiran_sdm'
@@ -41,12 +44,26 @@ const getAbsentSdm = async (req, res) => {
 
   try {
     const isFormExists = await isAbsentFormExists(res, data)
-    const isExpired = await checkIsExpired(presensiId)
 
     if (!isFormExists) {
-      res.sendStatus(404)
       return
     }
+
+    if (mode === 'view') {
+      await viewAbsentResultPage(res, presensiId)
+      return
+    }
+
+    const isAlreadyOpen = await checkIsAlreadyOpen(presensiId)
+
+    if (!isAlreadyOpen) {
+      res.status(403).render('errorPage', {
+        errorMessage: 'Sorry, this form is still locked'
+      })
+      return
+    }
+
+    const isExpired = await checkIsExpired(presensiId)
 
     if (isExpired) {
       res.status(403).render('errorPage', {
@@ -55,17 +72,13 @@ const getAbsentSdm = async (req, res) => {
       return
     }
 
-    if (mode === 'view') {
-      viewAbsentResultPage(res, presensiId)
-      return
-    } else {
-      res.status(200).render('inputAbsentSdm', {
-        presensiId: presensiId
-      })
-      return
-    }
+    res.status(200).render('inputAbsentSdm', {
+      presensiId: presensiId
+    })
+    return
+
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
   }
 }
 
@@ -87,8 +100,8 @@ const viewAbsentResultPage = async (res, presensiId) => {
     })
     return
 
-  } catch (err) {
-    console.log(err)
+  } catch (e) {
+    console.log(chalk.red(e))
     res.status(500).render('errorPage', {
       errorMessage: 'Server error. Please contact admin to resolve.'
     })
@@ -107,7 +120,7 @@ const isAbsentFormExists = async (res, data) => {
     const result = await checkRefIdExists(presensiId, tableName, rowName)
 
     if (!result) {
-      res.status(404).render('errorPage', {
+      res.render('errorPage', {
         errorMessage: 'Absent form doesn\'t exist or already closed!'
       })
       return false

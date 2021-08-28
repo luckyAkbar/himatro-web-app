@@ -1,4 +1,12 @@
+const chalk = require('chalk')
+
 const { testQuery } = require('../../db/connection')
+
+const {
+  checkIsExpired,
+  checkIsAlreadyOpen
+} = require('../util/absentFiller')
+
 const {
   upload,
   multerErrorChecker
@@ -19,7 +27,29 @@ const uploadAbsentSdmHandler = async (req, res) => {
     await upload(req, res, async (err) => {
       const { nama, npm, resume, presensiId } = req.body
 
+      if (multerErrorChecker(res, err)) {
+        return
+      }
+
       if (!validateAbsentData(res, nama, npm, presensiId)) {
+        return
+      }
+
+      const isAlreadyOpen = await checkIsAlreadyOpen(presensiId)
+
+      if (!isAlreadyOpen) {
+        res.status(400).render('errorPage', {
+          errorMessage: 'Sorry, this form is still locked'
+        })
+        return
+      }
+
+      const isExpired = await checkIsExpired(presensiId)
+
+      if (isExpired) {
+        res.status(403).render('errorPage', {
+          errorMessage: 'Sorry, absent form already closed'
+        })
         return
       }
 
@@ -36,11 +66,7 @@ const uploadAbsentSdmHandler = async (req, res) => {
 
       const alreadyAbsent = await isAlreadyAbsent(res, 'sdm', isAlreadyFilledQueryData)
 
-      if(alreadyAbsent) {
-        return
-      }
-
-      if (multerErrorChecker(res, err)) {
+      if (alreadyAbsent) {
         return
       }
 
@@ -78,7 +104,7 @@ const uploadAbsentSdmHandler = async (req, res) => {
     })
 
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
     res.status(500).render('errorPage', {
       errorMessage: 'Server failure. Please contact admin to resolve.'
     })
@@ -87,7 +113,6 @@ const uploadAbsentSdmHandler = async (req, res) => {
 }
 
 const validateAbsentData = (res, nama, npm, presensiId) => {
-  console.log(nama, npm, presensiId);
   if (!(namaValidator(nama) && npmValidator(npm) && refIdValidator(presensiId))) {
     res.status(400).render('errorPage', {
       errorMessage: 'Absent data invalid or image type not allowed (must .PNG / .JPEG) 1MB max.'

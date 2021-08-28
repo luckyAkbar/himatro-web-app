@@ -1,3 +1,5 @@
+const chalk = require('chalk')
+
 const { testQuery } = require('../../db/connection')
 
 const {
@@ -41,7 +43,7 @@ const getBuktiAbsensiSdmHandler = async (req, res) => {
     })
 
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
     res.status(500).render('errorPage', {
       errorMessage: 'Server failure. Please contact admin to resolve'
     })

@@ -1,9 +1,15 @@
 require('dotenv').config()
+const chalk = require('chalk')
 
 const { referensiIdGenerator } = require('../util/generator')
-const { absentFiller } = require('../util/absentFiller')
 const { testQuery } = require('../../db/connection')
 const { isExpired } = require('../util/getTimeStamp')
+
+const {
+  absentFiller,
+  checkIsAlreadyOpen,
+  checkIsExpired
+} = require('../util/absentFiller')
 
 const {
   createNewAbsent,
@@ -37,7 +43,7 @@ const postAbsentHandler = async (req, res) => {
       }
     } catch (e) {
       res.sendStatus(500)
-      console.log('cannot validate absent ref data', e)
+      console.log(chalk.red('Can\'t validate absent data',e))
     }
 
     const { ref } = req.query
@@ -47,7 +53,7 @@ const postAbsentHandler = async (req, res) => {
       await createNewAbsentRecord(refId, req, res)
     } catch (e) {
       //res.sendStatus(500)
-      console.log('cannot create new absent / kegiatan record', e)
+      console.log(chalk.red('cannot create new absent / kegiatan record', e))
     }
   }
 
@@ -55,7 +61,6 @@ const postAbsentHandler = async (req, res) => {
     const { absentId, npm, nama, keterangan, mode } = req.body
 
     if (!modeValidator(mode)) {
-      console.log(modeValidator(mode));
       res.sendStatus(404)
       return
     }
@@ -68,9 +73,27 @@ const postAbsentHandler = async (req, res) => {
     }
 
     try {
+      const isAlreadyOpen = await checkIsAlreadyOpen(absentId)
+
+      if (!isAlreadyOpen) {
+        res.status(403).render('errorPage', {
+          errorMessage: 'Sorry, this form is still locked'
+        })
+        return
+      }
+
+      const isExpired = await checkIsExpired(absentId)
+
+      if (isExpired) {
+        res.status(403).render('errorPage', {
+          errorMessage: 'Sorry, absent form already closed.'
+        })
+        return
+      }
+
       await absentFiller(absentId, npm, nama, keterangan, res)
     } catch(e) {
-      console.log(e);
+      console.log(chalk.red(e));
     }
   }
 }

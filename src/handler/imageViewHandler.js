@@ -1,3 +1,5 @@
+const chalk = require('chalk')
+
 const { testQuery } = require('../../db/connection')
 const { refIdValidator } = require('../util/validator')
 
@@ -46,14 +48,14 @@ const imageViewHandler = async (req, res) => {
 
     res.sendFile(nama_gambar, option, (err) => {
       if (err) {
-        console.log(err)
+        console.log(chalk.red(err))
         res.status(500).render('errorPage', {
           errorMessage: 'Server Error. Please contact admin to resolve.'
         })
       }
     })
   } catch (e) {
-    console.log(e)
+    console.log(chalk.red(e))
     res.status(404).render('errorPage', {
       errorMessage: 'Image not found.'
     })
