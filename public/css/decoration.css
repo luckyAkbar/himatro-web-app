@@ -1,8 +1,8 @@
 .decoration{
-	position: absolute;
+	position: fixed;
 	width: 500px;
 	height: 500px;
-	top: 700px;
+	top: 80%;
 	left: -40px;
 	border-radius: 14%;
 	background-color: #DF2E2E;
@@ -50,14 +50,17 @@
 @keyframes decorations {
 	0%{
 		opacity: 100%;
+		top: 80%;
 		transform: scale(0.2, 0.2);
 	}
 	70%{
 		opacity: 70%;
+		top: 80%;
 		transform: scale(1.2, 1.2);
 	}
 	100%{
 		opacity: 100%;
+		top: 80%;
 		transform: scale(1, 1);
 	}
 }
