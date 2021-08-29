@@ -1,0 +1,99 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  position: fixed;
+  background-color: #fff7ae;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.kotak {
+  position: relative;
+  width: 500px;
+  height: 350px;
+  background-color: #F6D167;
+  margin: auto;
+  top: 50px;
+  border-radius: 7%;
+  z-index: 10;
+  animation-name: kotake;
+  animation-duration: 0.5s;
+}
+
+.kotak:hover{
+  transform: scale(1.01, 1.01);
+}
+
+@keyframes kotake{
+  0%{
+    transform: scale(0.01, 0.01);
+  }
+  70%{
+    transform: scale(1.2, 1.2);
+  }
+  100%{
+    transform: scale(1, 1);
+  }
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #297F87;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  position: relative;
+  margin: 24px 0 12px 0;
+}
+
+img.logo {
+  width: 40%;
+  max-width: 200px;
+}
+
+.container {
+  padding: 16px;
+  width: 90%;
+  margin: auto;
+  max-width: 500px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
