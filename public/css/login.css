@@ -9,7 +9,7 @@ body {
 .kotak {
   position: relative;
   width: 500px;
-  height: 350px;
+  height: 550px;
   background-color: #F6D167;
   margin: auto;
   top: 50px;
@@ -95,5 +95,20 @@ span.psw {
   }
   .cancelbtn {
      width: 100%;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  img.logo {
+    width: 30%;
+  }
+
+  .container {
+    max-width: 400px;
+  }
+  
+  .kotak {
+    width: 70%;
+    height: 60%;
   }
 }
