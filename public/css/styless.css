@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif;
+}
+
+body{
+	background: #efddef;
+	min-height: 200vh;
+}
+
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	transition: 0.6s;
+	padding: 25px 45px;
+	z-index: 100000;
+}
+
+header.joss {
+	width: 100%;
+	padding: 5px 100px;
+	background: #03506F;
+}
+
+header .logo {
+	position: relative;
+	color: #fff;
+	text-decoration: none;
+	font-size: 2em;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	transition: 0.6s;
+	height: 60px;
+	transition: 0.6s;
+}
+header .logo p{
+	position: relative;
+	top: -70px;
+	left : 80px;
+	font-weight: 700;
+	color: #fff;
+	text-decoration: none;
+	font-size: 1em;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	transition: 0.6s;
+}
+
+header .logo img{
+	max-width: 60px;
+}
+
+header ul {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+header ul li {
+	position: relative;
+	list-style: none;
+}
+
+header ul li a {
+	position: relative;
+	margin: 0 15px;
+	text-decoration: none;
+	color: #fff;
+	letter-spacing: 2px;
+	font-weight: 500px;
+	transition: 0.6s;
+}
+
+@font-face {
+	font-family: header_satu;
+	src: url(../src/font/AveriaGruesaLibre_Regular.ttf);
+}
+@font-face {
+	font-family: footer;
+	src: url(../src/font/ARI.ttf);
+}
+@font-face {
+	font-family: footerh;
+	src: url(../src/font/Arialn.ttf);
+}
+
+.banner {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	background: url(../src/image/background.jpg);
+	background-size: cover;
+}
+.banner h1 {
+	position: relative;
+	top: 200px;
+	left: 100px;
+	color: #dddddd;
+	font-family: "header_satu";
+	font-size: 50px;
+}
+.banner p {
+	position: relative;
+	top: 250px;
+	left: 80px;
+	max-width: 1100px;
+	color: #dddddd;
+	font-size: 25px;
+}
+
+header.joss .logo,
+header.joss ul li a {
+	color: #fff;
+	left : -50px;
+}
+
+.slide{
+	position: absolute;
+	width: 100%;
+	height: 600px;
+	top: 150px;
+	z-index: 3;
+	overflow: hidden;
+}
+
+.slide .but-left{
+	position: inherit;
+	left: 40px;
+	top: 50%;
+	width: 40px;
+	height: 50px;
+	opacity: 20%;
+	z-index: 6;
+}
+
+.slide .but-right{
+	position: inherit;
+	right: 40px;
+	top: 50%;
+	width: 40px;
+	height: 50px;
+	opacity: 20%;
+}
+
+.but-right:hover, .but-left:hover{
+	opacity: 50%;
+}
+.slide img{
+	width: 100%;
+}
+
+footer {
+	min-height: 200px;
+
+}
+
+footer .background {
+	width: 100%;
+	height: 400px;
+	position: relative;
+	background-color: #000;
+}
+footer .background h2 {
+	font-size: 19px;
+	color: #aaaaaa;
+	font-family: "footerh";
+	position: relative;
+	padding-left: 40px;
+}
+
+footer .background p {
+
+	color: #aaaaaa;
+	max-width: 50%;
+	font-family: "footer";
+	font-size: 14px;
+	position: relative;
+	padding-left: 40px;
+}
