@@ -1,0 +1,100 @@
+.decoration{
+	position: absolute;
+	width: 500px;
+	height: 500px;
+	top: 700px;
+	left: -40px;
+	border-radius: 14%;
+	background-color: #DF2E2E;
+	animation-name: decorations;
+	animation-delay: 0.3s;
+	animation-duration: 1s;
+}
+.decoration:hover{
+	transform: scale(0.9, 0.9);
+}
+
+.decoration .dec1{
+	position: relative;
+	width: 500px;
+	height: 500px;
+	top: 60px;
+	left: -60px;
+	border-radius: 14%;
+	background-color: #F6D167;
+	animation-name: decorations;
+	animation-delay: 0.2s;
+	animation-duration: 1s;
+}
+.decoration .dec1:hover{
+	transform: rotate(20deg);
+}
+
+.decoration .dec1 .dec2{
+	position: relative;
+	width: 500px;
+	height: 500px;
+	top: 60px;
+	left: -60px;
+	border-radius: 14%;
+	background-color: #297F87;
+	animation-name: decorations;
+	animation-delay: 0.1s;
+	animation-duration: 1s;
+}
+
+.decoration .dec1 .dec2:hover{
+	transform: rotate(-40deg);
+}
+
+@keyframes decorations {
+	0%{
+		opacity: 100%;
+		transform: scale(0.2, 0.2);
+	}
+	70%{
+		opacity: 70%;
+		transform: scale(1.2, 1.2);
+	}
+	100%{
+		opacity: 100%;
+		transform: scale(1, 1);
+	}
+}
+
+.decor2 {
+	position: fixed;
+	width: 1000px;
+	height: 300px;
+	top: 100px;
+	left: 75%;
+	border-radius: 150px;
+	background-color: #297F87;
+	animation-name: decoor;
+	animation-duration: 0.7s;
+}
+.decor2:hover{
+	left: 80%;
+	top: 75px;
+	height: 350px;
+	border-radius: 175px;
+}
+
+.decor2 .decor3 {
+	position: relative;
+	width: 200px;
+	height: 20px;
+	top: 250px;
+	left:-20px;
+	border-radius: 150px;
+	background-color: #DF2E2E;
+}
+
+@keyframes decoor{
+	0%{
+		left: 110%;
+	}
+	100%{
+		left: 75%;
+	}
+}
