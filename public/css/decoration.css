@@ -50,17 +50,14 @@
 @keyframes decorations {
 	0%{
 		opacity: 100%;
-		top: 80%;
 		transform: scale(0.2, 0.2);
 	}
 	70%{
 		opacity: 70%;
-		top: 80%;
 		transform: scale(1.2, 1.2);
 	}
 	100%{
 		opacity: 100%;
-		top: 80%;
 		transform: scale(1, 1);
 	}
 }
