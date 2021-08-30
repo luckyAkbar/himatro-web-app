@@ -83,22 +83,22 @@ header ul li a {
 
 @font-face {
 	font-family: header_satu;
-	src: url(../src/font/AveriaGruesaLibre_Regular.ttf);
+	src: url(/font/AveriaGruesaLibre_Regular.ttf);
 }
 @font-face {
 	font-family: footer;
-	src: url(../src/font/ARI.ttf);
+	src: url(/font/ARI.ttf);
 }
 @font-face {
 	font-family: footerh;
-	src: url(../src/font/Arialn.ttf);
+	src: url(/font/Arialn.ttf);
 }
 
 .banner {
 	position: relative;
 	width: 100%;
 	height: 100vh;
-	background: url(../src/image/background.jpg);
+	background-color: #fff;
 	background-size: cover;
 }
 .banner h1 {
