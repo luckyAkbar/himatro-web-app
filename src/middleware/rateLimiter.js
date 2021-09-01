@@ -12,4 +12,17 @@ const loginLimiter = rateLimit({
   }
 })
 
-module.exports = { loginLimiter }
+const uploadLimiter = rateLimit({
+  windowMs: process.env.LOGIN_TIME_LIMIT_MS,
+  max: process.env.MAX_UPLOAD_TRIAL,
+  handler: function(req, res) {
+    res.status(429).render('errorPage', {
+      errorMessage: 'Too many uploads. Please wait another 2 hours or contact admin to resolve.'
+    })
+  }
+})
+
+module.exports = {
+  loginLimiter,
+  uploadLimiter
+}
