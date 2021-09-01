@@ -78,7 +78,7 @@ const uploadAbsentSdmHandler = async (req, res) => {
         req.file.id,
         resume,
         presensiId,
-        npm
+        npm,
       ]
 
       await testQuery(query, params)
@@ -91,9 +91,11 @@ const uploadAbsentSdmHandler = async (req, res) => {
         $2
       );`
 
+      const fileName = `/buktiKehadiran/${req.file.realname}`
+
       params = [
         req.file.id,
-        req.file.realname
+        fileName
       ]
 
       await testQuery(query, params)
