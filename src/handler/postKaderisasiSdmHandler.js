@@ -1,10 +1,9 @@
 const { load } = require('csv-load-sync')
 const chalk = require('chalk')
-const { namaFormatter } = require('../util/namaFormatter')
+const { namaFormatter } = require('../util/formatter')
 const { sdmUIDGenerator } = require('../util/generator')
 const { testQuery } = require('../../db/connection')
 const { namaKegiatanValidator } = require('../util/validator')
-const { readDataCsv } = require('../util/readDataCsv')
 const { createNewKegiatan } = require('../util/createNewAbsent')
 
 const kaderisasiSdmHandler = async (req, res) => {
@@ -14,6 +13,7 @@ const kaderisasiSdmHandler = async (req, res) => {
     res.sendStatus(400)
     return
   }
+
   const sdmId = sdmUIDGenerator()
   const presensi = sdmUIDGenerator()
 
@@ -46,12 +46,18 @@ const kaderisasiSdmHandler = async (req, res) => {
     const result = await initNewAbsentRecord('sdm', data)
     await createNewKegiatan(presensi, req.body)
 
+    res.status(201).json({
+      message: 'Kegiatan telah tercatat, dan absensi telah terbentuk.',
+      absensiId: presensi
+    })
+
     if (result) {
       res.status(201).json({
         message: 'Kegiatan telah tercatat, dan absensi telah terbentuk.',
         absensiId: presensi
       })
     }
+    
   } catch (e) {
     console.log(chalk.red(e))
     res.status(500).json({ error: 'Server error, please contact admin to resolve' })
@@ -106,4 +112,5 @@ const initNewAbsentRecord = async (opt, data) => {
     }
   }
 }
+
 module.exports = { kaderisasiSdmHandler }
