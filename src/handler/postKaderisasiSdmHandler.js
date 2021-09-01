@@ -43,21 +43,14 @@ const kaderisasiSdmHandler = async (req, res) => {
       ]
     }
 
-    const result = await initNewAbsentRecord('sdm', data)
+    await initNewAbsentRecord('sdm', data)
     await createNewKegiatan(presensi, req.body)
 
     res.status(201).json({
       message: 'Kegiatan telah tercatat, dan absensi telah terbentuk.',
       absensiId: presensi
     })
-
-    if (result) {
-      res.status(201).json({
-        message: 'Kegiatan telah tercatat, dan absensi telah terbentuk.',
-        absensiId: presensi
-      })
-    }
-    
+        
   } catch (e) {
     console.log(chalk.red(e))
     res.status(500).json({ error: 'Server error, please contact admin to resolve' })
@@ -105,8 +98,6 @@ const initNewAbsentRecord = async (opt, data) => {
           ]
         const finished = await testQuery(query, params)
       }
-
-      return true
     } catch (e) {
       console.log(chalk.red(e))
     }
