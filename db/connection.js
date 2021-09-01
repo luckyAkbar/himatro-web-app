@@ -43,7 +43,7 @@ async function testQuery(query, params) {
 
     return res
   } catch(e) {
-    console.log(chalk.red('err connection.js', e))
+    console.log(chalk.red(`err connection.js ${params}`, e))
   }
 }
 
