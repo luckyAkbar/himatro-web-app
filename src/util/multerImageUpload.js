@@ -7,7 +7,7 @@ const { getTimeStamp } = require('../util/getTimeStamp')
 const {
   uploadedImageNameGenerator,
   imageIdGenerator
-  } = require('../util/generator')
+} = require('../util/generator')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -18,7 +18,8 @@ const storage = multer.diskStorage({
   }
 })
 
-const fileFilter = (req, file, cb) => {
+const uploadFileFilter = (req, file, cb) => {
+
   if (file.mimetype === 'image/jpeg' && file.originalname.endsWith('.jpeg')) {
     file.extention = '.jpeg'
   } else if (file.mimetype === 'image/png' && file.originalname.endsWith('.png')) {
@@ -39,7 +40,7 @@ const upload = multer({ storage: storage,
   limits: {
     fileSize: Number(process.env.MAX_IMAGE_SIZE_UPLOAD)
   },
-  fileFilter: fileFilter
+  fileFilter: uploadFileFilter
 }).single('photoUpload')
 
 const multerErrorChecker = (res, err) => {
