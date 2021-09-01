@@ -57,11 +57,30 @@ const sessionIdGenerator = () => {
   })}`
 }
 
+const initOnetimeSignupIdGenerator = () => {
+  return `signup${generateUniqueId({
+    length: 9,
+    excludeSymbols: excludedSymbols,
+    useLetters: true,
+    useNumbers: true
+  })}`
+}
+
+const userPasswordGenerator = (npm) => {
+  return `${npm}${generateUniqueId({
+    length: 13,
+    useLetters: true,
+    useNumbers: true
+  })}`
+}
+
 module.exports = {
   referensiIdGenerator,
   uploadedImageNameGenerator,
   sdmUIDGenerator,
   imageIdGenerator,
   sessionGenerator,
-  sessionIdGenerator
+  sessionIdGenerator,
+  userPasswordGenerator,
+  initOnetimeSignupIdGenerator
  }
