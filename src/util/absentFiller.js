@@ -38,6 +38,24 @@ const checkAlreadyFilled = async (ref_id, npm, nama) => {
   }
 }
 
+const checkIsEmailExists = async (email, tableName) => {
+  const query = `SELECT COUNT(1) FROM ${tableName} WHERE email = $1`
+  const params = [email]
+
+  try {
+    const { rows } = await testQuery(query, params)
+
+    if (rows[0].count === '0') {
+      return false
+    }
+
+    return true
+  } catch(e) {
+    console.log(e)
+    throw new Error('Failed to check whether email already exists or not.')
+  }
+}
+
 const checkIsExpired = async (absentId) => {
   const query = 'select tanggal_berakhir from kegiatan where kegiatan_id = $1'
   const params = [absentId]
@@ -175,5 +193,6 @@ module.exports = {
   absentFiller,
   checkRefIdExists,
   checkIsExpired,
-  checkIsAlreadyOpen
+  checkIsAlreadyOpen,
+  checkIsEmailExists
 }
