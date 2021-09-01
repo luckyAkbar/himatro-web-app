@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS sdm_kaderisasi;
 DROP TABLE IF EXISTS gambar;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS signupdata;
 
 CREATE TABLE departemen (
   departemen_id VARCHAR(10) PRIMARY KEY,
@@ -172,7 +173,7 @@ CREATE TABLE kehadiran_sdm (
 
 CREATE TABLE gambar (
   gambar_id VARCHAR(10) PRIMARY KEY,
-  nama_gambar VARCHAR(35) NOT NULL
+  nama_gambar VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE users (
@@ -185,4 +186,11 @@ CREATE TABLE sessions (
   session VARCHAR(200) UNIQUE NOT NULL,
   useragent VARCHAR(200) NOT NULL,
   expired BIGINT NOT NULL
+);
+
+CREATE TABLE signupdata (
+  key VARCHAR(15) NOT NULL,
+  nama VARCHAR(255) NOT NULL,
+  npm VARCHAR(11) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL
 );
