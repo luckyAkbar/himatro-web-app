@@ -9,7 +9,9 @@ const { incorrectJSONFormatErrorHandler } = require('./util/incorrectJSONFormatE
 const app = express()
 app.set('view engine', 'ejs')
 app.use(cookieParser())
-app.use(helmet())
+app.use(helmet({
+    contentSecurityPolicy: false
+}))
 app.use(express.static('./public'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())

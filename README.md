@@ -14,3 +14,4 @@ to do list:
 6. sql view kok gadigunain astagaaa:)
 7. refactor getAbsentHandler (unnesecary if else statement)
 8. testing push
+9. HAVE YOU CREATE CSP DIRECTIVE?
