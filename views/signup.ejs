@@ -7,7 +7,7 @@
 	<title>Sign Up</title>
 </head>
 <body>
-	<form action="/signup" method="POST">
+	<form action="/one-time-signup" method="POST">
 		<div class="signContainer">
 			<div class="formSignUp">
 				<div class="formmargin">
@@ -21,18 +21,12 @@
 					<label for="email"><b>Email</b></label>
             		<input type="text" placeholder="Enter Username" name="email" required>
 
-            		<label for="password"><b>Password</b></label>
-            		<input type="password" placeholder="Enter Password" name="password" required>
-
-            		<label for="password"><b>Password(Confirm)</b></label>
-            		<input type="password" placeholder="Enter Password" name="password" required>
-
+					<label for="formId"><b>Form Id:</b></label>
+            		<input type="text" placeholder="Enter Form Id" name="formId" required>
             		<button type="submit">Sign Up</button>
             	</div>
-
 			</div>
 		</div>
 	</form>
-
 </body>
 </html>
