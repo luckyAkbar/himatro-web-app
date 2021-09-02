@@ -24,13 +24,13 @@ const {
 const {
     namaValidator,
     npmValidator,
-    emailValidator
+    emailValidator,
+    commonValidator
 } = require('../util/validator')
 
 const postOnetimeSignupHandler = async (req, res) => {
     try {
         const isDataValid = validateInputData(req.body)
-        console.log(req.body)
 
         if (!isDataValid) {
             res.status(400).render('errorPage', {
@@ -41,14 +41,33 @@ const postOnetimeSignupHandler = async (req, res) => {
 
         const {
             npm,
-            email
+            email,
+            formId
         } = req.body
+
+        const isFormExits = await checkIfFormIdExists(formId)
+
+        if (!isFormExits) {
+            res.status(404).render('errorPage', {
+                errorMessage: 'Not found. This form does not exists!'
+            })
+            return
+        }
 
         const isNpmExists = await checkIsNpmExists(npm)
 
         if (!isNpmExists) {
             res.status(404).render('errorPage', {
                 errorMessage: 'Sorry, your NPM is not registered. Please contact admin to resolve.'
+            })
+            return
+        }
+
+        const isAlreadySignup = await checkIsAlreadySignup(npm)
+
+        if (isAlreadySignup) {
+            res.status(403).render('errorPage', {
+                errorMessage: `Sorry, you can't change signup data. Please wait until that feature to be released.`
             })
             return
         }
@@ -173,15 +192,56 @@ const checkIsNpmExists = async (npm) => {
     }
 }
 
+const checkIfFormIdExists = async (formId) => {
+    const query = 'SELECT COUNT(1) FROM signupdata WHERE key = $1'
+    const params = [formatToLowercase(formId)]
+
+    try {
+        const { rows } = await testQuery(query, params)
+
+        if (rows[0].count === '0') {
+            return false
+        }
+
+        return true
+    } catch(e) {
+        console.log(e)
+        return false
+    }
+}
+
+const checkIsAlreadySignup = async (npm) => {
+    const query = 'SELECT nama FROM signupdata WHERE npm = $1'
+    const params = [npm]
+
+    try {
+        const { rows } = await testQuery(query, params)
+
+        if (rows[0].nama === 'dummy') {
+            return false
+        } else {
+            return true
+        }
+    } catch(e) {
+        console.log(e)
+        return true
+    }
+}
+
 const validateInputData = (data) => {
     const {
         nama,
         npm,
         email,
+        formId
     } = data
 
     try {
-        if (Object.keys(data).length !== 3) {
+        if (Object.keys(data).length !== 4) {
+            return false
+        }
+
+        if (!commonValidator(formId)) {
             return false
         }
 
