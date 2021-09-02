@@ -13,13 +13,20 @@ const createJWTToken = (session, sessionId) => {
 }
 
 const verifyJWTToken = (token) => {
-  return jwt.verify(token, process.env.SECRET_JWT_TOKEN, (err, result) => {
+  const result = jwt.verify(token, process.env.SECRET_JWT_TOKEN, (err, decoded) => {
     if (err) {
-      throw new Error('Token is not authentic')
+      return new Error('Token is not authentic')
     }
 
-    return result
+    return decoded
   })
+
+  if (result instanceof Error) {
+    throw new Error('Token invalid')
+  } else {
+    return result
+  }
+
 }
 
 module.exports = {
