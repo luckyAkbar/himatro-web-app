@@ -6,6 +6,17 @@ const sortByComparator = /[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/
 const emailComparator = /[!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?]+/
 const letterComparator = /[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]/
 
+const commonValidator = (variable) => {
+  try {
+    if (comparator.test(variable)) {
+      return false
+    }
+
+    return true
+  } catch(e) {
+    return false
+  }
+}
 const npmValidator = (npm) => {
   try {
     if (npm.length > 10) {
@@ -233,15 +244,17 @@ const postAbsentDataValidator = (refId, npm, nama, keterangan) => {
   return true
 }
 
-module.exports = { npmValidator,
-   namaValidator,
-   namaKegiatanValidator,
-   tanggalValidator,
-   validateAbsentRefData,
-   refIdValidator,
-   modeValidator,
-   sortByValidator,
-   showValueValidator,
-   postAbsentDataValidator,
-   emailValidator,
+module.exports = {
+  commonValidator,
+  npmValidator,
+  namaValidator,
+  namaKegiatanValidator,
+  tanggalValidator,
+  validateAbsentRefData,
+  refIdValidator,
+  modeValidator,
+  sortByValidator,
+  showValueValidator,
+  postAbsentDataValidator,
+  emailValidator,
 }
