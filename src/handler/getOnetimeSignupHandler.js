@@ -1,5 +1,5 @@
 const getOnetimeSignupHandler = (req, res) => {
-    res.status(200).json({ message: 'OK' })
+    res.status(200).render('signup')
     return
 }
 
