@@ -1,0 +1,62 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  position: fixed;
+  background-color: #FAF1E6;
+  width: 100%;
+  overflow-x: hidden;
+}
+h2{
+  text-align: center;
+  color: #fff;
+}
+
+.signContainer{
+  position: absolute;
+  width: 1000px;
+  height: 600px;
+  left: 50%;
+  top: 100px;
+  margin-left:-500px;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #FFC074;
+}
+.formSignUp{
+  position: relative;
+  top: -40px;
+  width: 600px;
+  height: 650px;
+  left: 40%;
+  background-color: #B6C867;
+}
+.formmargin{
+  position: relative;
+  top: 50px;
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #01937C;
+  color: white;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
