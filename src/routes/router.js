@@ -8,6 +8,7 @@ const { imageViewHandler } = require('../handler/imageViewHandler')
 const { getBuktiAbsensiSdmHandler } = require('../handler/getBuktiAbsensiSdmHandler')
 const { authentication } = require('../middleware/authentication')
 const { getOnetimeSignupHandler } = require('../handler/getOnetimeSignupHandler')
+const { logoutHandler } = require('../handler/logoutHandler')
 
 const {
   postOnetimeSignupHandler,
@@ -55,7 +56,9 @@ router.get('/kontak', (req, res) => {
 })
 
 router.get('/login', getLoginPage)
-  .post('/login', loginLimiter, postLoginHandler) 
+  .post('/login', loginLimiter, postLoginHandler)
+
+router.get('/logout', logoutHandler)
 
 router.post('/kaderisasi/sdm', kaderisasiSdmHandler)
 
@@ -69,7 +72,7 @@ router.get('/images/view/:imageId', imageViewHandler)
 router.get('/protected/route', authentication)
 
 router.get('/one-time-signup', getOnetimeSignupHandler)
-  .post('/one-time-signup', postOnetimeSignupHandler) //uploadLimiter,
+  .post('/one-time-signup', uploadLimiter, postOnetimeSignupHandler)
 
 router.post('/init/one-time-signup', initOnetimeSignupHandler)
 
