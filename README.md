@@ -15,3 +15,4 @@ to do list:
 7. refactor getAbsentHandler (unnesecary if else statement)
 8. testing push
 9. HAVE YOU CREATE CSP DIRECTIVE?
+10. JWT verify token
