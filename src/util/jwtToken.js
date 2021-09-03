@@ -3,10 +3,11 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const { sesionIdGenerator } = require('./generator')
 
-const createJWTToken = (session, sessionId) => {
+const createJWTToken = (session, sessionId, email) => {
   return jwt.sign({
     session,
-    sessionId
+    sessionId,
+    email
   }, process.env.SECRET_JWT_TOKEN, {
     expiresIn: Number(process.env.JWT_TOKEN_EXPIRES_SEC),
   })
