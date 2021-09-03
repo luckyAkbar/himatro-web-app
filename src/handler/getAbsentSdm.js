@@ -83,9 +83,7 @@ const getAbsentSdm = async (req, res) => {
 }
 
 const viewAbsentResultPage = async (res, presensiId) => {
-  const query = `SELECT npm, nama, gambar_id, resume
-    FROM kehadiran_sdm
-    WHERE presensi = $1 ORDER BY npm`
+  const query = `SELECT * FROM kehadiran_sdm WHERE presensi = $1 ORDER BY kelas`
   const params = [
     presensiId
   ]
