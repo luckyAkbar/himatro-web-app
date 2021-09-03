@@ -90,6 +90,7 @@ const postOnetimeSignupHandler = async (req, res) => {
         const userPassword = userPasswordGenerator(npm)
 
         await generateLoginCredential(req.body, userPassword)
+        await initDataAnggotaBiasa(req.body)
         await sendLoginCredentialViaEmail(userPassword, req.body)
 
         return
@@ -98,6 +99,27 @@ const postOnetimeSignupHandler = async (req, res) => {
         res.status(500).render('errorPage', {
             errorMessage: 'Internal Server Error. Please contact admin to resolve.'
         })
+    }
+}
+
+const initDataAnggotaBiasa = async (data) => {
+    const {
+        nama,
+        npm,
+        email
+    } = data
+
+    const query = 'INSERT INTO anggota_biasa (npm, nama, email) VALUES ($1, $2, $3)'
+    const params = [
+        npm,
+        nama,
+        email
+    ]
+
+    try {
+        await testQuery(query, params)
+    } catch(e) {
+        console.log(`FAILED TO INSERT DATA ANGGOTA BIASA ${params}`, e)
     }
 }
 
