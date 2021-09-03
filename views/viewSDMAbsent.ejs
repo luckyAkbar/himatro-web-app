@@ -34,6 +34,7 @@
         <th>No</th>
         <th>NPM</th>
         <th>Nama</th>
+        <th>Kelas</th>
         <th>Bukti</th>
       </tr>
       <% dataHasilAbsensi.forEach((data) => {%>
@@ -41,6 +42,7 @@
           <td><%= i+1 %></td>
           <td style="min-width:100px"><%= data.npm %></td>
           <td style="min-width:100px"><%= data.nama %></td>
+          <td style="min-width:100px"><%= data.kelas %></td>
           <% if (data.resume) { %>
           <td style="min-width:100px"><a href="<%= `/kaderisasi/sdm/absensi/bukti?presensiId=${presensiId}&npm=${data.npm}` %>">bukti</a></td>
           <% } else { %>
