@@ -23,13 +23,15 @@ DROP TABLE IF EXISTS signupdata;
 
 CREATE TABLE departemen (
   departemen_id VARCHAR(10) PRIMARY KEY,
-  jumlah_anggota INT NOT NULL,
+  nama_departemen VARCHAR(150) NOT NULL,
+  jumlah_anggota INT DEFAULT NULL,
   CHECK (jumlah_anggota >= 0)
 );
 
 CREATE TABLE divisi (
   divisi_id VARCHAR(10) PRIMARY KEY,
-  jumlah_anggota INT NOT NULL,
+  nama_divisi VARCHAR(150) NOT NULL,
+  jumlah_anggota INT DEFAULT NULL,
   departemen_id VARCHAR(10) REFERENCES departemen(departemen_id) NOT NULL
   CHECK(jumlah_anggota >= 0)
 );
@@ -60,28 +62,30 @@ CREATE TABLE kegiatan (
 );
 
 CREATE TABLE jabatan (
-  jabatan_id CHAR(1) PRIMARY KEY,
+  jabatan_id CHAR(10) PRIMARY KEY,
   nama_jabatan VARCHAR(255) UNIQUE NOT NULL,
-  singkatan VARCHAR(100) UNIQUE NOT NULL
+  hak INT NOT NULL
 );
 
 CREATE TABLE pengurus (
   npm VARCHAR(11) PRIMARY KEY,
   divisi_id VARCHAR(10) REFERENCES divisi(divisi_id),
-  jabatan_id CHAR(1) REFERENCES jabatan(jabatan_id)
+  jabatan_id CHAR(10) REFERENCES jabatan(jabatan_id)
 );
 
 CREATE TABLE anggota_biasa (
   npm VARCHAR(11) PRIMARY KEY,
   nama VARCHAR(255) NOT NULL,
-  no_telpon VARCHAR(25) UNIQUE NOT NULL,
-  alamat_email VARCHAR(255) UNIQUE NOT NULL,
-  no_whatsapp VARCHAR(25) UNIQUE NOT NULL,
-  media_sosial VARCHAR(255),
-  angkatan INT NOT NULL,
-  program_studi CHAR(1) NOT NULL,
-  ipk NUMERIC(3,2) DEFAULT 0.00 CHECK (ipk >= 0),
-  alamat VARCHAR(255) NOT NULL
+  no_telpon VARCHAR(25) UNIQUE DEFAULT NULL,
+  email VARCHAR(255) UNIQUE DEFAULT NULL,
+  no_whatsapp VARCHAR(25) UNIQUE DEFAULT NULL,
+  media_sosial VARCHAR(255) DEFAULT NULL,
+  angkatan INT DEFAULT NULL,
+  program_studi CHAR(1) DEFAULT NULL,
+  ipk NUMERIC(3,2) DEFAULT NULL CHECK (ipk >= 0),
+  alamat VARCHAR(255) DEFAULT NULL,
+  pekerjaan VARCHAR(255) DEFAULT NULL,
+  info_lainnya TEXT DEFAULT NULL
 );
 
 CREATE TABLE inventaris (
@@ -167,6 +171,7 @@ CREATE TABLE kehadiran_sdm (
   presensi VARCHAR(10) NOT NULL,
   nama VARCHAR(255) NOT NULL,
   npm VARCHAR(11) NOT NULL,
+  kelas VARCHAR(4) NOT NULL,
   gambar_id VARCHAR(10) DEFAULT NULL,
   resume TEXT DEFAULT NULL
 );
@@ -183,6 +188,7 @@ CREATE TABLE users (
 
 CREATE TABLE sessions (
   sessionid VARCHAR(10) PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
   session VARCHAR(200) UNIQUE NOT NULL,
   useragent VARCHAR(200) NOT NULL,
   expired BIGINT NOT NULL
@@ -194,3 +200,41 @@ CREATE TABLE signupdata (
   npm VARCHAR(11) UNIQUE NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL
 );
+
+INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000001', 'Pengurus Harian');
+INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000002', 'Pendidikan dan Pengembangan Diri');
+INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000003', 'Kaderisasi dan Pengembangan Organisasi');
+INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000004', 'Sosial dan Kewirausahaan');
+INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000005', 'Pengembangan Keteknikan');
+INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000006', 'Komunikasi dan Informasi');
+
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id ) VALUES ('div0000001', 'Pengurus Harian', 'dep0000001');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000002', 'Kaderisasi dan Pengembangan Organisasi', 'dep0000003');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000003', 'Pendidikan', 'dep0000002');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000004', 'Kerohanian', 'dep0000002');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000005', 'Minat dan Bakat', 'dep0000002');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000006', 'Sosial', 'dep0000004');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000007', 'Kewirausahaan', 'dep0000004');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000008', 'Penelitian dan Pengembangan', 'dep0000005');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000009', 'Pengabdian Masyarakat', 'dep0000005');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000010', 'Media Informasi', 'dep0000006');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000011', 'Hubungan Masyarakat', 'dep0000006');
+
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000001', 'Ketua Umum', 9);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000002', 'Wakil Ketua', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000003', 'Sekertaris Umum', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000004', 'Wakil Sekertaris Umum', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000005', 'Bendahara', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000006', 'Wakil Bendahara', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000007', 'Kepala Departemen', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000008', 'Sekertaris Departemen', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000009', 'Kepala Divisi', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000010', 'Anggota', 0);
+
+/*
+INSERT INTO anggota_biasa (npm, nama, email, angkatan) VALUES ('1915061056', 'Lucky', 'm248r4231@dicoding.org', '2019');
+
+INSERT INTO pengurus (npm, divisi_id, jabatan_id) VALUES ('1915061056', 'div0000001', 'jab0000001');
+
+SELECT hak FROM jabatan WHERE jabatan_id = (SELECT jabatan_id FROM pengurus WHERE npm = (SELECT npm FROM anggota_biasa WHERE email = 'm248r4231@dicoding.org'));
+*/
