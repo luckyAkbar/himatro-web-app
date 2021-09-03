@@ -16,3 +16,4 @@ to do list:
 8. testing push
 9. HAVE YOU CREATE CSP DIRECTIVE?
 10. JWT verify token
+11. Update ERD
