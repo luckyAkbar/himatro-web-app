@@ -16,8 +16,9 @@
 const { verifyJWTToken } = require('../util/jwtToken')
 const { getSecondsAfterEpoch } = require('../util/getTimeStamp')
 const { testQuery } = require('../../db/connection')
+const  chalk = require('chalk')
 
-const authentication = async (req, res) => {
+const authentication = async (req, res, next) => {
     const { jwt } = req.cookies
 
     try {
@@ -28,9 +29,8 @@ const authentication = async (req, res) => {
 
     if (jwt) {
         const query = 'SELECT * FROM sessions WHERE sessionid = $1'
-        try {
-            
-            const { sessionId, session, exp } = verifyJWTToken(jwt)
+        try {    
+            const { sessionId, session, exp, email } = verifyJWTToken(jwt)
             
             if (getSecondsAfterEpoch() > exp) {
                 console.log('token expired')
@@ -56,12 +56,13 @@ const authentication = async (req, res) => {
                 return
             }
 
-            res.render('adminPage')        
+            req.email = email
+            next()
             return
 
         } catch(e) {
-            console.log(e)
-            res.sendStatus(403)
+            console.log(chalk.white.bold.bgRed(`Unothorized access detected on ${req.path}`))
+            res.status(403).redirect('/login')
             return
         }
     }
