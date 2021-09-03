@@ -2,8 +2,6 @@ require('dotenv').config()
 const chalk = require('chalk')
 
 const { referensiIdGenerator } = require('../util/generator')
-const { testQuery } = require('../../db/connection')
-const { isExpired } = require('../util/getTimeStamp')
 
 const {
   absentFiller,
