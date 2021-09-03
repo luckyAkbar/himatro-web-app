@@ -50,7 +50,7 @@ const postLoginHandler = async (req, res) => {
     const sessionId = sessionIdGenerator()
     const expired = getSecondsAfterEpoch() + Number(process.env.JWT_TOKEN_EXPIRES_SEC)
 
-    const jwt = createJWTToken(session, sessionId)
+    const jwt = createJWTToken(session, sessionId, email)
     
     res.cookie('jwt', jwt, {
       maxAge: process.env.JWT_TOKEN_EXPIRES_MILIS,
@@ -59,12 +59,13 @@ const postLoginHandler = async (req, res) => {
     
     res.status(200).redirect('/')
 
-    query = 'INSERT INTO sessions (sessionid, session, useragent, expired) VALUES($1, $2, $3, $4)'
+    query = 'INSERT INTO sessions (sessionid, session, useragent, expired, email) VALUES($1, $2, $3, $4, $5)'
     params = [
       sessionId,
       session,
       req.headers['user-agent'],
-      expired
+      expired,
+      email
     ]
 
     await testQuery(query, params)
