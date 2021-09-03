@@ -1,7 +1,6 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const helmet = require('helmet')
-const ejs = require('ejs')
 const { router } = require('./routes/router')
 const { incomingRequestLogger } = require('./middleware/incomingRequestLogger')
 const { incorrectJSONFormatErrorHandler } = require('./util/incorrectJSONFormatErrorHandler')
