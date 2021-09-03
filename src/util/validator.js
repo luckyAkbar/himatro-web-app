@@ -5,6 +5,7 @@ const namaComparator = /[!@#$%^&*()_+\-=\[\]{};:"\\|,<>\/?]+/
 const sortByComparator = /[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/
 const emailComparator = /[!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?]+/
 const letterComparator = /[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]/
+const commonTextComparator = /[!@#$%^&*()_+\-=\[\]{};'"\\|<>\/?]+/ /*allowing: ,.:*/
 
 const commonValidator = (variable) => {
   try {
@@ -17,6 +18,35 @@ const commonValidator = (variable) => {
     return false
   }
 }
+
+const commonTextValidator = (text) => {
+  try {
+    if (commonTextComparator.test(text)) {
+      return false
+    }
+
+    return true
+  } catch(e) {
+    return false
+  }
+}
+
+const commonNumberValidator = (number) => {
+  try {
+    if (isNaN(number)) {
+      return false
+    }
+
+    if (letterComparator.test(number)) {
+      return false
+    }
+
+    return true
+  } catch(e) {
+    return false
+  }
+}
+
 const npmValidator = (npm) => {
   try {
     if (npm.length > 10) {
@@ -246,6 +276,8 @@ const postAbsentDataValidator = (refId, npm, nama, keterangan) => {
 
 module.exports = {
   commonValidator,
+  commonTextValidator,
+  commonNumberValidator,
   npmValidator,
   namaValidator,
   namaKegiatanValidator,
@@ -257,4 +289,4 @@ module.exports = {
   showValueValidator,
   postAbsentDataValidator,
   emailValidator,
-}
+} 
