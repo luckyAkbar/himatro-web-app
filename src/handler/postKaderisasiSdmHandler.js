@@ -39,7 +39,8 @@ const kaderisasiSdmHandler = async (req, res) => {
       recordName: [
         'presensi',
         'nama',
-        'npm'
+        'npm',
+        'kelas'
       ]
     }
 
@@ -65,36 +66,21 @@ const initNewAbsentRecord = async (opt, data) => {
       recordName
     } = data
 
-    const mabaTE = load(__dirname+'/../../db/data/te21.csv')
-    const mabaTI = load(__dirname+'/../../db/data/ti21.csv')
-
-    const dataMabaFull = []
-
-    mabaTE.forEach((item) => {
-      dataMabaFull.push({
-        nama: item.nama,
-        npm: item.npm
-      })
-    })
-
-    mabaTI.forEach((item) => {
-      dataMabaFull.push({
-        nama: item.nama,
-        npm: item.npm
-      })
-    })
+    const maba = load(__dirname+'/../../db/data/maba2021.csv')
 
     try {
-      for (let i = 0; i < dataMabaFull.length; i++) {
+      for (let i = 0; i < maba.length; i++) {
         const query = `INSERT INTO ${tableName} (
             ${recordName[0]},
             ${recordName[1]},
-            ${recordName[2]})
-          VALUES ($1, $2, $3)`
+            ${recordName[2]},
+            ${recordName[3]})
+          VALUES ($1, $2, $3, $4)`
           const params = [
             refId,
-            namaFormatter(dataMabaFull[i].nama),
-            dataMabaFull[i].npm
+            namaFormatter(maba[i].nama),
+            maba[i].npm,
+            maba[i].kelas
           ]
         const finished = await testQuery(query, params)
       }
