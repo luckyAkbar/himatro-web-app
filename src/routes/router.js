@@ -11,6 +11,11 @@ const { getOnetimeSignupHandler } = require('../handler/getOnetimeSignupHandler'
 const { logoutHandler } = require('../handler/logoutHandler')
 
 const {
+  getProfile,
+  updateProfile
+} = require('../handler/profileHandler')
+
+const {
   postOnetimeSignupHandler,
   initOnetimeSignupHandler
 } = require('../handler/postOnetimeSignupHandler')
@@ -19,7 +24,6 @@ const {
   loginLimiter,
   uploadLimiter
 } = require('../middleware/rateLimiter')
-
 
 const {
   getLoginPage,
@@ -59,6 +63,10 @@ router.get('/login', getLoginPage)
   .post('/login', loginLimiter, postLoginHandler)
 
 router.get('/logout', logoutHandler)
+
+router.all('/profile', authentication)
+  .get('/profile', getProfile)
+  .put('/profile', updateProfile)
 
 router.post('/kaderisasi/sdm', kaderisasiSdmHandler)
 
