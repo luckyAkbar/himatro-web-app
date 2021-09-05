@@ -1,4 +1,6 @@
 require('dotenv').config()
+
+/*
 const { app } = require('./src/app')
 
 app.on('exit', () => {
@@ -20,8 +22,15 @@ app.on('EADDRINUSE', () => {
   console.log('Restarting due to address error')
   process.exit(-1)
 })
+*/
 
-app.listen(process.env.SERVER_PORT, () => {
-  console.log('Server estabilised on port', process.env.SERVER_PORT)
-  console.log(`On DATABASE: ${process.env.PGDATABASE}`)
+const port = process.env.port || 3000
+
+app.get('/', (req, res) => {
+  res.sendStatus(200)
+})
+
+app.listen(port, () => {
+  console.log('Server estabilised on port', port)
+  //console.log(`On DATABASE: ${process.env.PGDATABASE}`)
 })
