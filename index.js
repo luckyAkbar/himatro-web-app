@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
   res.sendStatus(200)
 })
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('Server estabilised on port', port)
   //console.log(`On DATABASE: ${process.env.PGDATABASE}`)
 })
