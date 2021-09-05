@@ -30,6 +30,6 @@ app.get('/', (req, res) => {
 })
 */
 app.listen(process.env.PORT || 3000, () => {
-  console.log('Server estabilised)
+  console.log('Server estabilised')
   //console.log(`On DATABASE: ${process.env.PGDATABASE}`)
 })
