@@ -21,15 +21,10 @@ app.on('EADDRINUSE', () => {
   console.log('Restarting due to address error')
   process.exit(-1)
 })
-/*
-const express = require('express')
-const app = express()
-const port = process.env.port || 3000
-app.get('/', (req, res) => {
-  res.sendStatus(200)
-})
-*/
-app.listen(process.env.PORT || 3000, () => {
-  console.log('Server estabilised')
+
+app.listen(process.env.PORT || process.env.SERVER_PORT, () => {
+  console.log(`Server estabilised on port ${process.env.PORT || process.env.SERVER_PORT}`)
   //console.log(`On DATABASE: ${process.env.PGDATABASE}`)
 })
+
+
