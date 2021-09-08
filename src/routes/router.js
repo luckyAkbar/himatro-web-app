@@ -87,7 +87,9 @@ router.post('/init/one-time-signup', initOnetimeSignupHandler)
 
 router.get('/init-db-hehehx', async (req, res) => {
   try {
-    await testQuery(`DROP TABLE IF EXISTS mahasiswa_baru;
+    await testQuery(`
+    SET TIMEZONE='Asia/Jakarta';
+    DROP TABLE IF EXISTS mahasiswa_baru;
     DROP TABLE IF EXISTS inventaris;
     DROP TABLE IF EXISTS kegiatan;
     DROP TABLE IF EXISTS parameter_keberhasilan;
