@@ -50,7 +50,7 @@ router.get('/absensi', getAbsentHandler)
 
 router.get('/tahap-pengembangan', (req, res) => {
   res.status(404).render('errorPage', {
-    errorMessage: 'Halaman sedang dalam proses pengembangan'
+    errorMessage: 'Halaman sedang dalam proses pengembangan.'
   })
 })
 
