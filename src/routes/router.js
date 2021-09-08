@@ -9,6 +9,7 @@ const { getBuktiAbsensiSdmHandler } = require('../handler/getBuktiAbsensiSdmHand
 const { authentication } = require('../middleware/authentication')
 const { getOnetimeSignupHandler } = require('../handler/getOnetimeSignupHandler')
 const { logoutHandler } = require('../handler/logoutHandler')
+const { testQuery } = require('../../db/connection')
 
 const {
   getProfile,
