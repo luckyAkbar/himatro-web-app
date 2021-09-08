@@ -7,6 +7,9 @@ const config = {
   connectionTimeoutMillis: parseInt(process.env.CONNECTION_TIMEOUT_MILLISEC),
   idleTimeoutMillis: parseInt(process.env.IDLE_TIMEOUT_MILLISEC),
   max: parseInt(process.env.MAX_CONNECTION),
+  ssl: {
+    rejectUnauthorized: false
+  }
 }
 /*
 const pool = new Pool(config)
