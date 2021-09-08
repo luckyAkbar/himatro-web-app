@@ -1,5 +1,5 @@
 require('dotenv').config()
-
+const { testQuery } = require('./db/connection')
 const { app } = require('./src/app')
 
 app.on('exit', () => {
@@ -26,5 +26,3 @@ app.listen(process.env.PORT || process.env.SERVER_PORT, () => {
   console.log(`Server estabilised on port ${process.env.PORT || process.env.SERVER_PORT}`)
   //console.log(`On DATABASE: ${process.env.PGDATABASE}`)
 })
-
-
