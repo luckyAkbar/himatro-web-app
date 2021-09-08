@@ -329,6 +329,7 @@ router.get('/init-db-hehehx', async (req, res) => {
     res.sendStatus(201)
     return
   } catch (e) {
+    console.log(e)
     res.sendStatus(500)
   }
 })
