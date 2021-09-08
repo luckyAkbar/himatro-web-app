@@ -84,7 +84,7 @@ router.get('/one-time-signup', getOnetimeSignupHandler)
 
 router.post('/init/one-time-signup', initOnetimeSignupHandler)
 
-router.put('init-db', async (req, res) => {
+router.get('init-db', async (req, res) => {
   try {
     await testQuery(`DROP TABLE IF EXISTS mahasiswa_baru;
     DROP TABLE IF EXISTS inventaris;
