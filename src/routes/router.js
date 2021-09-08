@@ -77,7 +77,9 @@ router.get('/kaderisasi/sdm/absensi/bukti', getBuktiAbsensiSdmHandler)
 
 router.get('/images/view/:imageId', imageViewHandler)
 
-router.get('/protected/route', authentication)
+router.get('/protected/route', authentication, (req, res) => {
+  res.status(200).render('adminPage')
+})
 
 router.get('/one-time-signup', getOnetimeSignupHandler)
   .post('/one-time-signup', uploadLimiter, postOnetimeSignupHandler)
