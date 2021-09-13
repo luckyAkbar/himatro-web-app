@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
 const { sesionIdGenerator } = require('./generator')
+const { JWTInvalidError } = require('../classes/JWTInvalidError')
 
 const createJWTToken = (session, sessionId, email) => {
   return jwt.sign({
@@ -16,14 +17,14 @@ const createJWTToken = (session, sessionId, email) => {
 const verifyJWTToken = (token) => {
   const result = jwt.verify(token, process.env.SECRET_JWT_TOKEN, (err, decoded) => {
     if (err) {
-      return new Error('Token is not authentic')
+      return new JWTInvalidError('Token is not authentic')
     }
 
     return decoded
   })
 
-  if (result instanceof Error) {
-    throw new Error('Token invalid')
+  if (result instanceof JWTInvalidError) {
+    throw new JWTInvalidError('Token is not authentic')
   } else {
     return result
   }
