@@ -74,6 +74,7 @@ body {
 .menu {
     flex-grow: 1;
     margin: 3%;
+    padding: 15px;
     background-color: rgb(91, 223, 157);
     border-radius: 12px;
     color: black;
