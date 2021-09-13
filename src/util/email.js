@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const nodemailer = require('nodemailer')
+const { getTimeStamp } = require('../util/getTimeStamp')
 
 const transport = nodemailer.createTransport({
     service: 'gmail',
@@ -19,8 +20,29 @@ const sendEmail = async (message) => {
     }
 }
 
+const generateErrorEmail = async (errorMessage, extraInformation= '') => {
+    const message = {
+        from: 'lucky.pengelolawebhimatro@gmail.com',
+        to: 'lucky.akbar105619@students.unila.ac.id',
+        subject: 'Severe Error Has Happen',
+        html: `
+            <h1>Severe Error Need to be Review</h1>
+            <p>This incedent happen on ${getTimeStamp()}</p>
+            <p>Error Message: ${errorMessage}</p>
+            <p>Other information: ${String(extraInformation)}
+        `
+    }
+
+    try {
+        await sendEmail(message)
+    } catch (e) {
+        console.log('email functionality broken', e)
+    }
+}
+
 module.exports = {
-    sendEmail
+    sendEmail,
+    generateErrorEmail
 }
 
 // const message = {
