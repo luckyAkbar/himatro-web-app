@@ -9,11 +9,11 @@ const { getBuktiAbsensiSdmHandler } = require('../handler/getBuktiAbsensiSdmHand
 const { authentication } = require('../middleware/authentication')
 const { getOnetimeSignupHandler } = require('../handler/getOnetimeSignupHandler')
 const { logoutHandler } = require('../handler/logoutHandler')
-
-const {
-  getProfile,
-  updateProfile
-} = require('../handler/profileHandler')
+const { featurePermissionHandler } = require('../handler/featurePermissionHandler')
+const { getAdminPage } = require('../handler/getAdminPage')
+const { getProfile } = require('../handler/getProfileHandler')
+const { updateProfile } = require('../handler/postUpdateProfileHandler')
+const { getUpdateProfile } = require('../handler/getUpdateProfile')
 
 const {
   postOnetimeSignupHandler,
@@ -66,7 +66,11 @@ router.get('/logout', logoutHandler)
 
 router.all('/profile', authentication)
   .get('/profile', getProfile)
-  .put('/profile', updateProfile)
+
+router.route('/profile/update')
+  .all(authentication)
+  .get(getUpdateProfile)
+  .put(updateProfile)
 
 router.post('/kaderisasi/sdm', kaderisasiSdmHandler)
 
@@ -77,9 +81,9 @@ router.get('/kaderisasi/sdm/absensi/bukti', getBuktiAbsensiSdmHandler)
 
 router.get('/images/view/:imageId', imageViewHandler)
 
-router.get('/protected/route', authentication, (req, res) => {
-  res.status(200).render('adminPage')
-})
+router.get('/admin', authentication, getAdminPage)
+
+router.post('/feature/:featureId', authentication, featurePermissionHandler)
 
 router.get('/one-time-signup', getOnetimeSignupHandler)
   .post('/one-time-signup', uploadLimiter, postOnetimeSignupHandler)
