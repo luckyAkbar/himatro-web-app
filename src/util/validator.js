@@ -5,7 +5,7 @@ const namaComparator = /[!@#$%^&*()_+\-=\[\]{};:"\\|,<>\/?]+/
 const sortByComparator = /[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/
 const emailComparator = /[!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?]+/
 const letterComparator = /[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]/
-const commonTextComparator = /[!@#$%^&*()_+\-=\[\]{};'"\\|<>\/?]+/ /*allowing: ,.:*/
+const commonTextComparator = /[!@#$%^&*()_+\=\[\]{};'"\\|<>\/?]+/ /*allowing: -,.:*/
 
 const commonValidator = (variable) => {
   try {
@@ -32,12 +32,18 @@ const commonTextValidator = (text) => {
 }
 
 const commonNumberValidator = (number) => {
+  const stringNumber = String(number).toLocaleLowerCase()
+
   try {
+    if (comparator.test(number)) {
+      return false
+    }
+
     if (isNaN(number)) {
       return false
     }
 
-    if (letterComparator.test(number)) {
+    if (letterComparator.test(stringNumber)) {
       return false
     }
 
@@ -242,6 +248,210 @@ const modeValidator = (mode) => {
   return true
 }
 
+const prodiValidator = (prodi) => {
+  try {
+    if (prodi !== 'Teknik Informatika' && prodi !== 'Teknik Elektro') {
+      return false
+    }
+
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+const departemenValidator = (departemen) => {
+  try {
+    switch (departemen) {
+      case 'Pengurus Harian':
+        return true
+      case 'Pendidikan dan Pengembangan Diri':
+        return true
+      case 'Kaderisasi dan Pengembangan Organisasi':
+        return true
+      case 'Sosial dan Kewirausahaan':
+        return true
+      case 'Komunikasi dan Informasi':
+        return true
+      case 'Pengembangan Keteknikan':
+        return true
+      default:
+        return false
+    }
+  } catch (e) {
+    return false
+  }
+}
+
+const divisiValidator = (divisi) => {
+  try {
+    switch (divisi) {
+      case 'Pimpinan (kadep / kadiv / sekdep)':
+        return true
+      case 'Pengurus Harian':
+        return true
+      case 'Minat dan Bakat':
+        return true
+      case 'Pendidikan':
+        return true
+      case 'Kerohanian':
+        return true
+      case 'Kaderisasi dan Pengembangan Organisasi':
+        return true
+      case 'Sosial':
+        return true
+      case 'Kewirausahaan':
+        return true
+      case 'Media Informasi':
+        return true
+      case 'Hubungan Masyarakat':
+        return true
+      case 'Penelitian dan Pengembangan':
+        return true
+      case 'Pengabdian Masyarakat':
+        return true
+      default:
+        return false
+    }
+  } catch (e) {
+    return false
+  }
+}
+
+const jabatanValidator = (jabatan) => {
+  try {
+    switch (jabatan) {
+      case 'Ketua':
+        return true
+      case 'Wakil Ketua':
+        return true
+      case 'Sekertaris Umum':
+        return true
+      case 'Wakil Sekertaris Umum':
+        return true
+      case 'Bendahara':
+        return true
+      case 'Wakil Bendahara':
+        return true
+      case 'Kepala Departemen':
+        return true
+      case 'Sekertaris Departemen':
+        return true
+      case 'Kepala Divisi':
+        return true
+      case 'Anggota':
+        return true
+      default:
+        return false
+    }
+  } catch (e) {
+    return false
+  }
+}
+
+const tanggalLahirValidator = (tanggalLahir) => {
+  try {
+    if (tanggalLahir.length > 10) {
+      return false
+    }
+
+    if (timeFormatComparator.test(tanggalLahir)) {
+      return false
+    }
+
+    if (!/-/g.test(tanggalLahir)) {
+      return false
+    }
+
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+const golonganDarahValidator = (golonganDarah) => {
+  try {
+    switch (golonganDarah) {
+      case 'A':
+        return true
+      case 'B':
+        return true
+      case 'AB':
+        return true
+      case 'O':
+        return true
+      default:
+        return false
+    }
+  } catch (e) {
+    return false
+  }
+}
+
+const jalurMasukValidator = (jalurMasuk) => {
+  try {
+    switch (jalurMasuk) {
+      case 'SBMPTN':
+        return true
+      case 'SNMPTN':
+        return true
+      case 'Mandiri':
+        return true
+      case 'Prestasi':
+        return true
+      case 'Lainnya':
+        return true
+      default:
+        return false
+    }
+  } catch (e) {
+    return false
+  }
+}
+
+const ipkValidator = (ipk) => {
+  const IPK = Number(ipk)
+  try {
+    if (IPK <= 0 || IPK > 4) {
+      return false
+    }
+
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+const multipleCommonTextValidator = (textArray) => {
+  let returnValue = true
+  try {
+    textArray.forEach((text) => {
+      if (!commonTextValidator(text)) {
+        returnValue = false
+      }
+    })
+
+    return returnValue
+  } catch (e) {
+    return false
+  }
+}
+
+const multipleCommonNumberValidator = (numberArray) => {
+  let returnValue = true
+  try {
+    numberArray.forEach((number) => {
+      if (!commonNumberValidator(number)) {
+        returnValue = false
+      }
+    })
+
+    return returnValue
+  } catch (e) {
+    return false
+  }
+}
+
 const validateAbsentRefData = (namaKegiatan, tanggalPelaksanaan, tanggalBerakhir) => {
   try {
     if (!namaKegiatanValidator(namaKegiatan)) {
@@ -289,4 +499,14 @@ module.exports = {
   showValueValidator,
   postAbsentDataValidator,
   emailValidator,
+  prodiValidator,
+  departemenValidator,
+  divisiValidator,
+  jabatanValidator,
+  tanggalLahirValidator,
+  golonganDarahValidator,
+  jalurMasukValidator,
+  ipkValidator,
+  multipleCommonTextValidator,
+  multipleCommonNumberValidator
 } 
