@@ -5,6 +5,7 @@ const { createHash } = require('../util/cryptoHash')
 const { sendEmail } = require('../util/email')
 const { testQuery } = require('../../db/connection')
 const { checkIsEmailExists } = require('../util/absentFiller')
+const { initDataPengurus } = require('../util/initDataPengurus')
 
 const {
     namaFormatter,
@@ -91,9 +92,9 @@ const postOnetimeSignupHandler = async (req, res) => {
 
         await generateLoginCredential(req.body, userPassword)
         await initDataAnggotaBiasa(req.body)
+        await initDataPengurus(npm)
         await sendLoginCredentialViaEmail(userPassword, req.body)
 
-        return
     } catch(e) {
         console.log(e)
         res.status(500).render('errorPage', {
