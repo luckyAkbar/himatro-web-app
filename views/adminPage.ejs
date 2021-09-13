@@ -26,20 +26,57 @@
       <div class="container-daftar-menu">
         <h4 class="judul-menu">Daftar Menu:</h4>
         <div class="container-menu">
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
+          <div class="menu" style="background-color: aquamarine;">
+            <h6>Event terkini dan yang akan datang: </h6>
+            <% let i = 1 %>
+            <% if (upcomingEvents.length === 0) { %>
+            <p><%= 'No events' %></p>
+            <% } else { %>
+              <ol>
+              <% upcomingEvents.forEach((data) => { %>
+                <li>
+                  Nama Kegiatan: <%= data.nama_kegiatan %><br>
+                  Tanggal Pelaksanaan: <%= String(data.tanggal_pelaksanaan).slice(0, 25) %><br>
+                  Tanggal Berakhir: <%= String(data.tanggal_berakhir).slice(0, 25) %><br>
+                  Kode Absen: <%= data.kegiatan_id ? data.kegiatan_id: '-' %>
+                </li>
+              <% }); %>
+              </ol>
+            <% } %>
           </div>
           <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
+            <h6>Buat Absen Pengurus</h6>
+            <p class="deskripsi-menu">
+              Fitur ini digunakan untuk membuat absensi pengurus Himatro. Lingkup absen yang bisa digunakan adalah seluruh pengurus, atau khusus absen per departemen.
+              <br>
+              <br>
+              Catatan: Untuk pengisian tanggal pelaksanaan, tanggal berakhir, mohon ikuti pola berikut ->
+              2021-10-29 10:00:00 (YYYY-MM-DD HH:MM:SS). Jangan menggunakan pola lain karena akan menyebabkan ketidaksesuaian.
+            </p>
+
+            <form action="/feature/feature001" method="POST">
+              <label for="lingkup">Pilih Lingkup Kegiatan:</label>
+              <select id="lingkup" name="lingkup">
+                <option value="seluruhAnggota">Seluruh Anggota</option>
+              </select><br>
+
+              <label for = "namaKegiatan">Nama Kegiatan: </label>
+              <input type="text" id = "namaKegiatan" name = "namaKegiatan">
+
+              <label for="tanggalPelaksanaan">Tanggal Pelaksanaan: </label>
+              <input type="text" id = "tanggalPelaksanaan" name = "tanggalPelaksanaan">
+
+              <label for="tanggalBerakhir">Tanggal Berakhir: </label>
+              <input type="text" id = "tanggalBerakhir" name = "tanggalBerakhir">
+
+              <input type="submit" value="Gunakan" class="btn-menu" style="margin-top: 3%; font-weight: 800;">
+            </form>
           </div>
           <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
+            <h6>Lihat Seluruh Kegiatan</h6>
+            <form action="/feature/feature002" method="POST">
+              <input type="submit" value="Gunakan" class="btn-menu" style="margin-top: 10%; font-weight: 800;">
+            </form>
           </div>
           <div class="menu">
             <h6>Judul Menu</h6>
