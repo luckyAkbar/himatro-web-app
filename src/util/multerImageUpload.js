@@ -24,6 +24,8 @@ const uploadFileFilter = (req, file, cb) => {
     file.extention = '.jpeg'
   } else if (file.mimetype === 'image/png' && file.originalname.endsWith('.png')) {
     file.extention = '.png'
+  } else if (file.mimetype === 'image/jpeg' && file.originalname.endsWith('.jpg')) {
+    file.extention = '.jpg'
   } else {
     const err = `File type error (must be .PNG / .JPEG / .JPG only and have maximum size of ${process.env.MAX_IMAGE_SIZE_UPLOAD/(1024*1024)}MB.)`
     cb(new Error(err), false)
