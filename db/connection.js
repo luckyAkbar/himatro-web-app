@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const chalk = require('chalk')
 const { Pool } = require('pg')
+const { QueryError } = require('../src/classes/QueryError.js')
 
 const config = {
   connectionTimeoutMillis: parseInt(process.env.CONNECTION_TIMEOUT_MILLISEC),
@@ -44,6 +45,7 @@ async function testQuery(query, params) {
     return res
   } catch(e) {
     console.log(chalk.red(`err connection.js ${params}`, e))
+    throw new QueryError('Query Error.', params)
   }
 }
 
