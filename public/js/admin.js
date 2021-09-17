@@ -8,9 +8,17 @@ buttonAbsentPengurus.addEventListener('click', async () => {
         return
     }
 
+    const start = `${formAbsenPengurus.tanggalPelaksanaan.value} ${formAbsenPengurus.jamPelaksanaan.value}`
+    const end = `${formAbsenPengurus.tanggalBerakhir.value} ${formAbsenPengurus.jamBerakhir.value}`
+
+    if (checkBackwardDate(start, end)) {
+        alert('Penggunaan tanggal lampau atau terbalik, mohon perbaiki terlebih dahulu')
+        return
+    }
+    
     document.body.style.cursor = 'wait'
     buttonAbsentPengurus.style.cursor = 'wait'
-    
+
     const payload = {
         lingkup: formAbsenPengurus.lingkup.value,
         namaKegiatan: formAbsenPengurus.namaKegiatan.value,
@@ -73,4 +81,14 @@ const postData = async (payload, targetEndpoint) => {
         console.log(e)
         return { errorMessage: 'Network Error. Please check your connection'}
     }
+}
+
+const checkBackwardDate = (startDate, endDate) => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const now = new Date()
+
+    if (end < start) return true
+    if (end < now) return true
+    return false
 }
