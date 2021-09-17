@@ -2,6 +2,8 @@ require('dotenv').config()
 
 const { referensiIdGenerator } = require('../util/generator')
 const { validateAbsentRefData } = require('../util/validator')
+const { QueryError } = require('../classes/QueryError')
+const { generateErrorEmail } = require('../util/email')
 
 const {
   createNewAbsent,
@@ -9,57 +11,45 @@ const {
 } = require('../util/createNewAbsent')
 
 const createNewKegiatanFeature = async (req, res) => {
-    try {
-      const validate = await absentRefValidator(req)
+  const validate = absentRefValidator(req)
 
-      if (!validate) {
-        res.status(400).render('errorPage', {
-          errorMessage: 'Data Kegiatan / Rapat Invalid'
-        })
-        return
-      }
-    } catch (e) {
-      res.sendStatus(500)
-      console.log(e)
-    }
+  if (!validate) {
+    res.status(400).json({ errorMessage: 'Data Kegiatan / Rapat Invalid' })
+    return
+  }
 
+  res.status(201).json({ successMessage: `Data diterima, permintaan anda sedang diproses. Silahkan refresh halaman admin untuk melihat ID absesi dari kegiatan yang telah anda buat.` })
+
+  try {
     const refId = referensiIdGenerator('keg')
-
-    try {
-      await createNewAbsentRecord(refId, req, res)
-    } catch (e) {
-      res.status(500).render('errorPage', {
-        errorMessage: 'Server error. Please contact admin to resolve'
-      })
-      console.log(e)
-    }
+    await createNewAbsentRecord(refId, req.body)
+  } catch (e) {
+    console.log(e)
+    await generateErrorEmail(`Failed to create new absent record. issuer ${req.email} recently`)
+  }
 }
 
-const absentRefValidator = async (req) => {
-  let { namaKegiatan, tanggalPelaksanaan, tanggalBerakhir } = req.body
-
-  if (!/:/g.test(tanggalBerakhir)) {
-    req.body.tanggalBerakhir += ' 23:59:00'
-  }
-
-  if (!validateAbsentRefData(namaKegiatan, tanggalPelaksanaan, tanggalBerakhir)) {
-    return false
-  }
+const absentRefValidator = (req) => {
+  if (!validateAbsentRefData(req.body)) return false
 
   return true
 }
 
-const createNewAbsentRecord = async (refId, req, res) => {
+const createNewAbsentRecord = async (refId, data) => {
   try {
-    await createNewAbsent(res, refId)
-    await createNewKegiatan(refId, req.body)
-    
-    res.status(201).render('commonSuccess', {
-      successMessage: `Absent ID: ${refId}`
-    })
+    const kegiatanData = {
+      namaKegiatan: data.namaKegiatan,
+      mulai: `${data.tanggalPelaksanaan} ${data.jamPelaksanaan}`,
+      akhir: `${data.tanggalBerakhir} ${data.jamBerakhir}`
+    }
+
+    await createNewAbsent(refId)
+    await createNewKegiatan(refId, kegiatanData)
   } catch(e) {
-    res.status(500).json({ error: "Server Error" })
-    return
+    console.log(e)
+    if (e instanceof QueryError) {
+      throw new QueryError('failed to create new absent record')
+    }
   }
 }
 
