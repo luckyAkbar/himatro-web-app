@@ -5,14 +5,13 @@ const { refIdValidator } = require('../util/validator')
 const { getUserPermissionLevel } = require('../util/getUserPermissionLevel')
 const { getMinimumFeaturePermission } = require('../util/getMinimumFeaturePermission')
 const { viewAllKegiatan } = require('../feature/viewAllKegiatan')
+const { generateErrorEmail } = require('../util/email')
 
 const featurePermissionHandler = async (req, res) => {
     const isFeatureIdValid = validateFeatureId(req.params.featureId)
 
     if (!isFeatureIdValid) {
-        res.status(404).render('errorPage', {
-            errorMessage: 'Feature not found or invalid feature id used.'
-        })
+        res.status(404).json({ errorMessage: 'Feature not found or invalid feature id used.' })
         return
     }
 
@@ -23,10 +22,8 @@ const featurePermissionHandler = async (req, res) => {
         const userPermissionLevel = await getUserPermissionLevel(req.email)
 
         if (userPermissionLevel < minimumFeaturePermission) {
-            console.log(`${req.email} trying to access ${req.originalUrl}`)
-            res.status(403).render('errorPage', {
-                errorMessage: 'FORBIDDEN. You do not have required permission to use this feature.'
-            })
+            await generateErrorEmail(`${req.email} trying to access ${req.originalUrl}`)
+            res.status(403).json({ errorMessage: 'FORBIDDEN. You do not have required permission to use this feature.' })
             return
         }
 
@@ -47,13 +44,9 @@ const featurePermissionHandler = async (req, res) => {
         
     } catch(e) {
         if (e instanceof JWTInvalidError) {
-            res.status(401).render('errorPage', {
-                errorMessage: 'FORBIDDEN. Please Login First.'
-            })
+            res.status(401).json({ errorMessage: 'FORBIDDEN. Please Login First.' })
         } else if (e instanceof QueryError) {
-            res.status(500).render('errorPage', {
-                errorMessage: 'Server Error. Failed to perform requested query.'
-            })
+            res.status(500).json({ errorMessage: 'Server Error. Failed to perform requested query.' })
         }else {
             console.log(e)
         }
