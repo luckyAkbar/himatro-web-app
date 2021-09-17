@@ -46,15 +46,7 @@
           </div>
           <div class="menu">
             <h6>Buat Absen Pengurus</h6>
-            <p class="deskripsi-menu">
-              Fitur ini digunakan untuk membuat absensi pengurus Himatro. Lingkup absen yang bisa digunakan adalah seluruh pengurus, atau khusus absen per departemen.
-              <br>
-              <br>
-              Catatan: Untuk pengisian tanggal pelaksanaan, tanggal berakhir, mohon ikuti pola berikut ->
-              2021-10-29 10:00:00 (YYYY-MM-DD HH:MM:SS). Jangan menggunakan pola lain karena akan menyebabkan ketidaksesuaian.
-            </p>
-
-            <form action="/feature/feature001" method="POST">
+            <form name="createAbsent">
               <label for="lingkup">Pilih Lingkup Kegiatan:</label>
               <select id="lingkup" name="lingkup">
                 <option value="seluruhAnggota">Seluruh Anggota</option>
@@ -64,12 +56,18 @@
               <input type="text" id = "namaKegiatan" name = "namaKegiatan">
 
               <label for="tanggalPelaksanaan">Tanggal Pelaksanaan: </label>
-              <input type="text" id = "tanggalPelaksanaan" name = "tanggalPelaksanaan">
+              <input type="date" id = "tanggalPelaksanaan" name = "tanggalPelaksanaan">
+
+              <label for="jamPelaksanaan">Waktu Dimulai (12 hour format): </label>
+              <input type="time" timeformat="24h" id = "jamPelaksanaan" name = "jamPelaksanaan">
 
               <label for="tanggalBerakhir">Tanggal Berakhir: </label>
-              <input type="text" id = "tanggalBerakhir" name = "tanggalBerakhir">
+              <input type="date" id = "tanggalBerakhir" name = "tanggalBerakhir">
 
-              <input type="submit" value="Gunakan" class="btn-menu" style="margin-top: 3%; font-weight: 800;">
+              <label for="jamBerakhir">Waktu Berakhir (12 hour format): </label>
+              <input type="time" id = "jamBerakhir" name = "jamBerakhir">
+
+              <input value="Gunakan" id="btnAbsenPengurus" class="btn-menu" style="margin-top: 3%; font-weight: 800;">
             </form>
           </div>
           <div class="menu">
@@ -78,56 +76,11 @@
               <input type="submit" value="Gunakan" class="btn-menu" style="margin-top: 10%; font-weight: 800;">
             </form>
           </div>
-          <div class="menu">
+          <!--<div class="menu">
             <h6>Judul Menu</h6>
             <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
             <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu"><strong>Gunakan</strong></button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu">Gunakan</button>
-          </div>
-          <div class="menu">
-            <h6>Judul Menu</h6>
-            <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>
-            <button class="btn-menu">Gunakan</button>
-          </div>
+          </div>-->
         </div>
       </div>
     </main>
@@ -153,5 +106,6 @@
         </div>
       </div>
     </footer>
+    <script src="/js/admin.js"></script>
   </body>
 </html>
