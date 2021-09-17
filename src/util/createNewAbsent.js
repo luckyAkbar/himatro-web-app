@@ -1,44 +1,41 @@
-const chalk = require('chalk')
-
 const { testQuery } = require('../../db/connection')
+const { QueryError } = require('../classes/QueryError')
 const { readDataCsv } = require('./readDataCsv')
 
-const table_name = 'absensi'
-const refIdField = 'referensi_id'
-const divField = 'divisi'
-const npmField = 'npm'
-const namaField = 'nama'
-
-const initNewAbsentRecord = async (res, referensiId) => {
-  let result = readDataCsv(__dirname+'/../../db/data/fullData.csv')
+const initNewAbsentRecord = async (referensiId) => {
+  let dataPengurusHimatro = readDataCsv(__dirname+'/../../db/data/fullData.csv')
 
   try {
-    for(let i = 0; i < result.length; i++) {
-      const query = `INSERT INTO ${table_name} (${refIdField}, ${npmField}, ${namaField}, ${divField}) VALUES ($1, $2, $3, $4)`
-      const params = [`${referensiId}`, `${result[i].npm}`, `${result[i].nama}`, `${result[i].divisi}`]
+    for(let i = 0; i < dataPengurusHimatro.length; i++) {
+      const query = 'INSERT INTO absensi (referensi_id, npm, nama, divisi) VALUES ($1, $2, $3, $4)'
+      const params = [
+        referensiId,
+        dataPengurusHimatro[i].npm,
+        dataPengurusHimatro[i].nama,
+        dataPengurusHimatro[i].divisi
+      ]
 
-      const finished = await testQuery(query, params)
+      await testQuery(query, params)
     }
-    res.status(201)
   } catch(e) {
-    res.status(500)
-    console.log(chalk.red(e))
+    console.log(e)
+    throw new QueryError('failed to create new Absent')
   }
 }
 
-const createNewAbsent = async (res, referensiId) => {
+const createNewAbsent = async (referensiId) => {
   try {
-    await initNewAbsentRecord(res, referensiId)
-    //db.query('SELECT * FROM absensi'))
+    await initNewAbsentRecord(referensiId)
   } catch(e) {
-    console.log(chalk.red(e))
+    console.log(e)
+    throw new QueryError('failed to create new absent')
   }
 }
 
 const createNewKegiatan = async (refId, {
   namaKegiatan,
-  tanggalPelaksanaan,
-  tanggalBerakhir
+  mulai,
+  akhir
 }) => {
   const query = `INSERT INTO kegiatan (
     kegiatan_id,
@@ -50,16 +47,16 @@ const createNewKegiatan = async (refId, {
   const params = [
     refId,
     namaKegiatan,
-    tanggalPelaksanaan,
-    tanggalBerakhir
+    mulai,
+    akhir
   ]
 
   try {
     await testQuery(query, params)
     return
   } catch (e) {
-    console.log(chalk.red(e))
-    throw new Error('Failed to create new kegiatan')
+    console.log(e)
+    throw new QueryError('Failed to create new kegiatan')
   }
 }
 
