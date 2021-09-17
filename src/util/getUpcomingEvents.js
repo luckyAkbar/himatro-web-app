@@ -9,7 +9,7 @@ const getUpcomingEvents = async () => {
         const now = new Date()
         
         rows.forEach((data) => {
-            if (new Date(data.tanggal_pelaksanaan) < now && new Date(data.tanggal_berakhir) > now) {
+            if (new Date(data.tanggal_berakhir) > now) {
                 upcomingEvents.push(data)
             }
         })
