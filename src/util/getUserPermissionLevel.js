@@ -11,6 +11,9 @@ const getUserPermissionLevel = async (email) => {
 
     try {
         const { rows } = await testQuery(query, params)
+
+        if (rows[0] == undefined) return 0
+
         return Number(rows[0].hak)
     } catch (e) {
         if (e instanceof QueryError) {
