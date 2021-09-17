@@ -1,5 +1,6 @@
 const comparator = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/
-const timeFormatComparator = /[!@#$%^&*()_+\=\[\]{};'"\\|,<>\/?]+/
+const timeFormatComparator = /[!@#$%^&*:()_+\=\[\]{};'"\\|,<>\/?]+/
+const waktuComparator = /[!@#$%^&*()_+\-=\[\]{};'"\\|,.<>\/?]+/
 const keteranganComparator = /[h,i]/
 const namaComparator = /[!@#$%^&*()_+\-=\[\]{};:"\\|,<>\/?]+/
 const sortByComparator = /[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/
@@ -105,55 +106,59 @@ const showValueValidator = (show) => {
 
 const namaValidator = (nama) => {
   try {
-    if (namaComparator.test(nama)){
-      return false
-    }
+    if (namaComparator.test(nama)) return false
+    if (nama.length > 255) return false
+    if (nama.trim() === '') return false
 
-    if (nama.length > 255) {
-      return false
-    }
+    return true
   } catch (e) {
     return false
   }
-
-  return true
 }
 
 const namaKegiatanValidator = (namaKegiatan) => {
   try {
-    if (comparator.test(namaKegiatan)) {
-      return false
-    }
+    if (namaKegiatan.trim() === '') return false
+    if (comparator.test(namaKegiatan)) return false
+    if (namaKegiatan.length > 255) return false
 
-    if(namaKegiatan.length > 255) {
-      return false
-    }
+    return true
   } catch (e) {
     return false
   }
-  return true
+  
 }
 
 const tanggalValidator = (tanggal) => {
   try {
-    if (timeFormatComparator.test(tanggal)) {
-      return false
-    }
+    if (timeFormatComparator.test(tanggal)) return false
+    if (tanggal.length > 10) return false
 
     const testDate = new Date(tanggal)
-
-    if (testDate.toString() === 'Invalid Date') {
-      return false
-    }
-
-    if (tanggal.length > 255) {
-      return false
-    }
+    if (testDate.toString() === 'Invalid Date') return false
+      
+    return true
   } catch (e) {
     return false
   }
+}
 
-  return true
+const waktuValidator = (waktu) => {
+  try {
+    if (waktu.length > 8) return false
+    if (timeFormatComparator.test(waktu)) return false
+    if (letterComparator.test(waktu.toLowerCase())) return false
+    if (waktuComparator.test(waktu)) return false
+
+    const timeComponent = waktu.split(':')
+
+    if (Number(timeComponent[0]) > 24) return false
+    if (Number(timeComponent[1]) > 60 || Number(timeComponent[2]) > 60) return false
+
+    return true
+  } catch (e) {
+    return false
+  }
 }
 
 const keteranganValidator = (keterangan) => {
@@ -452,24 +457,25 @@ const multipleCommonNumberValidator = (numberArray) => {
   }
 }
 
-const validateAbsentRefData = (namaKegiatan, tanggalPelaksanaan, tanggalBerakhir) => {
+const validateAbsentRefData = (data) => {
+  const {
+    namaKegiatan,
+    tanggalPelaksanaan,
+    jamPelaksanaan='00:00:00',
+    tanggalBerakhir,
+    jamBerakhir='23:59:59'
+  } = data
+
   try {
-    if (!namaKegiatanValidator(namaKegiatan)) {
-      return false
-    }
+    if (!namaKegiatanValidator(namaKegiatan)) return false
+    if (!tanggalValidator(tanggalPelaksanaan)) return false
+    if (!tanggalValidator(tanggalBerakhir)) return false
+    if (waktuValidator(jamPelaksanaan) && waktuValidator(jamBerakhir)) return false
 
-    if (!tanggalValidator(tanggalPelaksanaan)) {
-      return false
-    }
-
-    if (!tanggalValidator(tanggalBerakhir)) {
-      return false
-    }
+    return true
   } catch (e) {
     return false
   }
-
-  return true
 }
 
 const postAbsentDataValidator = (refId, npm, nama, keterangan) => {
