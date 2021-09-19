@@ -1,7 +1,6 @@
 require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
-const { sesionIdGenerator } = require('./generator')
 const { JWTInvalidError } = require('../classes/JWTInvalidError')
 
 const createJWTToken = (session, sessionId, email) => {
@@ -28,12 +27,18 @@ const verifyJWTToken = (token) => {
   } else {
     return result
   }
+}
 
+const ocrToken = (filename) => {
+  return jwt.sign({ filename }, process.env.SECRET_JWT_TOKEN, {
+    expiresIn: Number(process.env.JWT_TOKEN_EXPIRES_SEC)
+  })
 }
 
 module.exports = {
   createJWTToken,
-  verifyJWTToken
+  verifyJWTToken,
+  ocrToken
 }
 
 /*
