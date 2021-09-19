@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "kill": "fuser -k 3000/tcp",
     "dev": "npm run kill && node index.js",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "simple-ocr-api": "uvicorn --port 5000 --app-dir ./api/simple-ocr main:app --reload"
   },
   "author": "Lucky Akbar",
   "license": "ISC",
