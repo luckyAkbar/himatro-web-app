@@ -3,6 +3,7 @@ node_modules/
 views/raw/
 views/test/
 db/data/
+api/simple-ocr/.env
 log.txt
 test.js
 nodemon.json
