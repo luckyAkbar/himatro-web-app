@@ -27,7 +27,7 @@ const compareHash = async (plain, hashed) => {
 }
 
 //createHash('lucky@gmail.com').then((data) => console.log(data))
-//createHash('alwaysopen').then((data) => console.log(data))
+createHash('1234').then((data) => console.log(data))
 
 module.exports = {
   createHash,
