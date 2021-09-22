@@ -21,6 +21,8 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS signupdata;
 DROP TABLE IF EXISTS feature_permission;
+DROP TABLE IF EXISTS socmed_post_validator;
+DROP TABLE IF EXISTS generic_presence_detector;
 
 CREATE TABLE departemen (
   departemen_id VARCHAR(10) PRIMARY KEY,
@@ -214,6 +216,31 @@ CREATE TABLE feature_permission (
   permission_level SMALLINT NOT NULL
 );
 
+CREATE TABLE socmed_post_validator (
+  id VARCHAR(10) PRIMARY KEY,
+  post_name VARCHAR(255) NOT NULL,
+  expired_at TIMESTAMPTZ NOT NULL,
+  start_at TIMESTAMPTZ NOT NULL,
+  keyword VARCHAR(255) NOT NULL,
+  issuer VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE generic_presence_detector (
+  event_id VARCHAR(10) NOT NULL,
+  expected_participant_id VARCHAR(11) NOT NULL,
+  presence_status BOOLEAN DEFAULT 'f',
+  key_data VARCHAR(255) DEFAULT NULL
+);
+
+CREATE TABLE registered_form (
+  form_id VARCHAR(10) PRIMARY KEY,
+  form_type VARCHAR(10) NOT NULL,
+  start_at TIMESTAMPTZ NOT NULL,
+  expired_at TIMESTAMPTZ NOT NULL,
+  form_template VARCHAR(10) NOT NULL,
+  issuer VARCHAR(11) REFERENCES pengurus(npm)
+);
+
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000001', 'Pengurus Harian');
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000002', 'Pendidikan dan Pengembangan Diri');
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000003', 'Kaderisasi dan Pengembangan Organisasi');
@@ -245,8 +272,10 @@ INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000009', 'Kepal
 INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000010', 'Anggota', 1);
 INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab1603123', 'Super Admin', 150);
 
-INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature001', 29);
-INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature002', 44);
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature001', 44); /* create absent form pengurus */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature002', 29); /* lihat semua kegiatan */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature003', 44); /* buat form socmed post validation form */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature004', 1);  /* isi data form socmed validation */
 
 /*
 INSERT INTO anggota_biasa (npm, nama, email, angkatan) VALUES ('1915061056', 'Lucky', 'm248r4231@dicoding.org', '2019');

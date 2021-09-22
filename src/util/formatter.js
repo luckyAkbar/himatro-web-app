@@ -1,22 +1,18 @@
 const namaFormatter = (nama) => {
-  nama = nama.toLowerCase()
-  nama = nama.split(' ')
+  let formatted = nama.toLowerCase();
+  formatted = formatted.split(' ');
 
-  for (let i = 0; i < nama.length; i++) {
-    nama[i] = nama[i][0].toUpperCase() + nama[i].substr(1);
+  for (let i = 0; i < formatted.length; i += 1) {
+    formatted[i] = formatted[i][0].toUpperCase() + formatted[i].substr(1);
   }
 
-  nama = nama.join(" ")
-  return nama
-}
+  formatted = formatted.join(' ');
+  return formatted;
+};
 
-const formatToLowercase = (str) => {
-  lowercased = String(str).toLowerCase()
-
-  return lowercased
-}
+const formatToLowercase = (str) => String(str).toLowerCase();
 
 module.exports = {
   namaFormatter,
-  formatToLowercase
-}
+  formatToLowercase,
+};

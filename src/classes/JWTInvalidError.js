@@ -1,8 +1,7 @@
 class JWTInvalidError extends Error {
-    constructor (errorMessage) {
-      super(errorMessage)
-    }
+  constructor(errorMessage) {
+    super(errorMessage);
   }
-  
-  module.exports = { JWTInvalidError }
-  
+}
+
+module.exports = { JWTInvalidError };

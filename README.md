@@ -1,19 +1,21 @@
-# WARNING
+# APLIKASI WEB HIMPUNAN MAHASISWA TEKNIK ELEKTRO
+# HIMATRO WEB APP
 
-issue list:
-1. Error handling in validator
-2. Incorrect body sent to server for each features
-3. check request missing / extra body request for each post/similar request
 
-to do list:
-1. refactor function so become match with it's name, and behave depending on the params
-2. absentId apa presensiId???? :(
-3. MODULARIZATIOOONNNN
-4. CODE REFACTOR:((
-5. REUSABLE CODE:(
-6. sql view kok gadigunain astagaaa:)
-7. refactor getAbsentHandler (unnesecary if else statement)
-8. testing push
-9. HAVE YOU CREATE CSP DIRECTIVE?
-10. JWT verify token
-11. Update ERD
+*This project is based on current need for technology implementation to solve both classic and modern problem about organization management.*
+
+**Developers: **
+-Lucky Akbar: Backend Developer
+-Hardi Nuari Caesar: Frontend Developer
+
+
+# FEATURES IN THIS APP
+
+**
+1. Presence made easy
+2. Signup
+3. Login
+4. Admin control feature
+5. Integration with OCR *coming soon*
+6. Flexible form creation *coming soon*
+**
