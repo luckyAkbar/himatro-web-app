@@ -5,8 +5,8 @@
 *This project is based on current need for technology implementation to solve both classic and modern problem about organization management.*
 
 **Developers:**
--Lucky Akbar: Backend Developer
--Hardi Nuari Caesar: Frontend Developer
+1. Lucky Akbar: Backend Developer
+2. Hardi Nuari Caesar: Frontend Developer-
 
 
 # FEATURES IN THIS APP
