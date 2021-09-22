@@ -36,5 +36,13 @@
     "eslint-plugin-import": "^2.24.2",
     "localtunnel": "^2.0.1",
     "nodemon": "^2.0.12"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luckyAkbar/himatro-web-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luckyAkbar/himatro-web-app/issues"
+  },
+  "homepage": "https://github.com/luckyAkbar/himatro-web-app#readme"
 }
