@@ -90,10 +90,6 @@ router.get('/one-time-signup', getOnetimeSignupHandler)
 
 router.post('/init/one-time-signup', initOnetimeSignupHandler)
 
-router.get('/cesar', (req, res) => {
-  res.render('sampah/luki')
-})
-
 router.all('*', (req, res) => {
   res.status(404).render('errorPage', {
     errorMessage: 'maaf, halaman yang anda cari tidak ditemukan, atau metode tidak didukung:)'
