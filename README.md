@@ -11,9 +11,9 @@
 
 # FEATURES IN THIS APP
 
-**1. Presence made easy**
-**2. Signup**
-**3. Login**
-**4. Admin control feature**
-**5. Integration with OCR *coming soon***
+**1. Presence made easy**<br>
+**2. Signup**<br>
+**3. Login**<br>
+**4. Admin control feature**<br>
+**5. Integration with OCR *coming soon***<br>
 **6. Flexible form creation *coming soon***
