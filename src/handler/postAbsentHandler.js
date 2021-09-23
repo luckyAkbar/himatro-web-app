@@ -20,8 +20,8 @@ const {
   modeValidator,
 } = require('../util/validator');
 
-const absentDataValidator = (absentId, npm, nama, keterangan) => {
-  const isAbsentDataValid = postAbsentDataValidator(absentId, npm, nama, keterangan);
+const absentDataValidator = (data) => {
+  const isAbsentDataValid = postAbsentDataValidator(data);
   return isAbsentDataValid;
 };
 
@@ -95,19 +95,17 @@ const postAbsentHandler = async (req, res) => {
 
   if (req.body.mode === 'post') {
     const {
-      absentId, npm, nama, keterangan, mode,
+      absentId, mode, alasan
     } = req.body;
-
-    console.log(req.body);
 
     if (!modeValidator(mode)) {
       res.sendStatus(404);
       return;
     }
 
-    if (!absentDataValidator(absentId, npm, nama, keterangan)) {
+    if (!absentDataValidator(req.body) || alasan.trim() === '') {
       res.status(400).render('errorPage', {
-        errorMessage: 'Data Absen Invalid',
+        errorMessage: 'Data Absen Invalid. Make sure to fill all the data required.',
       });
       return;
     }
@@ -131,7 +129,7 @@ const postAbsentHandler = async (req, res) => {
         return;
       }
 
-      await absentFiller(absentId, npm, nama, keterangan, res);
+      await absentFiller(req.body, res);
     } catch (e) {
       console.log(chalk.red(e));
     }

@@ -474,14 +474,21 @@ const validateAbsentRefData = (data) => {
   }
 };
 
-const postAbsentDataValidator = (refId, npm, nama, keterangan) => {
+const postAbsentDataValidator = (data) => {
+  const {
+    absentId,
+    npm,
+    nama,
+    keterangan,
+  } = data;
+
   try {
     if (
       !(
         npmValidator(npm)
         && namaValidator(nama)
         && keteranganValidator(keterangan)
-        && refIdValidator(refId)
+        && refIdValidator(absentId)
       )
     ) {
       return false;

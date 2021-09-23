@@ -38,6 +38,7 @@ const getAbsentFormResult = async (absentId, show, req, res) => {
     npm: '',
     waktuPengisian: '',
     keterangan: '',
+    alasan: '',
     divisi: '',
   };
   const result = [];
@@ -56,6 +57,7 @@ const getAbsentFormResult = async (absentId, show, req, res) => {
         npm: rows[i].npm,
         waktuPengisian: String(rows[i].waktu_pengisian).slice(16, 24),
         keterangan: rows[i].keterangan,
+        alasan: rows[i].alasan_izin,
         divisi: rows[i].divisi,
       };
       result.push(data);

@@ -117,6 +117,7 @@ CREATE TABLE absensi (
   nama VARCHAR(255) NOT NULL, -- Default ambil dari query npm ke anggota biasa, ambil namanya
   waktu_pengisian TIMESTAMPTZ DEFAULT NULL,
   keterangan CHAR(1) DEFAULT NULL,
+  alasan_izin VARCHAR(255) DEFAULT NULL,
   divisi VARCHAR(70) NOT NULL
 );
 

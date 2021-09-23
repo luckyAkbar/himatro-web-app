@@ -105,9 +105,16 @@ const checkRefIdExists = async (refId, tableName, rowName) => {
   }
 };
 
-const insertKehadiranRecord = async (npm, refId, now, keterangan) => {
-  const query = 'UPDATE absensi SET keterangan = $1, waktu_pengisian = $2 WHERE npm = $3 AND referensi_id = $4';
-  const params = [keterangan, now, npm, refId];
+const insertKehadiranRecord = async (data, now) => {
+  const {
+    npm,
+    absentId,
+    keterangan,
+    alasan = null,
+  } = data;
+
+  const query = 'UPDATE absensi SET keterangan = $1, waktu_pengisian = $2, alasan_izin = $5 WHERE npm = $3 AND referensi_id = $4';
+  const params = [keterangan, now, npm, absentId, alasan];
 
   try {
     await testQuery(query, params);
@@ -118,7 +125,12 @@ const insertKehadiranRecord = async (npm, refId, now, keterangan) => {
   }
 };
 
-const absentFiller = async (absentId, npm, nama, keterangan, res) => {
+const absentFiller = async (data, res) => {
+  const {
+    absentId,
+    npm,
+    nama,
+  } = data;
   try {
     const isAbsentFormExists = await checkRefIdExists(absentId, 'absensi', 'referensi_id');
     const isExpired = await checkIsExpired(absentId);
@@ -154,7 +166,7 @@ const absentFiller = async (absentId, npm, nama, keterangan, res) => {
     if (result === false) {
       const now = getTimeStamp();
       try {
-        const isSuccess = await insertKehadiranRecord(npm, absentId, now, keterangan);
+        const isSuccess = await insertKehadiranRecord(data, now);
 
         if (isSuccess === 'Success') {
           res.status(200).render('successAbsent', {

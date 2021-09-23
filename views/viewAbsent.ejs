@@ -47,12 +47,19 @@
         <th>Waktu</th>
       </tr>
       <% dataHasilAbsensi.forEach((data) => {%>
+        <% if (!data.keterangan) {%>
+          <% data.keterangan = '?' %>
+        <% } else if (data.keterangan === 'i') { %>
+          <% data.keterangan = '(izin) ' + data.alasan %>
+        <% } else { %>
+          <% data.keterangan = 'Hadir' %>
+        <% } %>
         <tr>
           <td><%= i+1 %></td>
           <td><%= data.npm %></td>
           <td><%= data.nama %></td>
           <td><%= data.divisi %></td>
-          <td><%= data.keterangan ? data.keterangan : '?' %></td>
+          <td><%= data.keterangan %></td>
           <td><%= data.waktuPengisian ? data.waktuPengisian : '?' %></td>
         </tr>
       <% i++});%>
