@@ -1,6 +1,27 @@
 const { load } = require('csv-load-sync');
 
-const readDataCsv = (filePath) => {
+const translateLingkup = (lingkup) => {
+  switch(lingkup) {
+    case 'ph':
+      return 'Pengurus Harian';
+    case 'ppd':
+      return 'Departemen Pendidikan dan Pengembangan Diri';
+    case 'kpo':
+      return 'Departemen Kaderisasi Dan Pengembangan Organisasi';
+    case 'kominfo':
+      return 'Departemen Komunikasi Dan Informasi';
+    case 'soswir':
+      return 'Departemen Sosial dan Kewirausahaan';
+    case 'bangtek':
+      return 'Departemen Pengembangan Keteknikan';
+    default:
+      return false;
+    
+  }
+}
+
+const readDataCsv = (filePath, lingkup) => {
+  const lingkupAbsen = translateLingkup(lingkup);
   const result = [];
 
   const csv = load(filePath);
@@ -10,14 +31,25 @@ const readDataCsv = (filePath) => {
     npm,
     nama,
     divisi,
+    departemen,
   }) => {
-    dataObject = {
-      nama,
-      npm,
-      divisi,
-    };
+    if (lingkupAbsen && departemen === lingkupAbsen) {
+      dataObject = {
+        nama,
+        npm,
+        divisi,
+      };
+      result.push(dataObject);
+    }
 
-    result.push(dataObject);
+    if (lingkup === false) {
+      dataObject = {
+        nama,
+        npm,
+        divisi,
+      };
+      result.push(dataObject);
+    }
   });
 
   return result;

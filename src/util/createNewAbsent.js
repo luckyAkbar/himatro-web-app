@@ -2,8 +2,8 @@ const { testQuery } = require('../../db/connection');
 const { QueryError } = require('../classes/QueryError');
 const { readDataCsv } = require('./readDataCsv');
 
-const initNewAbsentRecord = async (referensiId) => {
-  const dataPengurusHimatro = readDataCsv(`${__dirname}/../../db/data/fullData.csv`);
+const initNewAbsentRecord = async (referensiId, lingkup) => {
+  const dataPengurusHimatro = readDataCsv(`${__dirname}/../../db/data/fullData.csv`, lingkup);
 
   try {
     dataPengurusHimatro.forEach(async (data) => {
@@ -23,9 +23,9 @@ const initNewAbsentRecord = async (referensiId) => {
   }
 };
 
-const createNewAbsent = async (referensiId) => {
+const createNewAbsent = async (referensiId, lingkup) => {
   try {
-    await initNewAbsentRecord(referensiId);
+    await initNewAbsentRecord(referensiId, lingkup);
   } catch (e) {
     console.log(e);
     throw new QueryError('failed to create new absent');

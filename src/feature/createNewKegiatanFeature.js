@@ -22,9 +22,10 @@ const createNewAbsentRecord = async (refId, data) => {
       namaKegiatan: data.namaKegiatan,
       mulai: `${data.tanggalPelaksanaan} ${data.jamPelaksanaan}`,
       akhir: `${data.tanggalBerakhir} ${data.jamBerakhir}`,
+      lingkup: data.lingkup,
     };
 
-    await createNewAbsent(refId);
+    await createNewAbsent(refId, data.lingkup);
     await createNewKegiatan(refId, kegiatanData);
   } catch (e) {
     console.log(e);

@@ -423,6 +423,31 @@ const ipkValidator = (ipk) => {
   }
 };
 
+const lingkupValidator = (lingkup) => {
+  try {
+    switch(lingkup) {
+      case 'seluruhAnggota':
+        return true;
+      case 'kpo':
+        return true;
+      case 'ppd':
+        return true;
+      case 'soswir':
+        return true;
+      case 'kominfo':
+        return true;
+      case 'bangtek':
+        return true;
+      case 'ph':
+        return true;
+      default:
+        return false;
+    }
+  } catch(e) {
+    return false;
+  }
+}
+
 const multipleCommonTextValidator = (textArray) => {
   let returnValue = true;
   try {
@@ -460,6 +485,7 @@ const validateAbsentRefData = (data) => {
     jamPelaksanaan = '00:00:00',
     tanggalBerakhir,
     jamBerakhir = '23:59:59',
+    lingkup,
   } = data;
 
   try {
@@ -467,6 +493,7 @@ const validateAbsentRefData = (data) => {
     if (!tanggalValidator(tanggalPelaksanaan)) return false;
     if (!tanggalValidator(tanggalBerakhir)) return false;
     if (waktuValidator(jamPelaksanaan) && waktuValidator(jamBerakhir)) return false;
+    if (!lingkupValidator(lingkup)) return false;
 
     return true;
   } catch (e) {
