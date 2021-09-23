@@ -95,7 +95,7 @@ const postAbsentHandler = async (req, res) => {
 
   if (req.body.mode === 'post') {
     const {
-      absentId, mode, alasan
+      absentId, mode, alasan = 'h',
     } = req.body;
 
     if (!modeValidator(mode)) {
