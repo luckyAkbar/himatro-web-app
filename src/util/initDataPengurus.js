@@ -86,7 +86,7 @@ const checkIsOrganizationLeader = (npm) => {
   ];
 
   for (let i = 0; i < pengecualian.length; i += 1) {
-    if (npm === pengecualian[i]) {
+    if (npm === String(pengecualian[i])) {
       return true;
     }
   }
@@ -149,6 +149,7 @@ const initOrganizationLeaderData = async (npm) => {
 
 const initDataPengurus = async (npm) => {
   const isOrganizationLeader = checkIsOrganizationLeader(npm);
+  console.log(isOrganizationLeader)
 
   if (isOrganizationLeader) {
     initOrganizationLeaderData(npm);
