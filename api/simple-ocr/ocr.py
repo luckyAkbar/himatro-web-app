@@ -9,7 +9,10 @@ def get_text_from_image(image_name):
     try:
         img = Image.open(file_path)
         text = pytesseract.image_to_string(img)
+        text = text.replace('\n', ' ')
+        text = text.replace('  ', '')
+        text = text.replace(' ', ',')
 
-        return text.replace('\n', ' ')
+        return text
     except Exception as e:
         raise Exception('Failed to extract text from image, probably caused by img not found error.')

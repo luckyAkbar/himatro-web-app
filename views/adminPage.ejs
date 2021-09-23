@@ -76,6 +76,26 @@
               <input type="submit" value="Gunakan" class="btn-menu" style="margin-top: 10%; font-weight: 800;">
             </form>
           </div>
+          <div class="menu">
+            <h6>Sosmed Post Validation</h6>
+            <p class="deskripsi-menu">Menu ini bisa anda gunakan untuk mendeteksi apakah postingan sosial media yang diposting sudah sesuai atau belum berdasarkan text yang ada di gambar/bukti uploadnya</p>
+            <p class="deskripsi-menu">Untuk bagian kata/kalimat kunci, anda bisa mengetikan kalimat yg anda ingin ada di postingan, atau anda bisa menuliskan setiap kata dengan mengetikan ','(koma) untuk memisahkan setiap kata. Contoh: 'Paid Promote EEA' atau 'Paid,promote,eea'</p>
+            <form name="socmedPostValidation">
+              <label for = "namaPostingan">Nama Postingan: </label>
+              <input type="text" id = "namaPostingan" name = "namaPostingan">
+
+              <label for="tanggalPelaksanaan">Tanggal Mulai: </label>
+              <input type="date" id = "tanggalPelaksanaan" name = "tanggalPelaksanaan">
+
+              <label for="tanggalBerakhir">Tanggal Berakhir: </label>
+              <input type="date" id = "tanggalBerakhir" name = "tanggalBerakhir">
+
+              <label for="keyword">Kata/Kalimat Kunci (max 256 karakter): </label>
+              <input type="text" id = "keyword" name = "keyword">
+
+              <input value="Gunakan" id="btnSocmedPostValidation" class="btn-menu" style="margin-top: 3%; font-weight: 800;">
+            </form>
+          </div>
           <!--<div class="menu">
             <h6>Judul Menu</h6>
             <p class="deskripsi-menu">Ini adalah deskripsi dari menu tersebut</p>

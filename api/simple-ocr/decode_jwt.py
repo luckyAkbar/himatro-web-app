@@ -10,5 +10,4 @@ def decode_jwt_token(jwt_token):
         decoded = jwt.decode(jwt_token, secret, algorithms='HS256')
         return decoded
     except Exception as e:
-        print(e)
         raise Exception('Failed to decode JWT Token')

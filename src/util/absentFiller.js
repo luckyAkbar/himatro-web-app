@@ -1,198 +1,192 @@
-const chalk = require('chalk')
+const chalk = require('chalk');
 
-const { testQuery } = require('../../db/connection')
-const { AbsentFillerNotRegisteredError } = require('../classes/AbsentFillerNotRegisteredError')
-const { getTimeStamp } = require('./getTimeStamp')
+const { testQuery } = require('../../db/connection');
+const { AbsentFillerNotRegisteredError } = require('../classes/AbsentFillerNotRegisteredError');
+const { getTimeStamp } = require('./getTimeStamp');
 
-const table_name = 'absensi'
-const ref_id_field = 'referensi_id'
-const keterangan_field = 'keterangan'
-const npm_field = 'npm'
-const nama_field = 'nama'
-const comparation_operator = '='
-const logical_and_operator = 'AND'
+const table_name = 'absensi';
+const ref_id_field = 'referensi_id';
+const keterangan_field = 'keterangan';
+const npm_field = 'npm';
 
-const checkAlreadyFilled = async (ref_id, npm, nama) => {
-  const query = `SELECT ${keterangan_field} FROM ${table_name} WHERE ${npm_field} = $1 AND ${ref_id_field} = $2`
-  const params = [npm, ref_id]
+const checkAlreadyFilled = async (ref_id, npm) => {
+  const query = `SELECT ${keterangan_field} FROM ${table_name} WHERE ${npm_field} = $1 AND ${ref_id_field} = $2`;
+  const params = [npm, ref_id];
 
   try {
-    const { rows } = await testQuery(query, params)
+    const { rows } = await testQuery(query, params);
 
     if (rows.length === 0) {
-      console.log(chalk.red(`${npm} ini tidak terdaftar`))
-      throw new AbsentFillerNotRegisteredError(`User ${npm} is not registered`)
+      console.log(chalk.red(`${npm} ini tidak terdaftar`));
+      return new AbsentFillerNotRegisteredError(`User ${npm} is not registered`);
     }
 
     if (rows[0].keterangan === null) {
-      return false
+      return false;
     }
 
-    return true
-  }catch(e){
-    if (e instanceof AbsentFillerNotRegisteredError) {
-      return e
-    }
-
-    console.log(chalk.red(e))
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
-}
+};
 
 const checkIsEmailExists = async (email, tableName) => {
-  const query = `SELECT COUNT(1) FROM ${tableName} WHERE email = $1`
-  const params = [email]
+  const query = `SELECT COUNT(1) FROM ${tableName} WHERE email = $1`;
+  const params = [email];
 
   try {
-    const { rows } = await testQuery(query, params)
+    const { rows } = await testQuery(query, params);
 
     if (rows[0].count === '0') {
-      return false
+      return false;
     }
 
-    return true
-  } catch(e) {
-    console.log(e)
-    throw new Error('Failed to check whether email already exists or not.')
+    return true;
+  } catch (e) {
+    console.log(e);
+    throw new Error('Failed to check whether email already exists or not.');
   }
-}
+};
 
 const checkIsExpired = async (absentId) => {
-  const query = 'select tanggal_berakhir from kegiatan where kegiatan_id = $1'
-  const params = [absentId]
+  const query = 'select tanggal_berakhir from kegiatan where kegiatan_id = $1';
+  const params = [absentId];
 
   try {
-    const { rows } = await testQuery(query, params)
-    const result = await testQuery('select now()')
+    const { rows } = await testQuery(query, params);
+    const result = await testQuery('select now()');
 
     if (rows[0].tanggal_berakhir < result.rows[0].now) {
-      return true
+      return true;
     }
 
-    return false
+    return false;
   } catch (e) {
-    console.log(chalk.red(e))
-    throw new Error('Failed to compare time (is expired)')
+    console.log(chalk.red(e));
+    throw new Error('Failed to compare time (is expired)');
   }
-}
+};
 
 const checkIsAlreadyOpen = async (refId) => {
-  const query = 'SELECT tanggal_pelaksanaan FROM kegiatan WHERE kegiatan_id = $1'
-  const params = [refId]
+  const query = 'SELECT tanggal_pelaksanaan FROM kegiatan WHERE kegiatan_id = $1';
+  const params = [refId];
 
   try {
-    const { rows } = await testQuery(query, params)
-    const now = await testQuery('select now()')
+    const { rows } = await testQuery(query, params);
+    const now = await testQuery('select now()');
 
     if (rows[0].tanggal_pelaksanaan > now.rows[0].now) {
-      return false
+      return false;
     }
-    return true
+    return true;
   } catch (e) {
-    console.log(chalk.red(e))
-    throw new Error('Failed to compare time (already open)')
+    console.log(chalk.red(e));
+    throw new Error('Failed to compare time (already open)');
   }
-}
+};
 
 const checkRefIdExists = async (refId, tableName, rowName) => {
-  const query = `SELECT COUNT(1) FROM ${tableName} WHERE ${rowName} = $1`
-  const params = [refId]
+  const query = `SELECT COUNT(1) FROM ${tableName} WHERE ${rowName} = $1`;
+  const params = [refId];
 
   try {
-    const { rows } = await testQuery(query, params)
+    const { rows } = await testQuery(query, params);
 
     if (rows[0].count < 1) {
-      return false
+      return false;
     }
 
-    return true
+    return true;
   } catch (e) {
-    console.log(chalk.red(e))
+    console.log(e);
+    return false;
   }
-}
+};
 
 const insertKehadiranRecord = async (npm, refId, now, keterangan) => {
-  const query = `UPDATE absensi SET keterangan = $1, waktu_pengisian = $2 WHERE npm = $3 AND referensi_id = $4`
-  const params = [keterangan, now, npm, refId]
+  const query = 'UPDATE absensi SET keterangan = $1, waktu_pengisian = $2 WHERE npm = $3 AND referensi_id = $4';
+  const params = [keterangan, now, npm, refId];
 
   try {
-    await testQuery(query, params)
-    return 'Success'
+    await testQuery(query, params);
+    return 'Success';
   } catch (e) {
-    console.log(chalk.red(e))
-    return 'Failed'
+    console.log(chalk.red(e));
+    return 'Failed';
   }
-}
+};
 
-const absentFiller = async (absentId, npm, nama, keterangan, res)=> {
+const absentFiller = async (absentId, npm, nama, keterangan, res) => {
   try {
-    const isAbsentFormExists = await checkRefIdExists(absentId, 'absensi', 'referensi_id')
-    const isExpired = await checkIsExpired(absentId)
+    const isAbsentFormExists = await checkRefIdExists(absentId, 'absensi', 'referensi_id');
+    const isExpired = await checkIsExpired(absentId);
 
     if (!isAbsentFormExists) {
       res.status(404).render('errorPage', {
-        errorMessage: 'Absent Form Not Found'
-      })
-      return
+        errorMessage: 'Absent Form Not Found',
+      });
+      return;
     }
 
     if (isExpired) {
       res.status(404).render('errorPage', {
-        errorMessage: 'Sorry, this absent already closed.'
-      })
-      return
+        errorMessage: 'Sorry, this absent already closed.',
+      });
+      return;
     }
-
   } catch (e) {
-    console.log(chalk.red(e))
+    console.log(chalk.red(e));
   }
 
   try {
-    const result = await checkAlreadyFilled(absentId, npm, nama)
+    const result = await checkAlreadyFilled(absentId, npm);
 
-    if(result instanceof AbsentFillerNotRegisteredError) {
+    if (result instanceof AbsentFillerNotRegisteredError) {
       res.status(400).render('errorPage', {
-        errorMessage: 'NPM not registered'
-      })
-      res.end()
-      return
+        errorMessage: 'NPM not registered',
+      });
+      res.end();
+      return;
     }
 
     if (result === false) {
-      const now = getTimeStamp()
+      const now = getTimeStamp();
       try {
-        const isSuccess = await insertKehadiranRecord(npm, absentId, now, keterangan)
+        const isSuccess = await insertKehadiranRecord(npm, absentId, now, keterangan);
 
         if (isSuccess === 'Success') {
           res.status(200).render('successAbsent', {
-            nama: nama,
-            link: `/absensi?absentId=${absentId}&mode=view&sortBy=waktu_pengisian`
-          })
+            nama,
+            link: `/absensi?absentId=${absentId}&mode=view&sortBy=waktu_pengisian`,
+          });
         }
 
         if (isSuccess === 'Failed') {
           res.status(500).render('errorPage', {
-            errorMessage: 'Failed. Please contact administrator for this error.'
-          })
+            errorMessage: 'Failed. Please contact administrator for this error.',
+          });
         }
       } catch (e) {
-        console.log(chalk.red(e))
+        console.log(chalk.red(e));
       }
     }
 
     if (result === true) {
       res.status(403).render('errorPage', {
-        errorMessage: 'Can\'t change attendance record.'
-      })
+        errorMessage: 'Can\'t change attendance record.',
+      });
     }
   } catch (e) {
-    console.log(chalk.red(e))
+    console.log(chalk.red(e));
   }
-}
+};
 
 module.exports = {
   absentFiller,
   checkRefIdExists,
   checkIsExpired,
   checkIsAlreadyOpen,
-  checkIsEmailExists
-}
+  checkIsEmailExists,
+};
