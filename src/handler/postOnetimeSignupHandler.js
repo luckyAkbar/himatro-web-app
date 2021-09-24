@@ -206,6 +206,7 @@ const initOnetimeSignupHandler = async (req, res) => {
 
   if (password !== process.env.PASSWORD) {
     res.sendStatus(403);
+    return;
   }
 
   const key = initOnetimeSignupIdGenerator();
@@ -214,6 +215,7 @@ const initOnetimeSignupHandler = async (req, res) => {
   const nama = 'dummy';
   const data = readDataCsv(`${__dirname}/../../db/data/fullData.csv`);
   const query = 'INSERT INTO signupdata (key, npm, nama, email) VALUES ($1, $2, $3, $4)';
+
   let params = [];
 
   try {
@@ -288,7 +290,7 @@ const postOnetimeSignupHandler = async (req, res) => {
       });
       return;
     }
-
+    console.log(req.body)
     await insertSignupData(req.body);
 
     res.status(200).render('commonSuccess', {

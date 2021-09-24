@@ -12,7 +12,7 @@ const getAdminPage = async (req, res) => {
       });
       return;
     }
-
+    
     const upcomingEvents = await getUpcomingEvents();
 
     res.status(200).render('adminPage', {

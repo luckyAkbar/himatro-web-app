@@ -21,6 +21,7 @@ const featurePermissionHandler = async (req, res) => {
   const { featureId } = req.params;
 
   try {
+    
     const minimumFeaturePermission = await getMinimumFeaturePermission(featureId);
     const userPermissionLevel = await getUserPermissionLevel(req.email);
 
@@ -29,7 +30,7 @@ const featurePermissionHandler = async (req, res) => {
       res.status(403).json({ errorMessage: 'FORBIDDEN. You do not have required permission to use this feature.' });
       return;
     }
-
+    
     switch (featureId) {
       case 'feature001': // create new kegiatan
         createNewKegiatanFeature(req, res);

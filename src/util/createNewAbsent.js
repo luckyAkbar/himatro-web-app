@@ -1,9 +1,9 @@
 const { testQuery } = require('../../db/connection');
 const { QueryError } = require('../classes/QueryError');
-const { readDataCsv } = require('./readDataCsv');
+const { readDataCsvForAbsent } = require('./readDataCsv');
 
 const initNewAbsentRecord = async (referensiId, lingkup) => {
-  const dataPengurusHimatro = readDataCsv(`${__dirname}/../../db/data/fullData.csv`, lingkup);
+  const dataPengurusHimatro = readDataCsvForAbsent(`${__dirname}/../../db/data/fullData.csv`, lingkup);
 
   try {
     dataPengurusHimatro.forEach(async (data) => {
@@ -53,7 +53,6 @@ const createNewKegiatan = async (refId, {
 
   try {
     await testQuery(query, params);
-    return;
   } catch (e) {
     console.log(e);
     throw new QueryError('Failed to create new kegiatan');

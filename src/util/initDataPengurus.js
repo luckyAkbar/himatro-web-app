@@ -2,6 +2,7 @@ const { testQuery } = require('../../db/connection');
 const { readDataCsv } = require('./readDataCsv');
 
 const convertDivisiToDivisiId = (divisi) => {
+  console.log('ini divisi', divisi)
   switch (divisi) {
     case 'Pengurus Harian':
       return 'div0000001';
@@ -49,7 +50,7 @@ const getDivisiFromBaseData = (npm) => { // diambil dari fullData.csv atau data 
 
   for (let i = 0; i < baseData.length; i += 1) {
     if (npm === baseData[i].npm) {
-      return baseData[i].divisi;
+      return String(baseData[i].divisi);
     }
   }
 
@@ -86,7 +87,7 @@ const checkIsOrganizationLeader = (npm) => {
   ];
 
   for (let i = 0; i < pengecualian.length; i += 1) {
-    if (npm === String(pengecualian[i])) {
+    if (String(npm) === String(pengecualian[i])) {
       return true;
     }
   }
@@ -123,15 +124,13 @@ const initOrganizationLeaderData = async (npm) => {
     [1915031056, 'jab0000009'], // kadiv
   ];
 
-  const query = 'INSERT INTO pengurus (npm, divisi_id, jabatan_id) VALUES ($1, $2, $3)';
-  let params = [];
-  let divisiId;
-
   leadersNPM.forEach(async (data) => {
-    if (npm === data[0]) {
-      divisiId = convertDivisiToDivisiId(getDivisiFromBaseData(data[0]));
-      console.log(divisiId, getDivisiFromBaseData(npm));
-      params = [
+    const npmFromLeadersData = String(data[0]);
+
+    if (npm === npmFromLeadersData) {
+      const query = 'INSERT INTO pengurus (npm, divisi_id, jabatan_id) VALUES ($1, $2, $3)';
+      const divisiId = convertDivisiToDivisiId(getDivisiFromBaseData(npmFromLeadersData));
+      const params = [
         data[0],
         divisiId,
         data[1],
@@ -152,7 +151,7 @@ const initDataPengurus = async (npm) => {
   console.log(isOrganizationLeader)
 
   if (isOrganizationLeader) {
-    initOrganizationLeaderData(npm);
+    await initOrganizationLeaderData(npm);
     return;
   }
 
