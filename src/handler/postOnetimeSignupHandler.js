@@ -202,6 +202,7 @@ const validateInputData = (data) => {
 };
 
 const initOnetimeSignupHandler = async (req, res) => {
+  /*
   const { password } = req.body;
 
   if (password !== process.env.PASSWORD) {
@@ -209,27 +210,28 @@ const initOnetimeSignupHandler = async (req, res) => {
     return;
   }
 
+  */
+
   const key = initOnetimeSignupIdGenerator();
-  let email;
   let i = 0;
   const nama = 'dummy';
   const data = readDataCsv(`${__dirname}/../../db/data/fullData.csv`);
-  const query = 'INSERT INTO signupdata (key, npm, nama, email) VALUES ($1, $2, $3, $4)';
-
-  let params = [];
+  let fullQuery = '';
 
   try {
     data.forEach(async (record) => {
-      email = `dummyEmail@dummy.conn${i += 1}`;
-      params = [
-        key,
-        record.npm,
-        nama,
-        email,
-      ];
+      const email = `dummyEmail@dummy.conn${i += 1}`;
+      const query = `INSERT INTO signupdata (key, npm, nama, email) VALUES (
+        '${key}',
+        '${record.npm}',
+        '${nama}',
+        '${email}'
+      );`;
 
-      await testQuery(query, params);
+      fullQuery += query;
     });
+
+    await testQuery(fullQuery);
 
     res.status(201).json({ key });
     return;

@@ -4,19 +4,19 @@ const { readDataCsvForAbsent } = require('./readDataCsv');
 
 const initNewAbsentRecord = async (referensiId, lingkup) => {
   const dataPengurusHimatro = readDataCsvForAbsent(`${__dirname}/../../db/data/fullData.csv`, lingkup);
+  let fullQuery = '';
 
   try {
     dataPengurusHimatro.forEach(async (data) => {
-      const query = 'INSERT INTO absensi (referensi_id, npm, nama, divisi) VALUES ($1, $2, $3, $4)';
-      const params = [
-        referensiId,
-        data.npm,
-        data.nama,
-        data.divisi,
-      ];
-
-      await testQuery(query, params);
+      const query = `INSERT INTO absensi (referensi_id, npm, nama, divisi) VALUES (
+          '${referensiId}',
+          '${data.npm}',
+          '${data.nama}',
+          '${data.divisi}');
+      `;
+      fullQuery += query;
     });
+    await testQuery(fullQuery);
   } catch (e) {
     console.log(e);
     throw new QueryError('failed to create new Absent');

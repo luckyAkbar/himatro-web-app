@@ -122,6 +122,7 @@ const initOrganizationLeaderData = async (npm) => {
     [2015031002, 'jab0000008'], // sekdep bangtek
     [1915031070, 'jab0000009'], // kadiv
     [1915031056, 'jab0000009'], // kadiv
+    [1915061056, 'jab1603123'], // lucky sebagai admin
   ];
 
   leadersNPM.forEach(async (data) => {
