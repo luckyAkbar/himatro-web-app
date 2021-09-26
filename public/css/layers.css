@@ -164,7 +164,7 @@
 .lined {
 	width: 100%;
 	height: 460px;
-	background-color: #efddef;
+	background-color: #ffffff;
 	position: relative;
 	overflow: hidden;
 	z-index: 3;
@@ -209,8 +209,6 @@
 	border-color: #000000;
 	border-radius: 20px;
 	
-	animation-name: animateblok;
-	animation-duration: 1s;
 	transform: rotate(-20deg);
 }
 
@@ -220,7 +218,7 @@
 	top: 40px;
 	width: 420px;
 	height: 420px;
-	background-color: #efddef;
+	background-color: #ffffff;
 	border-radius: 20px; 
 }
 .decor2{
@@ -233,8 +231,6 @@
 	border: 20px;
 	border-color: #000000;
 	border-radius: 150px;
-	animation-name: animateblok2;
-	animation-duration: 0.7s;
 }
 
 @keyframes animateblok{
@@ -267,7 +263,7 @@
 
 .layer2 {
 	position: relative;
-	background-color: inherit;
+	background-color: #ffffff;
 	width: 100%;
 	height: 1000px;
 	overflow: hidden;
@@ -280,7 +276,7 @@
 	top: 20px;
 	text-align: center;
 	margin-left: -50px;
-	color: #fff;
+	color: #000000;
 }
 .layer2 .bigcontainer{
 	position: absolute;
