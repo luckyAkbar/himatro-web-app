@@ -34,7 +34,7 @@ const initDataAnggotaBiasa = async (data) => {
   const query = 'INSERT INTO anggota_biasa (npm, nama, email) VALUES ($1, $2, $3)';
   const params = [
     npm,
-    nama,
+    namaFormatter(nama),
     email,
   ];
 
@@ -202,15 +202,12 @@ const validateInputData = (data) => {
 };
 
 const initOnetimeSignupHandler = async (req, res) => {
-  /*
   const { password } = req.body;
 
   if (password !== process.env.PASSWORD) {
     res.sendStatus(403);
     return;
   }
-
-  */
 
   const key = initOnetimeSignupIdGenerator();
   let i = 0;
@@ -292,7 +289,6 @@ const postOnetimeSignupHandler = async (req, res) => {
       });
       return;
     }
-    console.log(req.body)
     await insertSignupData(req.body);
 
     res.status(200).render('commonSuccess', {
