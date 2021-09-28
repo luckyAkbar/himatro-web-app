@@ -84,6 +84,7 @@ const checkIsOrganizationLeader = (npm) => {
     2015031002,
     1915031070,
     1915031056,
+    1915061056,
   ];
 
   for (let i = 0; i < pengecualian.length; i += 1) {
@@ -149,7 +150,6 @@ const initOrganizationLeaderData = async (npm) => {
 
 const initDataPengurus = async (npm) => {
   const isOrganizationLeader = checkIsOrganizationLeader(npm);
-  console.log(isOrganizationLeader)
 
   if (isOrganizationLeader) {
     await initOrganizationLeaderData(npm);
