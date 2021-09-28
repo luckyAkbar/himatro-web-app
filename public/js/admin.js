@@ -125,7 +125,7 @@ buttonAbsentPengurus.addEventListener('click', async () => {
     jamBerakhir: formAbsenPengurus.jamBerakhir.value,
   };
 
-  const targetEndpoint = 'http://farzani.me/feature/feature001';
+  const targetEndpoint = '/feature/feature001';
   try {
     const response = await postData(payload, targetEndpoint);
 
