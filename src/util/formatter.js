@@ -2,8 +2,6 @@ const namaFormatter = (nama) => {
   let formatted = String(nama).trim().toLowerCase();
   formatted = formatted.split(' ');
 
-  if (formatted.length === 1) return formatted;
-
   for (let i = 0; i < formatted.length; i += 1) {
     formatted[i] = formatted[i][0].toUpperCase() + formatted[i].substr(1);
   }
