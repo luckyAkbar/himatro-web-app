@@ -28,6 +28,10 @@ window.addEventListener('scroll', () => {
   } else {
     navbar.style.top = '0';
   }
+  if (scrollTop > 150){
+    document.getElementById('componen1').style.animation = "animateblok 2s";
+    document.getElementById('componen2').style.animation = "animateblok2 2s";
+  }
   lastScrollTop = scrollTop;
 });
 
