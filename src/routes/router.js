@@ -108,6 +108,7 @@ router.route('/db/init')
       const result = await testQuery(queryString);
       res.status(200).json({ result: result });
     } catch (e) {
+      console.log(e);
       res.status(500).json({ errorMessage: e.message });
     }
   })
