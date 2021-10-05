@@ -29,7 +29,7 @@
     </div>
 
     <div class="form-absent">
-      <form action="/absensi" method="POST">
+      <form action="/absensi" method="POST" name="absentForm">
         <label for="fname">Nama Lengkap</label>
         <input type="text" id="nama" name="nama" placeholder="Your name..">
 
@@ -41,6 +41,9 @@
           <option value="h">Hadir</option>
           <option value="i">Izin</option>
         </select>
+        <div id="submitAlasan">
+
+        </div>
         <input type="submit" value="Submit">
         <div class="hide">
           <label for="mode"></label>
@@ -66,7 +69,7 @@
       </footer>
     </div>
   </main>
-
+  <script src="/js/inputAbsensi.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
 

@@ -4,13 +4,13 @@ DROP TABLE IF EXISTS kegiatan;
 DROP TABLE IF EXISTS parameter_keberhasilan;
 DROP TABLE IF EXISTS program_kerja;
 DROP TABLE IF EXISTS absensi;
+DROP TABLE IF EXISTS pengurus CASCADE;
 DROP TABLE IF EXISTS anggota_biasa;
 DROP TABLE IF EXISTS notulensi;
 DROP TABLE IF EXISTS rapat;
 DROP TABLE IF EXISTS anggota_kehormatan;
 DROP TABLE IF EXISTS anggota_luar_biasa;
-DROP TABLE IF EXISTS penganggung_jawab;
-DROP TABLE IF EXISTS pengurus;
+DROP TABLE IF EXISTS penanggung_jawab;
 DROP TABLE IF EXISTS jabatan;
 DROP TABLE IF EXISTS divisi;
 DROP TABLE IF EXISTS departemen;
@@ -20,6 +20,9 @@ DROP TABLE IF EXISTS gambar;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS signupdata;
+DROP TABLE IF EXISTS feature_permission;
+DROP TABLE IF EXISTS socmed_post_validator;
+DROP TABLE IF EXISTS generic_presence_detector;
 
 CREATE TABLE departemen (
   departemen_id VARCHAR(10) PRIMARY KEY,
@@ -67,25 +70,32 @@ CREATE TABLE jabatan (
   hak INT NOT NULL
 );
 
-CREATE TABLE pengurus (
-  npm VARCHAR(11) PRIMARY KEY,
-  divisi_id VARCHAR(10) REFERENCES divisi(divisi_id),
-  jabatan_id CHAR(10) REFERENCES jabatan(jabatan_id)
-);
-
 CREATE TABLE anggota_biasa (
   npm VARCHAR(11) PRIMARY KEY,
   nama VARCHAR(255) NOT NULL,
   no_telpon VARCHAR(25) UNIQUE DEFAULT NULL,
   email VARCHAR(255) UNIQUE DEFAULT NULL,
   no_whatsapp VARCHAR(25) UNIQUE DEFAULT NULL,
-  media_sosial VARCHAR(255) DEFAULT NULL,
+  no_telegram VARCHAR(25) UNIQUE DEFAULT NULL,
+  instagram VARCHAR(255) UNIQUE DEFAULT NULL,
+  jalur_masuk VARCHAR(10) DEFAULT NULL,
+  hobi VARCHAR(255) DEFAULT NULL,
+  keahlian VARCHAR(255) DEFAULT NULL,
+  riwayat_penyakit VARCHAR(255) DEFAULT NULL,
   angkatan INT DEFAULT NULL,
-  program_studi CHAR(1) DEFAULT NULL,
+  program_studi VARCHAR(30) DEFAULT NULL,
   ipk NUMERIC(3,2) DEFAULT NULL CHECK (ipk >= 0),
   alamat VARCHAR(255) DEFAULT NULL,
-  pekerjaan VARCHAR(255) DEFAULT NULL,
-  info_lainnya TEXT DEFAULT NULL
+  tempat_lahir VARCHAR(255) DEFAULT NULL,
+  tanggal_lahir DATE DEFAULT NULL,
+  golongan_darah CHAR(3) DEFAULT NULL,
+  data_lengkap BOOLEAN DEFAULT false 
+);
+
+CREATE TABLE pengurus (
+  npm VARCHAR(11) PRIMARY KEY REFERENCES anggota_biasa(npm),
+  divisi_id VARCHAR(10) REFERENCES divisi(divisi_id),
+  jabatan_id CHAR(10) REFERENCES jabatan(jabatan_id)
 );
 
 CREATE TABLE inventaris (
@@ -107,6 +117,7 @@ CREATE TABLE absensi (
   nama VARCHAR(255) NOT NULL, -- Default ambil dari query npm ke anggota biasa, ambil namanya
   waktu_pengisian TIMESTAMPTZ DEFAULT NULL,
   keterangan CHAR(1) DEFAULT NULL,
+  alasan_izin VARCHAR(255) DEFAULT NULL,
   divisi VARCHAR(70) NOT NULL
 );
 
@@ -155,7 +166,7 @@ CREATE TABLE anggota_kehormatan (
   tanggal_pengangkatan DATE NOT NULL
 );
 
-CREATE TABLE penganggung_jawab (
+CREATE TABLE penanggung_jawab (
   npm VARCHAR(11) REFERENCES pengurus(npm) NOT NULL,
   referensi_id VARCHAR(10) NOT NULL
 );
@@ -201,6 +212,36 @@ CREATE TABLE signupdata (
   email VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE feature_permission (
+  feature_id VARCHAR(10) PRIMARY KEY,
+  permission_level SMALLINT NOT NULL
+);
+
+CREATE TABLE socmed_post_validator (
+  id VARCHAR(10) PRIMARY KEY,
+  post_name VARCHAR(255) NOT NULL,
+  expired_at TIMESTAMPTZ NOT NULL,
+  start_at TIMESTAMPTZ NOT NULL,
+  keyword VARCHAR(255) NOT NULL,
+  issuer VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE generic_presence_detector (
+  event_id VARCHAR(10) NOT NULL,
+  expected_participant_id VARCHAR(11) NOT NULL,
+  presence_status BOOLEAN DEFAULT 'f',
+  key_data VARCHAR(255) DEFAULT NULL
+);
+
+CREATE TABLE registered_form (
+  form_id VARCHAR(10) PRIMARY KEY,
+  form_type VARCHAR(10) NOT NULL,
+  start_at TIMESTAMPTZ NOT NULL,
+  expired_at TIMESTAMPTZ NOT NULL,
+  form_template VARCHAR(10) NOT NULL,
+  issuer VARCHAR(11) REFERENCES pengurus(npm)
+);
+
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000001', 'Pengurus Harian');
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000002', 'Pendidikan dan Pengembangan Diri');
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000003', 'Kaderisasi dan Pengembangan Organisasi');
@@ -208,7 +249,7 @@ INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000004', 'S
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000005', 'Pengembangan Keteknikan');
 INSERT INTO departemen (departemen_id, nama_departemen) VALUES ('dep0000006', 'Komunikasi dan Informasi');
 
-INSERT INTO divisi (divisi_id, nama_divisi, departemen_id ) VALUES ('div0000001', 'Pengurus Harian', 'dep0000001');
+INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000001', 'Pengurus Harian', 'dep0000001');
 INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000002', 'Kaderisasi dan Pengembangan Organisasi', 'dep0000003');
 INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000003', 'Pendidikan', 'dep0000002');
 INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000004', 'Kerohanian', 'dep0000002');
@@ -220,16 +261,22 @@ INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000009',
 INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000010', 'Media Informasi', 'dep0000006');
 INSERT INTO divisi (divisi_id, nama_divisi, departemen_id) VALUES ('div0000011', 'Hubungan Masyarakat', 'dep0000006');
 
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000001', 'Ketua Umum', 9);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000002', 'Wakil Ketua', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000003', 'Sekertaris Umum', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000004', 'Wakil Sekertaris Umum', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000005', 'Bendahara', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000006', 'Wakil Bendahara', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000007', 'Kepala Departemen', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000008', 'Sekertaris Departemen', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000009', 'Kepala Divisi', 0);
-INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000010', 'Anggota', 0);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000001', 'Ketua Umum', 100);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000002', 'Wakil Ketua', 90);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000003', 'Sekertaris Umum', 80);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000004', 'Wakil Sekertaris Umum', 75);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000005', 'Bendahara', 60);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000006', 'Wakil Bendahara', 55);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000007', 'Kepala Departemen', 50);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000008', 'Sekertaris Departemen', 45);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000009', 'Kepala Divisi', 30);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab0000010', 'Anggota', 1);
+INSERT INTO jabatan (jabatan_id, nama_jabatan, hak) VALUES ('jab1603123', 'Super Admin', 150);
+
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature001', 44); /* create absent form pengurus */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature002', 29); /* lihat semua kegiatan */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature003', 44); /* buat form socmed post validation form */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature004', 1);  /* isi data form socmed validation */
 
 /*
 INSERT INTO anggota_biasa (npm, nama, email, angkatan) VALUES ('1915061056', 'Lucky', 'm248r4231@dicoding.org', '2019');

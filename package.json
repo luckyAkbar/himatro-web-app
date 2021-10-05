@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "kill": "fuser -k 3000/tcp",
     "dev": "npm run kill && node index.js",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "simple-ocr-api": "uvicorn --port 5000 --app-dir ./api/simple-ocr main:app --reload"
   },
   "author": "Lucky Akbar",
   "license": "ISC",
@@ -31,7 +32,18 @@
     "nodemon": "^2.0.12"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
     "localtunnel": "^2.0.1",
     "nodemon": "^2.0.12"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luckyAkbar/himatro-web-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luckyAkbar/himatro-web-app/issues"
+  },
+  "homepage": "https://github.com/luckyAkbar/himatro-web-app#readme"
 }

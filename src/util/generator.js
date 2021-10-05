@@ -1,78 +1,73 @@
-const generateUniqueId = require('generate-unique-id')
+const generateUniqueId = require('generate-unique-id');
 
-const excludedSymbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '[', ']', '{', '}', ';', ':', `"`, '|', ',', '.', '<', '>', '?', ']', '+']
+const excludedSymbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '[', ']', '{', '}', ';', ':', '"', '|', ',', '.', '<', '>', '?', ']', '+'];
 
-const referensiIdGenerator = (option) => {
+const referensiIdGenerator = (option = 'keg') => {
   if (option === 'keg') {
     return `keg${generateUniqueId({
       length: 7,
       excludeSymbols: excludedSymbols,
-      useLetters: false
-    })}`
+      useLetters: false,
+    })}`;
   }
-}
 
-const sdmUIDGenerator = () => {
-  return `sdm${generateUniqueId({
-    length: 7,
-    excludeSymbols: excludedSymbols,
-    useNumbers: true,
-    useLetters: false
-  })}`
-}
+  return false;
+};
 
-const uploadedImageNameGenerator = () => {
-  return `${generateUniqueId({
-    length: 15,
-    excludeSymbols: excludedSymbols,
-    useLetters: true,
-    useNumbers: false
-  })}`
-}
+const sdmUIDGenerator = () => `sdm${generateUniqueId({
+  length: 7,
+  excludeSymbols: excludedSymbols,
+  useNumbers: true,
+  useLetters: false,
+})}`;
 
-const imageIdGenerator = () => {
-  return `${generateUniqueId({
-    length: 10,
-    excludeSymbols: excludedSymbols,
-    useLetters: true,
-    useNumbers: true
-  })}`
-}
+const uploadedImageNameGenerator = () => `${generateUniqueId({
+  length: 15,
+  excludeSymbols: excludedSymbols,
+  useLetters: true,
+  useNumbers: false,
+})}`;
 
-const sessionGenerator = () => {
-  return `${generateUniqueId({
-    length: 10,
-    excludeSymbols: excludedSymbols,
-    useLetters: true,
-    useNumbers: true
-  })}`
-}
+const imageIdGenerator = () => `${generateUniqueId({
+  length: 10,
+  excludeSymbols: excludedSymbols,
+  useLetters: true,
+  useNumbers: true,
+})}`;
 
-const sessionIdGenerator = () => {
-  return `${generateUniqueId({
-    length: 5,
-    excludeSymbols: excludedSymbols,
-    useLetters: true,
-    useNumbers: true
-  })}`
-}
+const sessionGenerator = () => `${generateUniqueId({
+  length: 10,
+  excludeSymbols: excludedSymbols,
+  useLetters: true,
+  useNumbers: true,
+})}`;
 
-const initOnetimeSignupIdGenerator = () => {
-  return `signup${generateUniqueId({
-    length: 9,
-    excludeSymbols: excludedSymbols,
-    useLetters: true,
-    useNumbers: true
-  })}`
-}
+const sessionIdGenerator = () => `${generateUniqueId({
+  length: 5,
+  excludeSymbols: excludedSymbols,
+  useLetters: true,
+  useNumbers: true,
+})}`;
 
-const userPasswordGenerator = (npm) => {
-  return `${npm}${generateUniqueId({
-    length: 13,
-    useLetters: true,
-    useNumbers: true
-  })}`
-}
+const initOnetimeSignupIdGenerator = () => `signup${generateUniqueId({
+  length: 9,
+  excludeSymbols: excludedSymbols,
+  useLetters: true,
+  useNumbers: true,
+})}`;
+
+const userPasswordGenerator = (npm) => `${npm}${generateUniqueId({
+  length: 13,
+  useLetters: true,
+  useNumbers: true,
+})}`;
+
+const socmedPostIdGenerator = () => `smpv${generateUniqueId({
+  length: 6,
+  useLetters: true,
+  useNumbers: true,
+  excludeSymbols: excludedSymbols,
+})}`;
 
 module.exports = {
   referensiIdGenerator,
@@ -82,5 +77,6 @@ module.exports = {
   sessionGenerator,
   sessionIdGenerator,
   userPasswordGenerator,
-  initOnetimeSignupIdGenerator
- }
+  initOnetimeSignupIdGenerator,
+  socmedPostIdGenerator,
+};

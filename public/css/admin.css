@@ -3,6 +3,11 @@ body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+input {
+    width: 100%;
+    padding: 5px;
+}
+
 .navigation {
     display: flex;
     flex-flow: row wrap;
@@ -74,6 +79,7 @@ body {
 .menu {
     flex-grow: 1;
     margin: 3%;
+    padding: 15px;
     background-color: rgb(91, 223, 157);
     border-radius: 12px;
     color: black;
@@ -151,4 +157,8 @@ h6 {
 .footer-sub-content {
     padding: 50px;
     width: 100%;
+}
+
+#createAbsent {
+    padding: 10px;
 }

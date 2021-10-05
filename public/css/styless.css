@@ -8,7 +8,9 @@
 }
 
 body{
-	background: #efddef;
+	background: #040d21;
+	max-width: 100%;
+	overflow-x: hidden;
 	min-height: 200vh;
 }
 
@@ -159,31 +161,3 @@ header.joss ul li a {
 	width: 100%;
 }
 
-footer {
-	min-height: 200px;
-
-}
-
-footer .background {
-	width: 100%;
-	height: 400px;
-	position: relative;
-	background-color: #000;
-}
-footer .background h2 {
-	font-size: 19px;
-	color: #aaaaaa;
-	font-family: "footerh";
-	position: relative;
-	padding-left: 40px;
-}
-
-footer .background p {
-
-	color: #aaaaaa;
-	max-width: 50%;
-	font-family: "footer";
-	font-size: 14px;
-	position: relative;
-	padding-left: 40px;
-}

@@ -1,39 +1,44 @@
-require('dotenv').config()
+require('dotenv').config();
 
-const jwt = require('jsonwebtoken')
-const { sesionIdGenerator } = require('./generator')
+const jwt = require('jsonwebtoken');
+const { JWTInvalidError } = require('../classes/JWTInvalidError');
 
-const createJWTToken = (session, sessionId, email) => {
-  return jwt.sign({
-    session,
-    sessionId,
-    email
-  }, process.env.SECRET_JWT_TOKEN, {
-    expiresIn: Number(process.env.JWT_TOKEN_EXPIRES_SEC),
-  })
-}
+const createJWTToken = (session, sessionId, email) => jwt.sign({
+  session,
+  sessionId,
+  email,
+}, process.env.SECRET_JWT_TOKEN, {
+  expiresIn: Number(process.env.JWT_TOKEN_EXPIRES_SEC),
+});
 
 const verifyJWTToken = (token) => {
   const result = jwt.verify(token, process.env.SECRET_JWT_TOKEN, (err, decoded) => {
     if (err) {
-      return new Error('Token is not authentic')
+      return new JWTInvalidError('Token is not authentic');
     }
 
-    return decoded
-  })
+    return decoded;
+  });
 
-  if (result instanceof Error) {
-    throw new Error('Token invalid')
+  if (result instanceof JWTInvalidError) {
+    throw new JWTInvalidError('Token is not authentic');
   } else {
-    return result
+    return result;
   }
+};
 
-}
+const ocrToken = (filename, featureCode) => jwt.sign({
+  filename,
+  featureCode,
+}, process.env.SECRET_JWT_TOKEN, {
+  expiresIn: Number(process.env.JWT_TOKEN_EXPIRES_SEC),
+});
 
 module.exports = {
   createJWTToken,
-  verifyJWTToken
-}
+  verifyJWTToken,
+  ocrToken,
+};
 
 /*
 const coba = async () => {
@@ -50,7 +55,9 @@ const coba = async () => {
     const result = verifyJWTToken(token) // got jwt from user
     console.log('result', result);
 
-    const comparedHash = await compareHash(sessionId, result.userId) // comparing sessionId from user's jwt, and then comparing it with actual session id stored in database
+    // comparing sessionId from user's jwt,
+    // and then comparing it with actual session id stored in database
+    const comparedHash = await compareHash(sessionId, result.userId)
     console.log('compared:', comparedHash);
   } catch (e) {
     console.log(e);
@@ -69,7 +76,6 @@ userId === result.userId ? console.log('true'): console.log('false');
 
 const getUserId = await compareHash(userId, result.userId)
 console.log('userId?:', getUserId);
-
 
 const jwtExp = 1629694412
 const sec = getSecondsAfterEpoch()
@@ -235,7 +241,6 @@ const postLoginHandler = async (req, res) => {
   }
 }
 
-
 const verifyPassword = async ({ email, password }) => {
   const query = `SELECT password from users where email = $1`
   const params = [email]
@@ -296,6 +301,3 @@ module.exports = {
 }
 
 */
-
-
-

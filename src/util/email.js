@@ -1,27 +1,49 @@
-require('dotenv').config()
+require('dotenv').config();
 
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const { getTimeStamp } = require('./getTimeStamp');
 
 const transport = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD_EMAIL
-    }
-})
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD_EMAIL,
+  },
+});
 
 const sendEmail = async (message) => {
-    try {
-        await transport.sendMail(message)
-    } catch(e) {
-        console.log(e)
-        throw new Error(`Failed to send message ${message} to ${message.to}`)
-    }
-}
+  try {
+    await transport.sendMail(message);
+  } catch (e) {
+    console.log(e);
+    throw new Error(`Failed to send message ${message} to ${message.to}`);
+  }
+};
+
+const generateErrorEmail = async (errorMessage, extraInformation = '') => {
+  const message = {
+    from: 'lucky.pengelolawebhimatro@gmail.com',
+    to: 'lucky.akbar105619@students.unila.ac.id',
+    subject: 'Severe Error Has Happen',
+    html: `
+            <h1>Severe Error Need to be Review</h1>
+            <p>This incedent happen on ${getTimeStamp()}</p>
+            <p>Error Message: ${errorMessage}</p>
+            <p>Other information: ${String(extraInformation)}
+        `,
+  };
+
+  try {
+    await sendEmail(message);
+  } catch (e) {
+    console.log('email functionality broken', e);
+  }
+};
 
 module.exports = {
-    sendEmail
-}
+  sendEmail,
+  generateErrorEmail,
+};
 
 // const message = {
 //     from: 'lucky.pengelolawebhimatro@gmail.com',

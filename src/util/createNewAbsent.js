@@ -1,69 +1,65 @@
-const chalk = require('chalk')
+const { testQuery } = require('../../db/connection');
+const { QueryError } = require('../classes/QueryError');
+const { readDataCsvForAbsent } = require('./readDataCsv');
 
-const { testQuery } = require('../../db/connection')
-const { readDataCsv } = require('./readDataCsv')
-
-const table_name = 'absensi'
-const refIdField = 'referensi_id'
-const divField = 'divisi'
-const npmField = 'npm'
-const namaField = 'nama'
-
-const initNewAbsentRecord = async (res, referensiId) => {
-  let result = readDataCsv(__dirname+'/../../db/data/fullData.csv')
+const initNewAbsentRecord = async (referensiId, lingkup) => {
+  const dataPengurusHimatro = readDataCsvForAbsent(`${__dirname}/../../db/data/fullData.csv`, lingkup);
+  let fullQuery = '';
 
   try {
-    for(let i = 0; i < result.length; i++) {
-      const query = `INSERT INTO ${table_name} (${refIdField}, ${npmField}, ${namaField}, ${divField}) VALUES ($1, $2, $3, $4)`
-      const params = [`${referensiId}`, `${result[i].npm}`, `${result[i].nama}`, `${result[i].divisi}`]
-
-      const finished = await testQuery(query, params)
-    }
-    res.status(201)
-  } catch(e) {
-    res.status(500)
-    console.log(chalk.red(e))
+    dataPengurusHimatro.forEach(async (data) => {
+      const query = `INSERT INTO absensi (referensi_id, npm, nama, divisi) VALUES (
+          '${referensiId}',
+          '${data.npm}',
+          '${data.nama}',
+          '${data.divisi}');
+      `;
+      fullQuery += query;
+    });
+    await testQuery(fullQuery);
+  } catch (e) {
+    console.log(e);
+    throw new QueryError('failed to create new Absent');
   }
-}
+};
 
-const createNewAbsent = async (res, referensiId) => {
+const createNewAbsent = async (referensiId, lingkup) => {
   try {
-    await initNewAbsentRecord(res, referensiId)
-    //db.query('SELECT * FROM absensi'))
-  } catch(e) {
-    console.log(chalk.red(e))
+    await initNewAbsentRecord(referensiId, lingkup);
+  } catch (e) {
+    console.log(e);
+    throw new QueryError('failed to create new absent');
   }
-}
+};
 
 const createNewKegiatan = async (refId, {
   namaKegiatan,
-  tanggalPelaksanaan,
-  tanggalBerakhir
+  mulai,
+  akhir,
 }) => {
   const query = `INSERT INTO kegiatan (
     kegiatan_id,
     nama_kegiatan,
     tanggal_pelaksanaan,
     tanggal_berakhir
-  ) VALUES ($1, $2, $3, $4)`
+  ) VALUES ($1, $2, $3, $4)`;
 
   const params = [
     refId,
     namaKegiatan,
-    tanggalPelaksanaan,
-    tanggalBerakhir
-  ]
+    mulai,
+    akhir,
+  ];
 
   try {
-    await testQuery(query, params)
-    return
+    await testQuery(query, params);
   } catch (e) {
-    console.log(chalk.red(e))
-    throw new Error('Failed to create new kegiatan')
+    console.log(e);
+    throw new QueryError('Failed to create new kegiatan');
   }
-}
+};
 
 module.exports = {
   createNewAbsent,
-  createNewKegiatan
-}
+  createNewKegiatan,
+};

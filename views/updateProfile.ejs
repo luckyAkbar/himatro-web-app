@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="icon" href="/images/Himatro.png">
+    <link rel="stylesheet" href="/css/updateProfile.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Update Profile</h2>
+  <form action="/profile/update" method="POST">
+  <div class="row">
+    <div class="col-25">
+      <label for="nama">Nama Lengkap<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="nama" name="nama" placeholder="<%= nama %>" value="<%= nama %>"" disabled>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="npm">NPM<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="npm" name="npm" placeholder="<%= npm %>" value="<%= npm %>" disabled>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="prodi">Program Studi<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <select id="prodi" name="prodi">
+        <option value="blank"><em>Pilih Satu</em></option>
+        <option value="Teknik Informatika">Teknik Informatika</option>
+        <option value="Teknik Elektro">Teknik Elektro</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="departemen">Departemen<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <select id="departemen" name="departemen">
+        <option value="blank"><em>Pilih Satu</em></option>
+        <option value="Pengurus Harian">Pengurus Harian</option>
+        <option value="Pendidikan dan Pengembangan Diri">Pendidikan dan Pengembangan Diri</option>
+        <option value="Kaderisasi dan Pengembangan Organisasi">Kaderisasi dan Pengembangan Organisasi</option>
+        <option value="Sosial dan Kewirausahaan">Sosial dan Kewirausahaan</option>
+        <option value="Komunikasi dan Informasi">Komunikasi dan Informasi</option>
+        <option value="Pengembangan Keteknikan">Pengembangan Keteknikan</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="divisi">Divisi<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <select id="divisi" name="divisi">
+        <option value="blank"><em>Pilih Satu</em></option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="jabatan">Jabatan<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <select id="jabatan" name="jabatan">
+        <option value="blank"><em>Pilih Satu</em></option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="tempatLahir">Tempat Lahir<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="tempatLahir" name="tempatLahir" placeholder="Masukan tempat lahir" required>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="tanggalLahir">Tanggal Lahir<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="date" id="tanggalLahir" name="tanggalLahir" placeholder="Masukan tanggal lahir" required>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="golonganDarah">Golongan Darah<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <select id="golonganDarah" name="golonganDarah">
+        <option value="blank"><em>Pilih Satu</em></option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="AB">AB</option>
+        <option value="O">O</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="alamatRumah">Alamat Rumah<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <textarea id="alamatRumah" name="alamatRumah" placeholder="Masukan alamat lengkap rumah anda" style="height:200px"></textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="nomorTelepon">Nomor Telepon<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="tel" id="nomorTelepon" name="nomorTelepon" placeholder="Masukan nomor telepon dengan required pola seperti berikut: 6281234567890">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="nomorWA">Nomor Whatsapp<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="tel" id="nomorWA" name="nomorWA" placeholder="Masukan nomor whatsapp aktif dengan pola required seperti berikut: 6281234567890">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="nomorTelegram">Nomor Telegram<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="tel" id="nomorTelegram" name="nomorTelegram" placeholder="Masukan nomor telegram aktif required dengan pola seperti berikut: 6281234567890">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="instagram">Instagram<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="instagram" name="instagram" placeholder="Masukan ID instagram anda (cek di: required https://followersgratis.web.id/cek-user-id-instagram/)">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="jalurMasuk">Jalur Masuk<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <select id="jalurMasuk" name="jalurMasuk">
+        <option value="blank"><em>Pilih Satu</em></option>
+        <option value="SBMPTN">SBMPTN</option>
+        <option value="SNMPTN">SNMPTN</option>
+        <option value="Mandiri">Mandiri</option>
+        <option value="Prestasi">Prestasi</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="hobi">Hobi<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="hobi" name="hobi" placeholder="Masukan hobi anda" required>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="keahlian">Keahlian<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="keahlian" name="keahlian" placeholder="Masukan keahlian yang anda miliki" required>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="ipk">IPK<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="ipk" name="ipk" placeholder="Masukan IPK hingga semester saat ini (contoh: 3 required.89)">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for="riwayatPenyakit">Riwayat Penyakit<span> *</span></label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="riwayatPenyakit" name="riwayatPenyakit" placeholder="Masukan riwayat penyakit required yang anda miliki. Isikan - bila tidak ada.">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+      <label for=""><span>*</span> <span style="font-size: 12px;">Wajib diisi</span></label>
+    </div>
+  </div>
+  </form>
+  <div class="row">
+    <button id="modal-btn" class="submit-btn">Submit</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 class="modal-title">Mohon Perhatikan Data Berikut:</h2>
+      <div class="card">
+        <table>
+          <tr>
+            <td>Nama: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>NPM: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Program Studi: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Departemen: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Divisi: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Jabatan: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Tempat Lahir: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Tanggal Lahir: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Golongan Darah: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Alamat Rumah: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Nomor Telepon: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Nomor Whatsapp: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Nomor Telegram: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Instagram: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Jalur Masuk: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Hobi: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Keahlian: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>IPK: </td>
+            <td class="modal-data"></td>
+          </tr>
+          <tr>
+            <td>Riwayat Penyakit: </td>
+            <td class="modal-data"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="final-submit">
+        <p>Dengan menekan tombol submit saya menyatakan bahwa:</p>
+        <ol>
+          <li><p style="font-weight: bold;">Data yang saya masukan adalah benar keabsahannya</p></li>
+          <li><p style="font-weight: bold;">Apabila dikemudian hari ditemukan kesalahan data yang disebabkan faktor kesengajaan seperti kesalahan menginput departemen dan jabatan, maka saya bersedia menanggung semua resikonya.</p></li>
+        </ol>
+        <button id="finalSubmit" type="submit">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="/js/updateProfile.js"></script>
+</body>
+</html>
