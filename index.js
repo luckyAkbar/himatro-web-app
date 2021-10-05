@@ -24,5 +24,5 @@ app.on('EADDRINUSE', () => {
 
 app.listen(process.env.PORT || process.env.SERVER_PORT, () => {
   console.log(`Server estabilised on port ${process.env.PORT || process.env.SERVER_PORT}`)
-  //console.log(`On DATABASE: ${process.env.PGDATABASE}`)
+  console.log(`On DATABASE: ${process.env.PGDATABASE}`)
 })

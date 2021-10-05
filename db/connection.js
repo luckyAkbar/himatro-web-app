@@ -5,7 +5,6 @@ const { Pool } = require('pg');
 const { QueryError } = require('../src/classes/QueryError');
 
 const config = {
-<<<<<<< HEAD
   connectionTimeoutMillis: parseInt(process.env.CONNECTION_TIMEOUT_MILLISEC),
   idleTimeoutMillis: parseInt(process.env.IDLE_TIMEOUT_MILLISEC),
   max: parseInt(process.env.MAX_CONNECTION),
@@ -13,12 +12,6 @@ const config = {
     rejectUnauthorized: false
   }
 }
-=======
-  connectionTimeoutMillis: parseInt(process.env.CONNECTION_TIMEOUT_MILLISEC, 10),
-  idleTimeoutMillis: parseInt(process.env.IDLE_TIMEOUT_MILLISEC, 10),
-  max: parseInt(process.env.MAX_CONNECTION, 10),
-};
->>>>>>> 81f8ee3fc5dd4fb2d691783fe68b79a8b849b7e1
 /*
 const pool = new Pool(config)
 pool.on('error', (err, client) => {

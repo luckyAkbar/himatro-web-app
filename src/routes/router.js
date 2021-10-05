@@ -10,6 +10,11 @@ const { authentication } = require('../middleware/authentication')
 const { getOnetimeSignupHandler } = require('../handler/getOnetimeSignupHandler')
 const { logoutHandler } = require('../handler/logoutHandler')
 const { testQuery } = require('../../db/connection')
+const { getProfile } = require('../handler/getProfileHandler')
+const { getUpdateProfile } = require('../handler/getUpdateProfile')
+const { updateProfile } = require('../handler/postUpdateProfileHandler')
+const { getAdminPage } = require('../handler/getAdminPage')
+const { featurePermissionHandler } = require('../handler/featurePermissionHandler')
 
 const {
   getFormHandler,
