@@ -34,8 +34,8 @@ const createNewAbsent = async (referensiId, lingkup) => {
 
 const createNewKegiatan = async (refId, {
   namaKegiatan,
-  mulai,
-  akhir,
+  tanggalPelaksanaan,
+  tanggalBerakhir,
 }) => {
   const query = `INSERT INTO kegiatan (
     kegiatan_id,
@@ -47,8 +47,8 @@ const createNewKegiatan = async (refId, {
   const params = [
     refId,
     namaKegiatan,
-    mulai,
-    akhir,
+    tanggalPelaksanaan,
+    tanggalBerakhir,
   ];
 
   try {

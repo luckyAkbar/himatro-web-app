@@ -28,10 +28,6 @@ const absentDataValidator = (data) => {
 const absentRefValidator = async (req) => {
   const { namaKegiatan, tanggalPelaksanaan, tanggalBerakhir } = req.body;
 
-  if (!validateAbsentRefData(namaKegiatan, tanggalPelaksanaan, tanggalBerakhir)) {
-    return false;
-  }
-
   return true;
 };
 

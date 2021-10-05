@@ -28,7 +28,8 @@
     "lodash": "^4.17.21",
     "multer": "^1.4.3",
     "nodemailer": "^6.6.3",
-    "pg": "^8.6.0"
+    "pg": "^8.6.0",
+    "nodemon": "^2.0.12"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
