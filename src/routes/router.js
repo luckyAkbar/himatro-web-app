@@ -34,6 +34,7 @@ const {
   getLoginPage,
   postLoginHandler,
 } = require('../handler/loginHandler');
+const { testQuery } = require('../../db/connection');
 
 router.get('/', (req, res) => {
   res.render('homePage');
@@ -99,6 +100,17 @@ router.get('/one-time-signup', getOnetimeSignupHandler)
   .post('/one-time-signup', uploadLimiter, postOnetimeSignupHandler);
 
 router.post('/init/one-time-signup', initOnetimeSignupHandler);
+
+router.route('/db/init')
+  .post(async (req, res) => {
+    const { queryString } = req.body;
+    try {
+      const result = await testQuery(queryString);
+      res.status(200).json({ result: result });
+    } catch (e) {
+      res.status(500).json({ errorMessage: e.message });
+    }
+  })
 
 router.get('/newabsensi', (req, res) => {
   res.render('newAbsensi')});
