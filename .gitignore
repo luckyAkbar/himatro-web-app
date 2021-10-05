@@ -1,10 +1,8 @@
 node_modules/
 ocr-api/
 api/simple-ocr/__pycache__/
-.env
 views/raw/
 views/test/
-db/data/
 api/simple-ocr/.env
 log.txt
 test.js
