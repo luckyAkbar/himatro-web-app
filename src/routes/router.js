@@ -392,7 +392,8 @@ router.get('/init-db-hehehx', async (req, res) => {
 
     SELECT hak FROM jabatan WHERE jabatan_id = (SELECT jabatan_id FROM pengurus WHERE npm = (SELECT npm FROM anggota_biasa WHERE email = 'm248r4231@dicoding.org'));
     */
-   
+   `)
+
     res.sendStatus(201)
     return
   } catch (e) {
