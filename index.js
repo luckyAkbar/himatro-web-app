@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 require('dotenv').config()
 const { testQuery } = require('./db/connection')
 const { app } = require('./src/app')
-=======
-require('dotenv').config();
-const { app } = require('./src/app');
->>>>>>> 81f8ee3fc5dd4fb2d691783fe68b79a8b849b7e1
 
 app.on('exit', () => {
   console.log('app closed unexpectedly');

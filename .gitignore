@@ -1,16 +1,6 @@
 node_modules/
-<<<<<<< HEAD
 views/raw/
 views/test/
-=======
-ocr-api/
-api/simple-ocr/__pycache__/
-.env
-views/raw/
-views/test/
-db/data/
-api/simple-ocr/.env
->>>>>>> 81f8ee3fc5dd4fb2d691783fe68b79a8b849b7e1
 log.txt
 test.js
 nodemon.json
