@@ -92,7 +92,7 @@ router.get('/kaderisasi/sdm/absensi/bukti', getBuktiAbsensiSdmHandler);
 
 router.get('/images/view/:imageId', imageViewHandler);
 
-router.get('/admin', authentication, getAdminPage);
+router.get('/admin', getAdminPage);
 
 router.post('/feature/:featureId', authentication, featurePermissionHandler);
 
