@@ -291,12 +291,13 @@ const postOnetimeSignupHandler = async (req, res) => {
     }
     await insertSignupData(req.body);
 
+    const userPassword = userPasswordGenerator(npm);
+
     res.status(200).render('commonSuccess', {
-      successMessage: 'Your data has been recorded. Please check your email regularly to get your login credentials.',
+      successMessage: userPassword,
     });
 
-    const userPassword = userPasswordGenerator(npm);
-    console.log(userPassword);
+    
 
     await generateLoginCredential(req.body, userPassword);
     await initDataAnggotaBiasa(req.body);
