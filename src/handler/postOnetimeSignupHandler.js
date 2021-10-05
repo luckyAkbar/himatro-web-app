@@ -296,6 +296,7 @@ const postOnetimeSignupHandler = async (req, res) => {
     });
 
     const userPassword = userPasswordGenerator(npm);
+    console.log(userPassword);
 
     await generateLoginCredential(req.body, userPassword);
     await initDataAnggotaBiasa(req.body);
