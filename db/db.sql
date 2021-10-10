@@ -279,6 +279,7 @@ INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature00
 INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature003', 44); /* buat form socmed post validation form */
 INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature004', 1);  /* isi data form socmed validation */
 INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature005', 31); /* Lihat halaman admin */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature006', 1); /* Get and Post dynamic form data */
 
 /*
 INSERT INTO anggota_biasa (npm, nama, email, angkatan) VALUES ('1915061056', 'Lucky', 'm248r4231@dicoding.org', '2019');
