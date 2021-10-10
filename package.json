@@ -26,15 +26,18 @@
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "mongo-sanitize": "^1.1.0",
+    "mongoose": "^6.0.9",
     "multer": "^1.4.3",
     "nodemailer": "^6.6.3",
-    "pg": "^8.6.0"
+    "pg": "^8.6.0",
+    "xss": "^1.0.10"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.2",
-    "localtunnel": "^2.0.1",
+    "localtunnel": "^2.0.2",
     "nodemon": "^2.0.12"
   },
   "repository": {
@@ -44,5 +47,10 @@
   "bugs": {
     "url": "https://github.com/luckyAkbar/himatro-web-app/issues"
   },
-  "homepage": "https://github.com/luckyAkbar/himatro-web-app#readme"
+  "homepage": "https://github.com/luckyAkbar/himatro-web-app#readme",
+  "nodemonConfig": {
+    "ignore": [
+      "public/*"
+    ]
+  }
 }
