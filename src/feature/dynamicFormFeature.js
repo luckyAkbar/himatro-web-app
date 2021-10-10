@@ -1,21 +1,21 @@
-const { CustomError } = require("../classes/CustomError");
+const { CustomError } = require('../classes/CustomError');
 const { getFormShape } = require('../util/getFormShape');
-const { createDynamicFormToken, verifyJWTToken } = require("../util/jwtToken");
+const { createDynamicFormToken, verifyJWTToken } = require('../util/jwtToken');
 const { validateDynamicFormBody } = require('../util/validateDynamicFormBody');
 const { saveUserInputOnDynamicForm } = require('../util/saveUserInputOnDynamicForm');
 
 const getFormShapeDataFeature = async (req, res) => {
   const { formId } = req.query;
-  const email = req.email;
+  const { email } = req;
 
   try {
     const formShape = await getFormShape(formId);
     const formToken = createDynamicFormToken({ formId, email });
-    res.status(200).json({ formShape: formShape, formToken: formToken });
+    res.status(200).json({ formShape, formToken });
   } catch (e) {
     res.status(400).json({ errorMessage: e.message });
   }
-}
+};
 
 const postDynamicFormFeature = async (req, res) => {
   const { formToken } = req.body;
@@ -32,7 +32,7 @@ const postDynamicFormFeature = async (req, res) => {
   } catch (e) {
     res.status(400).json({ errorMessage: e.message });
   }
-}
+};
 
 module.exports = {
   getFormShapeDataFeature,

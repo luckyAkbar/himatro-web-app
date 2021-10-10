@@ -2,7 +2,6 @@ const { testQuery } = require('../../db/connection');
 const { readDataCsv } = require('./readDataCsv');
 
 const convertDivisiToDivisiId = (divisi) => {
-  console.log('ini divisi', divisi)
   switch (divisi) {
     case 'Pengurus Harian':
       return 'div0000001';

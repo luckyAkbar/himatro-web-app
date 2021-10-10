@@ -21,7 +21,7 @@ const formatToCamelCase = (attributeName) => {
   }
 
   return camelCased.join('');
-}
+};
 
 const formatToCapitalizeEach = (targetString) => namaFormatter(targetString);
 

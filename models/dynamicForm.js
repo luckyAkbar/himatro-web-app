@@ -16,7 +16,7 @@ const dynamicFormDetails = new mongoose.Schema({
   formTitle: {
     type: String,
     required: [true, 'Please provide form title.'],
-    set: formTitle => formatToCapitalizeEach(formTitle),
+    set: (formTitle) => formatToCapitalizeEach(formTitle),
   },
 
   issuer: {
@@ -38,7 +38,7 @@ const dynamicFormDetails = new mongoose.Schema({
 
   closedAt: {
     type: Date,
-    required: [true, 'Please provide date on closedAt attribute']
+    required: [true, 'Please provide date on closedAt attribute'],
   },
 
   formShape: {
@@ -49,6 +49,7 @@ const dynamicFormDetails = new mongoose.Schema({
         for (let i = 0; i < formShape.length; i += 1) {
           if (!(formShape[i] instanceof FormAttributeElement)) return false;
         }
+        return true;
       },
       message: 'Form body only can be instance of FormAttributeElement',
     },

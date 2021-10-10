@@ -1,16 +1,18 @@
-const { CustomError } = require('../classes/CustomError');
 const noSQLSanitizer = require('mongo-sanitize');
-const { XSSFilterOnTextInputType } = require('../util/XSSFilter');
+const { CustomError } = require('../classes/CustomError');
+const { XSSFilterOnTextInputType } = require('./XSSFilter');
 const { FormData } = require('../../models/formData');
 
 const saveUserInputOnDynamicForm = async (formId, formShape, { body, email }) => {
   const userInput = noSQLSanitizer(body);
   const warningMessageOnXSSAttempt = 'Kami mendeteksi adanya input yang tidak wajar. Mohon ulangi data yang anda kirim dan jangan bermain-main.';
-  let inputObject = {};
-  
+  const inputObject = {};
+
   formShape.forEach((shape) => {
-    const attributeName = shape.attributeName;
-    const isRequired = shape.isRequired;
+    const {
+      attributeName,
+      isRequired
+    } = shape;
     const saveInputDataFromUser = XSSFilterOnTextInputType(userInput[attributeName]);
 
     if (isRequired && saveInputDataFromUser === '') throw new CustomError(warningMessageOnXSSAttempt);
@@ -28,7 +30,7 @@ const saveUserInputOnDynamicForm = async (formId, formShape, { body, email }) =>
 
     await finalFormData.save();
   } catch (e) {
-    res.sendStatus(500);
+    throw new CustomError('Failed to save user form data to Mongo Atlas', 500);
   } 
 }
 

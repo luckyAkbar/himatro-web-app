@@ -13,8 +13,8 @@ const mongodbAtlasConnection = async () => {
     console.log('MongoDB Atlas connected.');
   } catch (e) {
     console.log('failed to connect to MongoDB Atlas. Retrying...');
-    await mongodbAtlasConnection()
+    await mongodbAtlasConnection();
   }
-}
+};
 
 module.exports = { mongodbAtlasConnection };

@@ -9,18 +9,14 @@ const getFormShape = async () => {
     credentials: 'include',
     mode: 'cors',
   };
-  
-  try {
-    const result = await fetch(url, options);
-    const jsonResult = await result.json();
 
-    if (result.status !== 200) throw new Error(jsonResult.errorMessage);
+  const result = await fetch(url, options);
+  const jsonResult = await result.json();
 
-    return jsonResult;
-  } catch (e) {
-    throw e;
-  }
-}
+  if (result.status !== 200) throw new Error(jsonResult.errorMessage);
+
+  return jsonResult;
+};
 
 const generateTextInputTypeElement = (data, parentForm) => {
   const formElementContainer = document.createElement('div');
@@ -36,17 +32,17 @@ const generateTextInputTypeElement = (data, parentForm) => {
   inputElement.setAttribute('id', data.attributeName);
   inputElement.setAttribute('type', data.HTMLInputType);
   inputElement.setAttribute('placeholder', 'Jawaban Anda');
-  
+
   if (data.isRequired) {
     inputElement.setAttribute('required', data.isRequired);
     elementTitle.innerHTML += requiredStarMark;
   }
-  
+
   formElementContainer.appendChild(elementTitle);
   formElementContainer.appendChild(inputElement);
 
   parentForm.appendChild(formElementContainer);
-}
+};
 
 const generateRadioAndCheckboxInputTypeElement = (data, parentForm) => {
   const { choices } = data;
@@ -62,9 +58,8 @@ const generateRadioAndCheckboxInputTypeElement = (data, parentForm) => {
   if (data.isRequired) elementTitle.innerHTML += requiredStarMark;
 
   formElementContainer.appendChild(elementTitle);
-  
+
   choices.forEach((choice) => {
-    
     const inputElement = document.createElement('input');
     const labelRadioInput = document.createElement('label');
     const lineBreak = document.createElement('br');
@@ -96,14 +91,13 @@ const createFormElement = (formData, parentForm) => {
       generateTextInputTypeElement(data, parentForm);
       return;
     }
-    
     generateRadioAndCheckboxInputTypeElement(data, parentForm);
   });
 };
 
 const validateTextInputType = (attributeName, fieldName) => {
   const value = String(document.getElementById(attributeName).value).trim();
-  
+
   if(value === '') throw new Error(`Mohon isi bagian ${fieldName} terlebih dahulu`)
 };
 

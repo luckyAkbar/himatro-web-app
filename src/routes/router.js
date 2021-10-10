@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { getAbsentHandler } = require('../handler/getAbsentHandler');
-const { getNewAbsentHandler } = require('../handler/getNewAbsentHandler');
 const { postAbsentHandler } = require('../handler/postAbsentHandler');
 const { uploadAbsentSdmHandler } = require('../handler/postUploadAbsentSdmHandler');
 const { kaderisasiSdmHandler } = require('../handler/postKaderisasiSdmHandler');
@@ -109,7 +108,8 @@ router.get('/one-time-signup', getOnetimeSignupHandler)
 router.post('/init/one-time-signup', initOnetimeSignupHandler);
 
 router.get('/newabsensi', (req, res) => {
-  res.render('newAbsensi')});
+  res.render('newAbsensi')
+});
 
 router.all('*', (req, res) => {
   res.status(404).render('errorPage', {

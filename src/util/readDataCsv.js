@@ -1,7 +1,7 @@
 const { load } = require('csv-load-sync');
 
 const translateLingkup = (lingkup) => {
-  switch(lingkup) {
+  switch (lingkup) {
     case 'ph':
       return 'Pengurus Harian';
     case 'ppd':
@@ -18,9 +18,8 @@ const translateLingkup = (lingkup) => {
       return 'seluruhAnggota';
     default:
       return false;
-    
   }
-}
+};
 
 const readDataCsvForAbsent = (filePath, lingkup) => {
   const lingkupAbsen = translateLingkup(lingkup);
@@ -67,7 +66,6 @@ const readDataCsv = (filePath) => {
     npm,
     nama,
     divisi,
-    departemen,
   }) => {
     dataObject = {
       nama,
@@ -91,5 +89,5 @@ allData.forEach((data) => {
 
 module.exports = {
   readDataCsv,
-  readDataCsvForAbsent
+  readDataCsvForAbsent,
 };

@@ -19,9 +19,9 @@ const appendAlasanForm = () => {
 
 const removeAlasanForm = () => {
   while (alasanForm.hasChildNodes()) {
-    alasanForm.removeChild(alasanForm.firstChild)
+    alasanForm.removeChild(alasanForm.firstChild);
   }
-}
+};
 
 keteranganButton.addEventListener('click', () => {
   if (keteranganButton.value === 'i' && !isAlasanInputAlreadyShow) {

@@ -16,8 +16,8 @@ const formData = mongoose.Schema({
     type: String,
     minLength: 1,
     validate: {
-      validator: filler => emailValidator(filler),
-      message: 'Please use valid email as filler data.'
+      validator: (filler) => emailValidator(filler),
+      message: 'Please use valid email as filler data.',
     },
   },
 });

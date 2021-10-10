@@ -1,4 +1,4 @@
-const { CustomError } = require("../classes/CustomError");
+const { CustomError } = require('../classes/CustomError');
 
 const validateCheckboxInput = (formShape, userInput) => {
   const {
@@ -14,7 +14,7 @@ const validateCheckboxInput = (formShape, userInput) => {
   userInput.forEach((data) => {
     if (choices.indexOf(data) === -1) throw new CustomError(`choice ${data} is not exists!`);
   });
-}
+};
 
 const validateRadioInput = (formShape, userInput) => {
   const {
@@ -26,7 +26,7 @@ const validateRadioInput = (formShape, userInput) => {
   if (!isRequired && userInput === undefined) return;
   if (isRequired && userInput === undefined) throw new CustomError(`${elementTitle} can't have null value.`);
   if (choices.indexOf(userInput) === -1) throw new CustomError(`choice ${userInput} is not exists!`);
-}
+};
 
 const validateTextInput = (formShape, userInput) => {
   const {
@@ -35,10 +35,10 @@ const validateTextInput = (formShape, userInput) => {
     datatype,
   } = formShape;
 
-  if (!userInput  && !isRequired) return;
+  if (!userInput && !isRequired) return;
   if (!userInput && isRequired) throw new CustomError(`${elementTitle} can't have null value`);
-  if (typeof(userInput) !== datatype && isRequired) throw new CustomError(`Invalid Datatype on ${elementTitle}`);
-}
+  if (typeof (userInput) !== datatype && isRequired) throw new CustomError(`Invalid Datatype on ${elementTitle}`);
+};
 
 const validateDynamicFormBody = (formShape, bodyRequest) => {
   formShape.forEach((shape) => {
@@ -49,23 +49,23 @@ const validateDynamicFormBody = (formShape, bodyRequest) => {
 
     const userInput = bodyRequest[attributeName];
 
-    switch(HTMLInputType) {
+    switch (HTMLInputType) {
       case 'checkbox':
         validateCheckboxInput(shape, userInput);
         break;
-      
+
       case 'radio':
         validateRadioInput(shape, userInput);
         break;
-      
+
       case 'text':
         validateTextInput(shape, userInput);
         break;
-      
+
       default:
         throw new CustomError(`${HTMLInputType} type can't be validate on form body validator`, 500);
-    };
+    }
   });
-}
+};
 
 module.exports = { validateDynamicFormBody };

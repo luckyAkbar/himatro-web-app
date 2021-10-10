@@ -46,7 +46,7 @@ const createDynamicFormToken = (formData) => {
   }, process.env.SECRET_JWT_TOKEN, {
     expiresIn: Number(process.env.JWT_FORM_TOKEN_EXPIRES_SEC),
   });
-}
+};
 
 module.exports = {
   createJWTToken,

@@ -11,7 +11,7 @@ const { CustomError } = require('../classes/CustomError');
 
 const {
   getFormShapeDataFeature,
-  postDynamicFormFeature
+  postDynamicFormFeature,
 } = require('../feature/dynamicFormFeature');
 
 const validateFeatureId = (featureId) => refIdValidator(featureId);
@@ -27,7 +27,6 @@ const postFeaturePermissionHandler = async (req, res) => {
   const { featureId } = req.params;
 
   try {
-    
     const minimumFeaturePermission = await getMinimumFeaturePermission(featureId);
     const userPermissionLevel = await getUserPermissionLevel(req.email);
 
@@ -36,7 +35,7 @@ const postFeaturePermissionHandler = async (req, res) => {
       res.status(403).json({ errorMessage: 'FORBIDDEN. You do not have required permission to use this feature.' });
       return;
     }
-    
+
     switch (featureId) {
       case 'feature001': // create new kegiatan
         createNewKegiatanFeature(req, res);
@@ -49,8 +48,8 @@ const postFeaturePermissionHandler = async (req, res) => {
       case 'feature003': // create social media post validation using ocr
         initSocmedPostValidatorFeature(req, res);
         break;
-      
-      case 'feature006': //post dynamic form
+
+      case 'feature006': // post dynamic form
         postDynamicFormFeature(req, res);
         break;
 
@@ -90,13 +89,13 @@ const getFeaturePermissionHandler = async (req, res) => {
     return;
   }
 
-  switch(featureId) {
+  switch (featureId) {
     case 'feature006':
       getFormShapeDataFeature(req, res);
       break;
     default:
       res.status(404).json({ errorMessage: 'This feature is not exists!' });
   }
-}
+};
 
 module.exports = { postFeaturePermissionHandler, getFeaturePermissionHandler };

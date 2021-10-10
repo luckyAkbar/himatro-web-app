@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const {
   formatToCamelCase,
-  formatToCapitalizeEach
+  formatToCapitalizeEach,
 } = require('../src/util/formatter');
 
 const formAttributeElementSchema = new mongoose.Schema({
   elementTitle: {
     type: String,
     required: [true, 'Please provide element title in formAttributeSchema.'],
-    set: elementTitle => formatToCapitalizeEach(elementTitle),
+    set: (elementTitle) => formatToCapitalizeEach(elementTitle),
   },
 
   datatype: {
@@ -18,7 +18,7 @@ const formAttributeElementSchema = new mongoose.Schema({
     lowercase: true,
     enum: {
       values: ['string', 'number'],
-      message: 'We still not support {VALUE} data type in form attribute'
+      message: 'We still not support {VALUE} data type in form attribute',
     },
     default: 'string',
   },
@@ -26,7 +26,7 @@ const formAttributeElementSchema = new mongoose.Schema({
   attributeName: {
     type: String,
     required: [true, 'Please provide attribute name in form atribute schema.'],
-    set: attributeName => formatToCamelCase(attributeName),
+    set: (attributeName) => formatToCamelCase(attributeName),
   },
 
   isRequired: {
@@ -55,9 +55,10 @@ const formAttributeElementSchema = new mongoose.Schema({
     validate: {
       validator: (maxLength) => {
         if (maxLength <= 0) return false;
+        return true;
       },
       message: 'Max length value can not have 0 or negative value.',
-    }
+    },
   },
 
   minLength: {
@@ -67,8 +68,8 @@ const formAttributeElementSchema = new mongoose.Schema({
       validator: (minLength) => {
         if (minLength < 0) return false;
       },
-      message: 'Min length can not have negative value.'
-    }
+      message: 'Min length can not have negative value.',
+    },
   },
 }, { _id: false });
 
