@@ -98,7 +98,10 @@ router.get('/images/view/:imageId', imageViewHandler);
 
 router.get('/admin', authentication, getAdminPage);
 
-router.post('/feature/:featureId', authentication, featurePermissionHandler);
+router.route('/feature/:featureId')
+  .all(authentication)
+  .post(postFeaturePermissionHandler)
+  .get(getFeaturePermissionHandler);
 
 router.get('/one-time-signup', getOnetimeSignupHandler)
   .post('/one-time-signup', uploadLimiter, postOnetimeSignupHandler);
