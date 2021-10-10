@@ -7,10 +7,16 @@ const { getMinimumFeaturePermission } = require('../util/getMinimumFeaturePermis
 const { viewAllKegiatan } = require('../feature/viewAllKegiatan');
 const { initSocmedPostValidatorFeature } = require('../feature/socmedPostValidatorFeature');
 const { generateErrorEmail } = require('../util/email');
+const { CustomError } = require('../classes/CustomError');
+
+const {
+  getFormShapeDataFeature,
+  postDynamicFormFeature
+} = require('../feature/dynamicFormFeature');
 
 const validateFeatureId = (featureId) => refIdValidator(featureId);
 
-const featurePermissionHandler = async (req, res) => {
+const postFeaturePermissionHandler = async (req, res) => {
   const isFeatureIdValid = validateFeatureId(req.params.featureId);
 
   if (!isFeatureIdValid) {
@@ -43,6 +49,11 @@ const featurePermissionHandler = async (req, res) => {
       case 'feature003': // create social media post validation using ocr
         initSocmedPostValidatorFeature(req, res);
         break;
+      
+      case 'feature006': //post dynamic form
+        postDynamicFormFeature(req, res);
+        break;
+
       default:
         res.status(404).render('errorPage', {
           errorMessage: 'Feature not found.',
