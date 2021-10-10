@@ -70,4 +70,33 @@ const postFeaturePermissionHandler = async (req, res) => {
   }
 };
 
-module.exports = { featurePermissionHandler };
+const getFeaturePermissionHandler = async (req, res) => {
+  const { featureId } = req.params;
+
+  try {
+    if (!validateFeatureId(featureId)) throw new CustomError('Feature Id Invalid!');
+  } catch (e) {
+    res.status(e.httpErrorStatus).json({ errorMessage: e.message });
+    return;
+  }
+
+  try {
+    const featurePermissionLevel = await getMinimumFeaturePermission(featureId);
+    const userPermissionLevel = await getUserPermissionLevel(req.email);
+
+    if (featurePermissionLevel > userPermissionLevel) throw new CustomError('Forbidden.');
+  } catch (e) {
+    res.status(e.httpErrorStatus).json({ errorMessage: e.message });
+    return;
+  }
+
+  switch(featureId) {
+    case 'feature006':
+      getFormShapeDataFeature(req, res);
+      break;
+    default:
+      res.status(404).json({ errorMessage: 'This feature is not exists!' });
+  }
+}
+
+module.exports = { postFeaturePermissionHandler, getFeaturePermissionHandler };
