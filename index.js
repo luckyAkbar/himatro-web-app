@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { mongodbAtlasConnection } = require('./db/mongodb-connection');
 const { app } = require('./src/app');
 
 app.on('exit', () => {
@@ -21,7 +22,13 @@ app.on('EADDRINUSE', () => {
   process.exit(-1);
 });
 
-app.listen(process.env.SERVER_PORT, () => {
+app.listen(process.env.SERVER_PORT, async () => {
+  try {
+    await mongodbAtlasConnection();
+  } catch (e) {
+    console.log(e);
+  }
+
   console.log('Server estabilised on port', process.env.SERVER_PORT);
   console.log(`On DATABASE: ${process.env.PGDATABASE}`);
 });
