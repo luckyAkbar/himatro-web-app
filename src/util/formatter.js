@@ -12,7 +12,22 @@ const namaFormatter = (nama) => {
 
 const formatToLowercase = (str) => String(str).toLowerCase();
 
+const formatToCamelCase = (attributeName) => {
+  let camelCased = String(formatToLowercase(attributeName)).trim();
+  camelCased = camelCased.split(' ');
+
+  for (let i = 1; i < camelCased.length; i += 1) {
+    camelCased[i] = camelCased[i][0].toUpperCase() + camelCased[i].substr(1);
+  }
+
+  return camelCased.join('');
+}
+
+const formatToCapitalizeEach = (targetString) => namaFormatter(targetString);
+
 module.exports = {
   namaFormatter,
   formatToLowercase,
+  formatToCamelCase,
+  formatToCapitalizeEach,
 };
