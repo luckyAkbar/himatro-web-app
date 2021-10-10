@@ -10,11 +10,15 @@ const { getBuktiAbsensiSdmHandler } = require('../handler/getBuktiAbsensiSdmHand
 const { authentication } = require('../middleware/authentication');
 const { getOnetimeSignupHandler } = require('../handler/getOnetimeSignupHandler');
 const { logoutHandler } = require('../handler/logoutHandler');
-const { featurePermissionHandler } = require('../handler/featurePermissionHandler');
 const { getAdminPage } = require('../handler/getAdminPage');
 const { getProfile } = require('../handler/getProfileHandler');
 const { updateProfile } = require('../handler/postUpdateProfileHandler');
 const { getUpdateProfile } = require('../handler/getUpdateProfile');
+
+const {
+  postFeaturePermissionHandler,
+  getFeaturePermissionHandler,
+} = require('../handler/featurePermissionHandler');
 
 const {
   getFormHandler,
