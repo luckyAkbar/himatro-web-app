@@ -1,7 +1,9 @@
 const morgan = require('morgan');
 
 morgan.token('body', (req, res) => {
-  return JSON.stringify(req.body);
+  const { body } = req;
+  body.password = undefined;
+  return JSON.stringify(body);
 });
 
 morgan.token('query', (req, res) => {
