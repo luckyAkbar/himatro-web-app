@@ -1,5 +1,9 @@
 const morgan = require('morgan');
 
+morgan.token('urlOnly', (req, res) => {
+  return req.path;
+});
+
 morgan.token('body', (req, res) => {
   return JSON.stringify(req.body);
 });
@@ -30,7 +34,7 @@ morgan.token('statusColor', (req, res) => {
   return '\x1b[' + color + 'm' + status + '\x1b[0m';
 });
 
-const incomingRequestLogger = morgan(`:splitter\x1b[33m:method\x1b[0m \x1b[36m:url\x1b[0m :statusColor \x1b[1m:response-time ms || :date[web]\x1b[0m
+const incomingRequestLogger = morgan(`:splitter\x1b[33m:method\x1b[0m \x1b[36m:urlOnly\x1b[0m :statusColor \x1b[1m:response-time ms || :date[web]\x1b[0m
   length|:res[content-length]
   \x1b[2mbody:body\x1b[0m
   \x1b[2mquery:query\x1b[0m
