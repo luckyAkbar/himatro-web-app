@@ -1,26 +1,14 @@
 const morgan = require('morgan');
 
-morgan.token('urlOnly', (req, res) => {
-  return req.path;
-});
+morgan.token('urlOnly', (req) => req.path);
 
-morgan.token('body', (req, res) => {
-  const { body } = req;
-  body.password = undefined;
-  return JSON.stringify(body);
-});
+morgan.token('body', (req) => JSON.stringify(req.body));
 
-morgan.token('query', (req, res) => {
-  return JSON.stringify(req.query);
-});
+morgan.token('query', (req) => JSON.stringify(req.query));
 
-morgan.token('params', (req, res) => {
-  return JSON.stringify(req.params);
-});
+morgan.token('params', (req) => JSON.stringify(req.params));
 
-morgan.token('splitter', (req) => {
-  return "\x1b[36m----------------------------------------------------------------------------------\x1b[0m\n";
-});
+morgan.token('splitter', () => '\x1b[36m----------------------------------------------------------------------------------\x1b[0m\n');
 
 morgan.token('statusColor', (req, res) => {
   const status = (typeof res.headersSent !== 'boolean' ? Boolean(res.header) : res.headersSent) ?
