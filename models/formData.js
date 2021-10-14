@@ -20,7 +20,7 @@ const formData = mongoose.Schema({
       message: 'Please use valid email as filler data.',
     },
   },
-});
+}, { timestamps: true });
 
 const FormData = mongoose.model('FormData', formData);
 
