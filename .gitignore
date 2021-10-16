@@ -1,16 +1,23 @@
-node_modules/
-ocr-api/
-api/simple-ocr/__pycache__/
-.env
-db/data
-views/raw/
-views/test/
-api/simple-ocr/.env
-log.txt
-test.js
-nodemon.json
-uploads/
-key.sql
-sqlInitSDMAbsent.js
-himatro-web-app.zip
-views/.fuse_hidden0000106c00000003
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

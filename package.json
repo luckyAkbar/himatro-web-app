@@ -1,57 +1,38 @@
 {
   "name": "himatro-web-app",
-  "version": "0.0.1",
-  "description": "Himatro Web App",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "kill": "fuser -k 3000/tcp",
-    "dev": "npm run kill && node index.js",
-    "start": "nodemon index.js",
-    "simple-ocr-api": "uvicorn --port 5000 --app-dir ./api/simple-ocr main:app --reload"
-  },
-  "author": "Lucky Akbar",
-  "license": "ISC",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "chalk": "^4.1.2",
-    "cookie-parser": "^1.4.5",
-    "csv-load-sync": "^2.3.1",
-    "date-and-time": "^2.0.0",
-    "dotenv": "^10.0.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
-    "express-rate-limit": "^5.3.0",
-    "generate-unique-id": "^2.0.1",
-    "helmet": "^4.6.0",
-    "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.21",
-    "mongo-sanitize": "^1.1.0",
-    "mongoose": "^6.0.9",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.3",
-    "nodemailer": "^6.6.3",
-    "pg": "^8.6.0",
-    "xss": "^1.0.10"
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.1.2"
   },
-  "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.24.2",
-    "localtunnel": "^2.0.2",
-    "nodemon": "^2.0.12"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/luckyAkbar/himatro-web-app.git"
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
-  "bugs": {
-    "url": "https://github.com/luckyAkbar/himatro-web-app/issues"
-  },
-  "homepage": "https://github.com/luckyAkbar/himatro-web-app#readme",
-  "nodemonConfig": {
-    "ignore": [
-      "public/*"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

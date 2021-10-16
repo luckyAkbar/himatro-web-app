@@ -1,21 +1,25 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const { router } = require('./routes/router');
-const { incomingRequestLogger } = require('./middleware/incomingRequestLogger');
-const { incorrectJSONFormatErrorHandler } = require('./util/incorrectJSONFormatErrorHandler');
+import logo from './logo.svg';
+import './App.css';
 
-const app = express();
-app.set('view engine', 'ejs');
-app.use(cookieParser());
-app.use(helmet({
-  contentSecurityPolicy: false,
-}));
-app.use(express.static('./public'));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(express.json({ type: 'application/json' }), incorrectJSONFormatErrorHandler);
-app.use('/', incomingRequestLogger);
-app.use('/', router);
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+}
 
-module.exports = { app };
+export default App;
