@@ -1,0 +1,24 @@
+.Navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.Navbar ul {
+    transition: ease-in-out 0.2s;
+    list-style: none;
+    background: var(--main-black);
+    display: flex;
+    justify-content: end;
+}
+
+.nav-links {
+    margin-right: 2rem;
+    
+}
+
+.Navbar a {
+    text-decoration: none;
+}
