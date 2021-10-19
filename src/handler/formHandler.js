@@ -4,6 +4,10 @@ const {
   getSMPVFormResult,
 } = require('../feature/socmedPostValidatorFeature');
 
+const {
+  getDynamicFormHandler,
+} = require('./dynamicFormHandler');
+
 const formResultHandler = async (req, res) => {
   const { formId } = req.params;
 
@@ -25,6 +29,10 @@ const getFormHandler = async (req, res) => {
   switch (formType) {
     case 'smpv':
       await getSocmedPostValidatorForm(req, res);
+      break;
+
+    case 'dynamic':
+      await getDynamicFormHandler(req, res);
       break;
 
     case 'result':
