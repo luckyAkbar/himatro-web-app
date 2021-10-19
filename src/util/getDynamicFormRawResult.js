@@ -68,13 +68,12 @@ const generateWhereInQueryParamFromArray = (arrayInput) => {
   return paramString.substring(0, paramString.length - 1);
 };
 
-const getNPMFromDynamicFormFillerEmail = async (rawFormResult) => {
-  const fillerEmails = extractValueFromArrayOfObject(rawFormResult, 'filler');
-  const query = `SELECT nama, npm FROM anggota_biasa WHERE email IN (${generateWhereInQueryParamFromArray(fillerEmails)})`;
+const getNPMFromDynamicFormFillerNPM = async (rawFormResult) => {
+  const NPM = extractValueFromArrayOfObject(rawFormResult, 'filler');
+  const query = `SELECT nama FROM anggota_biasa WHERE npm IN (${generateWhereInQueryParamFromArray(NPM)})`;
 
   try {
     const { rows } = await testQuery(query);
-    const NPM = extractValueFromArrayOfObject(rows, 'npm');
     const nama = extractValueFromArrayOfObject(rows, 'nama');
 
     return { NPM, nama };
@@ -124,7 +123,7 @@ const getDynamicFormRawResult = async (formId) => {
       scope: 1,
     });
     const cleanData = getCleanDataFromRawResult(dynamicFormResultData);
-    const fillerData = await getNPMFromDynamicFormFillerEmail(dynamicFormResultData);
+    const fillerData = await getNPMFromDynamicFormFillerNPM(dynamicFormResultData);
     const intendedParticipants = await getIntendedParticipants(scope);
 
     const prettyData = prettifyData(cleanData, fillerData);
