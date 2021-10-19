@@ -1,5 +1,6 @@
 const { JWTInvalidError } = require('../classes/JWTInvalidError');
 const { QueryError } = require('../classes/QueryError');
+const { CustomError } = require('../classes/CustomError');
 const { createNewKegiatanFeature } = require('../feature/createNewKegiatanFeature');
 const { refIdValidator } = require('../util/validator');
 const { getUserPermissionLevel } = require('../util/getUserPermissionLevel');
@@ -7,11 +8,12 @@ const { getMinimumFeaturePermission } = require('../util/getMinimumFeaturePermis
 const { viewAllKegiatan } = require('../feature/viewAllKegiatan');
 const { initSocmedPostValidatorFeature } = require('../feature/socmedPostValidatorFeature');
 const { generateErrorEmail } = require('../util/email');
-const { CustomError } = require('../classes/CustomError');
 
 const {
   getFormShapeDataFeature,
   postDynamicFormFeature,
+  createDynamicFormFeature,
+  getDynamicFormInsight,
 } = require('../feature/dynamicFormFeature');
 
 const validateFeatureId = (featureId) => refIdValidator(featureId);
@@ -51,6 +53,10 @@ const postFeaturePermissionHandler = async (req, res) => {
 
       case 'feature006': // post dynamic form
         postDynamicFormFeature(req, res);
+        break;
+
+      case 'feature007': // register new dynamic form
+        await createDynamicFormFeature(req, res);
         break;
 
       default:
@@ -93,6 +99,11 @@ const getFeaturePermissionHandler = async (req, res) => {
     case 'feature006':
       getFormShapeDataFeature(req, res);
       break;
+
+    case 'feature007':
+      await getDynamicFormInsight(req, res);
+      break;
+
     default:
       res.status(404).json({ errorMessage: 'This feature is not exists!' });
   }
