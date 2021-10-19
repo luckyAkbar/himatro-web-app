@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const {
   formatToCamelCase,
   formatToCapitalizeEach,
@@ -54,7 +53,7 @@ const formAttributeElementSchema = new mongoose.Schema({
     required: false,
     validate: {
       validator: (maxLength) => {
-        if (maxLength <= 0) return false;
+        if (maxLength !== null && maxLength <= 0) return false;
         return true;
       },
       message: 'Max length value can not have 0 or negative value.',
@@ -66,7 +65,7 @@ const formAttributeElementSchema = new mongoose.Schema({
     required: false,
     validate: {
       validator: (minLength) => {
-        if (minLength < 0) return false;
+        if (minLength !== null && minLength < 0) return false;
       },
       message: 'Min length can not have negative value.',
     },
