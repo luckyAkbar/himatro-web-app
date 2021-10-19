@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { formatToCapitalizeEach } = require('../src/util/formatter');
-const { npmValidator } = require('../src/util/validator');
+const { emailValidator } = require('../src/util/validator');
 const { FormAttributeElement } = require('./formAttributeElement');
 const { formIdGenerator } = require('../src/util/generator');
 
@@ -19,15 +19,27 @@ const dynamicFormDetails = new mongoose.Schema({
     set: (formTitle) => formatToCapitalizeEach(formTitle),
   },
 
+  scope: {
+    type: String,
+    default: null,
+  },
+
+  allowedAttempt: {
+    type: Number,
+    default: 1,
+    validate: {
+      validator: (allowedAttempt) => allowedAttempt > 0,
+      message: 'Please use correct input for allowed attempt ( > 0 )',
+    },
+  },
+
   issuer: {
     type: String,
-    required: [true, 'Please provide issuer NPM on form detail.'],
+    required: [true, 'Please provide issuer email on form detail.'],
     lowercase: true,
-    maxlength: 10,
-    minLength: 10,
     validate: {
-      validator: (issuer) => npmValidator(issuer),
-      message: 'Please makse sure use correct NPM format in issuer field on form detail attribute.',
+      validator: (issuer) => emailValidator(issuer),
+      message: 'Please makse sure use correct email format in issuer field on form detail attribute.',
     },
   },
 
