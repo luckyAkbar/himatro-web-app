@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { emailValidator } = require('../src/util/validator');
+const { npmValidator } = require('../src/util/validator');
 
 const formData = mongoose.Schema({
   formId: {
@@ -14,10 +14,11 @@ const formData = mongoose.Schema({
 
   filler: {
     type: String,
-    minLength: 1,
+    minLength: 10,
+    maxLength: 10,
     validate: {
-      validator: (filler) => emailValidator(filler),
-      message: 'Please use valid email as filler data.',
+      validator: (filler) => npmValidator(filler),
+      message: 'Please use valid NPM as filler data.',
     },
   },
 }, { timestamps: true });
