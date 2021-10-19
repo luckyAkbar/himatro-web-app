@@ -7,6 +7,7 @@
 **Developers:**
 1. Lucky Akbar: Backend Developer
 2. Hardi Nuari Caesar: Frontend Developer
+3. Ramadhani Asrofa Kemal: Frontend Developer
 
 
 # FEATURES IN THIS APP
