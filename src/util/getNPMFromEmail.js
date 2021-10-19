@@ -5,8 +5,9 @@ const getNPMFromEmail = async (email) => {
   const params = [email];
 
   try {
-    const NPM = await testQuery(query, params);
-    return NPM;
+    const { rows } = await testQuery(query, params);
+    console.log(rows[0].npm)
+    return rows[0].npm;
   } catch (e) {
     throw new CustomError('Server failed to resolve NPM from given email', 500);
   }
