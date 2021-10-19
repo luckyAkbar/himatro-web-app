@@ -1,4 +1,3 @@
-const formId = 'form2ua9bq';
 const form = document.getElementById('mainForm');
 const requiredStarMark = '<span style="color: red; font-size: 1rem;"> *</span>';
 
@@ -293,29 +292,8 @@ const main = async () => {
     attachSubmitButton(form, formShape, formToken);
     attachClearFormButton(formShape, form);
   } catch (e) {
-    console.log(e)
     alert(e.message);
   }
 }
 
 main();
-
-
-/*
-const endpoint = 'http://localhost:3000/feature/feature004?formId=formv4ha7p';
-
-const getFormBody = async () => {
-  try {
-    const result = await fetch(endpoint, {
-      method: 'GET',
-      mode: 'no-cors'
-    });
-    const res = await result.json();
-    console.log(res.formBody);
-  } catch(e) {
-    console.log(e);
-  }
-}
-
-getFormBody();
-*/
