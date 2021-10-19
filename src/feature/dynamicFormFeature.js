@@ -41,7 +41,60 @@ const postDynamicFormFeature = async (req, res) => {
   }
 };
 
+const createDynamicFormFeature = async (req, res) => {
+  const rawFormBody = noSQLSanitizer(req.body);
+  const formId = formIdGenerator ();
+  const { email } = req;
+  const {
+    formBody,
+    formTitle,
+    startAt,
+    closedAt,
+    allowedAttempt,
+    scope = null,
+  } = rawFormBody;
+
+  try {
+    const formShape = generateDynamicFormShapeFromInput(formBody);
+    const newDynamicForm = new DynamicFormDetail({
+      formTitle,
+      formShape,
+      startAt,
+      closedAt,
+      formId,
+      scope,
+      allowedAttempt,
+      issuer: email,
+    });
+
+    await newDynamicForm.save();
+    res.status(201).json({ dynamicFormId: formId });
+  } catch (e) {
+    res.status(400).json({ errorMessage: e.message });
+  }
+};
+
+const getDynamicFormInsight = async (req, res) => {
+  const { formId } = noSQLSanitizer(req.query);
+
+  try {
+    const {
+      intendedParticipants,
+      inputData,
+    } = await getDynamicFormRawResult(formId);
+
+    res.status(200).json({
+      intendedParticipants,
+      inputData,
+    });
+  } catch (e) {
+    res.status(e.httpErrorStatus).json({ errorMessage: e.message});
+  }
+};
+
 module.exports = {
+  createDynamicFormFeature,
   getFormShapeDataFeature,
+  getDynamicFormInsight,
   postDynamicFormFeature,
 };
