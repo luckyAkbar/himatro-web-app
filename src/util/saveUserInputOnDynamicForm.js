@@ -2,6 +2,7 @@ const noSQLSanitizer = require('mongo-sanitize');
 const { CustomError } = require('../classes/CustomError');
 const { XSSFilterOnTextInputType } = require('./XSSFilter');
 const { FormData } = require('../../models/formData');
+const { getNPMFromEmail } = require('./getNPMFromEmail');
 
 const saveUserInputOnDynamicForm = async (formId, formShape, { body, email }) => {
   const userInput = noSQLSanitizer(body);
@@ -22,10 +23,11 @@ const saveUserInputOnDynamicForm = async (formId, formShape, { body, email }) =>
 
   try {
     const userInputInJSONString = JSON.stringify(inputObject);
+    const NPM = await getNPMFromEmail(email);
     const finalFormData = new FormData({
       formId,
       data: userInputInJSONString,
-      filler: email,
+      filler: NPM,
     });
 
     await finalFormData.save();
