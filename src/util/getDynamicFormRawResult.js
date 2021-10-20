@@ -4,18 +4,34 @@ const { DynamicFormDetail } = require('../../models/dynamicForm');
 const { testQuery } = require('../../db/connection');
 const { extractValueFromArrayOfObject } = require('./extractValueFromArrayOfObject');
 
-const getIntendedParticipants = async (scope) => {
+const removeAlreadyFilledParticipants = (intendedParticipants, alreadyFilledParticipants) => {
+  const intendedParticipantsNPM = extractValueFromArrayOfObject(intendedParticipants, 'npm');
+  const { NPM } = alreadyFilledParticipants;
+  let totalRemoved = 0;
+
+  NPM.forEach((participants) => {
+    const indexToRemove = intendedParticipantsNPM.indexOf(participants);
+    if (indexToRemove !== -1) {
+      intendedParticipants.splice(indexToRemove - totalRemoved, 1);
+      totalRemoved += 1;
+    }
+  });
+
+  return intendedParticipants;
+}
+
+const getAwaitingParticipantsList = async (scope, alreadyFilledParticipants) => {
   let query;
   let params;
 
   switch (scope) {
     case 'all':
-      query = 'SELECT npm FROM pengurus';
+      query = 'SELECT npm, nama FROM anggota_biasa WHERE npm IN (SELECT npm FROM pengurus)';
       params = [];
       break;
 
     case 'ph':
-      query = 'SELECT npm FROM pengurus WHERE divisi_id = $1';
+      query = 'SELECT npm, nama FROM anggota_biasa WHERE npm IN (SELECT npm FROM pengurus WHERE divisi_id = $1)';
       params = ['div0000001']; // divisi_id pengurus harian
       break;
 
