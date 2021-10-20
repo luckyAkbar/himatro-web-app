@@ -79,13 +79,17 @@ const getDynamicFormInsight = async (req, res) => {
 
   try {
     const {
-      intendedParticipants,
-      inputData,
+      awaitingParticipantsList,
+      totalAlreadyFilled,
+      totalAwaitingResponse,
+      result,
     } = await getDynamicFormRawResult(formId);
 
     res.status(200).json({
-      intendedParticipants,
-      inputData,
+      awaitingParticipantsList,
+      result,
+      totalAlreadyFilled,
+      totalAwaitingResponse,
     });
   } catch (e) {
     res.status(e.httpErrorStatus).json({ errorMessage: e.message});
