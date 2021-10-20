@@ -33,9 +33,9 @@ const postDynamicFormFeature = async (req, res) => {
     validateDynamicFormBody(formShape, req.body);
 
     await saveUserInputOnDynamicForm(formId, formShape, req);
-    res.status(200).json({ message: 'OK sementara ini', URLRedirect: '/' });
+    res.status(200).json({ message: 'Terimakasih, data anda sudah tercatat.', URLRedirect: '/' });
   } catch (e) {
-    res.status(400).json({ errorMessage: e.message });
+    res.status(e.httpErrorStatus).json({ errorMessage: e.message });
   }
 };
 
