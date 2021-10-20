@@ -5,7 +5,7 @@ let isAlasanInputAlreadyShow = false;
 const appendAlasanForm = () => {
   const alasanFormLabel = document.createElement('label');
   alasanFormLabel.innerText = 'Alasan Izin: ';
-  alasanFormLabel.setAttribute('for', 'alasan')
+  alasanFormLabel.setAttribute('for', 'alasan');
 
   const alasanFormInput = document.createElement('input');
   alasanFormInput.setAttribute('placeholder', 'Masukan alasan anda izin...');

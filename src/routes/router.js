@@ -108,7 +108,7 @@ router.get('/one-time-signup', getOnetimeSignupHandler)
 router.post('/init/one-time-signup', initOnetimeSignupHandler);
 
 router.get('/newabsensi', (req, res) => {
-  res.render('newAbsensi')
+  res.render('newAbsensi');
 });
 
 router.all('*', (req, res) => {

@@ -1,3 +1,4 @@
+const { CustomError } = require('../classes/CustomError');
 const { testQuery } = require('../../db/connection');
 
 const getNPMFromEmail = async (email) => {
@@ -6,7 +7,7 @@ const getNPMFromEmail = async (email) => {
 
   try {
     const { rows } = await testQuery(query, params);
-    console.log(rows[0].npm)
+    console.log(rows[0].npm);
     return rows[0].npm;
   } catch (e) {
     throw new CustomError('Server failed to resolve NPM from given email', 500);

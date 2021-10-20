@@ -66,6 +66,7 @@ const formAttributeElementSchema = new mongoose.Schema({
     validate: {
       validator: (minLength) => {
         if (minLength !== null && minLength < 0) return false;
+        return true;
       },
       message: 'Min length can not have negative value.',
     },

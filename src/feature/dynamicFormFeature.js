@@ -1,5 +1,3 @@
-'use strict';
-
 const noSQLSanitizer = require('mongo-sanitize');
 const { CustomError } = require('../classes/CustomError');
 const { DynamicFormDetail } = require('../../models/dynamicForm');
@@ -43,7 +41,7 @@ const postDynamicFormFeature = async (req, res) => {
 
 const createDynamicFormFeature = async (req, res) => {
   const rawFormBody = noSQLSanitizer(req.body);
-  const formId = formIdGenerator ();
+  const formId = formIdGenerator();
   const { email } = req;
   const {
     formBody,
@@ -92,7 +90,7 @@ const getDynamicFormInsight = async (req, res) => {
       totalAwaitingResponse,
     });
   } catch (e) {
-    res.status(e.httpErrorStatus).json({ errorMessage: e.message});
+    res.status(e.httpErrorStatus).json({ errorMessage: e.message });
   }
 };
 

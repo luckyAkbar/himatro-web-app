@@ -3,9 +3,9 @@ const extractValueFromArrayOfObject = (arrOfObject, keyName) => {
 
   arrOfObject.forEach((object) => {
     arr.push(object[keyName]);
-  })
+  });
 
   return arr;
-}
+};
 
 module.exports = { extractValueFromArrayOfObject };

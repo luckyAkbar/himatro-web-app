@@ -12,7 +12,7 @@ const saveUserInputOnDynamicForm = async (formId, formShape, { body, email }) =>
   formShape.forEach((shape) => {
     const {
       attributeName,
-      isRequired
+      isRequired,
     } = shape;
     const saveInputDataFromUser = XSSFilterOnTextInputType(userInput[attributeName]);
 
@@ -33,7 +33,7 @@ const saveUserInputOnDynamicForm = async (formId, formShape, { body, email }) =>
     await finalFormData.save();
   } catch (e) {
     throw new CustomError('Failed to save user form data to Mongo Atlas', 500);
-  } 
-}
+  }
+};
 
 module.exports = { saveUserInputOnDynamicForm };

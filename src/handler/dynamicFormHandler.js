@@ -6,4 +6,4 @@ const getDynamicFormHandler = (req, res) => {
   });
 };
 
-module.exports = { getDynamicFormHandler, };
+module.exports = { getDynamicFormHandler };

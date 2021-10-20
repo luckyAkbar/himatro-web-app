@@ -82,7 +82,7 @@ const generateRadioAndCheckboxInputTypeElement = (data, parentForm) => {
   });
 
   parentForm.appendChild(formElementContainer);
-}
+};
 
 const createFormElement = (formData, parentForm) => {
   formData.forEach((data) => {
@@ -97,34 +97,34 @@ const createFormElement = (formData, parentForm) => {
 const validateTextInputType = (attributeName, fieldName) => {
   const value = String(document.getElementById(attributeName).value).trim();
 
-  if(value === '') throw new Error(`Mohon isi bagian ${fieldName} terlebih dahulu`)
+  if (value === '') throw new Error(`Mohon isi bagian ${fieldName} terlebih dahulu`);
 };
 
 const validateRadioInputType = (attributeName, fieldName) => {
-  const value = document.querySelector(`input[name='${attributeName}']:checked`).value;
-  
+  const { value } = document.querySelector(`input[name='${attributeName}']:checked`);
+
   if (!value) throw new Error(`Mohon isi ${fieldName} terlebih dahulu`);
 };
 
 const validateCheckboxInputType = (attributeName, fieldName) => {
   const checkboxInputChecked = document.querySelectorAll(`input[name='${attributeName}']:checked`);
 
-  if (checkboxInputChecked.length === 0) throw new Error (`Mohon pilih salah satu dari ${fieldName} terlebih dahulu`);
+  if (checkboxInputChecked.length === 0) throw new Error(`Mohon pilih salah satu dari ${fieldName} terlebih dahulu`);
 };
 
 const eraseTextInputField = (attributeName) => {
   const textInput = document.getElementById(attributeName);
   textInput.value = '';
-}
+};
 
 const unselectRadioButton = (attributeName) => {
   try {
     const checkedRadioButton = document.querySelector(`input[name='${attributeName}']:checked`);
     checkedRadioButton.checked = false;
   } catch (e) {
-    return;
+
   }
-}
+};
 
 const unselectCheckboxButton = (attributeName) => {
   try {
@@ -133,9 +133,9 @@ const unselectCheckboxButton = (attributeName) => {
       checkbox.checked = false;
     });
   } catch (e) {
-    return;
+
   }
-}
+};
 
 const getTextInputElement = (attributeName, fullData, isRequired) => {
   const data = document.getElementById(attributeName).value;
@@ -143,7 +143,7 @@ const getTextInputElement = (attributeName, fullData, isRequired) => {
   if (!data && !isRequired) return;
 
   fullData[attributeName] = data;
-}
+};
 
 const getRadioInputElement = (attributeName, fullData, isRequired) => {
   const data = document.querySelector(`input[name='${attributeName}']:checked`);
@@ -151,29 +151,29 @@ const getRadioInputElement = (attributeName, fullData, isRequired) => {
   if (!data && !isRequired) return;
 
   fullData[attributeName] = data.value;
-}
+};
 
 const getCheckboxInputElement = (attributeName, fullData, isRequired) => {
   const data = document.querySelectorAll(`input[name='${attributeName}']:checked`);
 
   if (data.length === 0 && !isRequired) return;
 
-  let allCheckedValue = [];
+  const allCheckedValue = [];
 
   data.forEach((input) => {
     allCheckedValue.push(input.value);
   });
 
   fullData[attributeName] = allCheckedValue;
-}
+};
 
 const getAllData = (formShape, formToken) => {
-  let fullData = {};
-  
+  const fullData = {};
+
   formShape.forEach((formData) => {
     const inputType = formData.HTMLInputType;
-    const attributeName = formData.attributeName;
-    const isRequired = formData.isRequired;
+    const { attributeName } = formData;
+    const { isRequired } = formData;
 
     if (inputType === 'text') getTextInputElement(attributeName, fullData, isRequired);
     if (inputType === 'radio') getRadioInputElement(attributeName, fullData, isRequired);
@@ -182,7 +182,7 @@ const getAllData = (formShape, formToken) => {
 
   fullData.formToken = formToken;
   return fullData;
-}
+};
 
 const postData = async (formShape, URL, formToken) => {
   const fullInputData = getAllData(formShape, formToken);
@@ -190,12 +190,12 @@ const postData = async (formShape, URL, formToken) => {
   const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     credentials: 'include',
     mode: 'cors',
     body: bodyRequest,
-  }
+  };
 
   try {
     const rawResponse = await fetch(URL, options);
@@ -204,29 +204,29 @@ const postData = async (formShape, URL, formToken) => {
     if (rawResponse.status !== 200) throw new Error(response.errorMessage);
 
     alert(response.message);
-    window.location.href = response.URLRedirect ? response.URLRedirect: '/';
+    window.location.href = response.URLRedirect ? response.URLRedirect : '/';
   } catch (e) {
     alert(e.message);
   }
-}
+};
 
 const clearFormListener = (formData) => {
   for (let i = 0; i < formData.length; i += 1) {
     const required = formData[i].isRequired;
     const inputType = formData[i].HTMLInputType;
-    const attributeName = formData[i].attributeName;
+    const { attributeName } = formData[i];
 
     if (required) continue;
 
-    if (inputType === 'radio') unselectRadioButton(attributeName)
+    if (inputType === 'radio') unselectRadioButton(attributeName);
     if (inputType === 'checkbox') unselectCheckboxButton(attributeName);
     if (inputType === 'text') eraseTextInputField(attributeName);
   }
-}
+};
 
 const formValidation = (formData) => {
   formData.forEach((data) => {
-    const attributeName = data.attributeName;
+    const { attributeName } = data;
     const fieldName = data.elementTitle;
 
     if (!data.isRequired) return;
@@ -242,11 +242,11 @@ const formValidation = (formData) => {
         validateCheckboxInputType(attributeName, fieldName);
         break;
     }
-  })
-}
+  });
+};
 
 const attachSubmitButton = (parentForm, formShape, formToken) => {
-  const URL = '/feature/feature006'
+  const URL = '/feature/feature006';
   const submitButton = document.createElement('input');
 
   submitButton.setAttribute('type', 'submit');
@@ -267,23 +267,23 @@ const attachSubmitButton = (parentForm, formShape, formToken) => {
       submitButton.disabled = false;
       submitButton.style.cursor = 'pointer';
     }
-  })
+  });
 
   parentForm.appendChild(submitButton);
-}
+};
 
 const attachClearFormButton = (formData, parentForm) => {
   const clearButton = document.createElement('button');
 
   clearButton.setAttribute('class', 'clear-button');
-  clearButton.innerHTML = 'Reset'
+  clearButton.innerHTML = 'Reset';
   clearButton.addEventListener('click', (event) => {
     event.preventDefault();
     clearFormListener(formData);
   });
 
   parentForm.appendChild(clearButton);
-}
+};
 
 const main = async () => {
   try {
@@ -294,6 +294,6 @@ const main = async () => {
   } catch (e) {
     alert(e.message);
   }
-}
+};
 
 main();

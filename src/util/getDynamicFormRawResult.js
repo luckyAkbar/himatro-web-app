@@ -18,7 +18,7 @@ const removeAlreadyFilledParticipants = (intendedParticipants, alreadyFilledPart
   });
 
   return intendedParticipants;
-}
+};
 
 const getAwaitingParticipantsList = async (scope, alreadyFilledParticipants) => {
   let query;
@@ -138,7 +138,7 @@ const getDynamicFormRawResult = async (formId) => {
       _id: 0,
       scope: 1,
     });
-    
+
     const fillerData = await getNPMFromDynamicFormFillerNPM(dynamicFormResultData);
     const awaitingParticipantsList = await getAwaitingParticipantsList(scope, fillerData);
     const cleanData = getCleanDataFromRawResult(dynamicFormResultData);
@@ -148,7 +148,7 @@ const getDynamicFormRawResult = async (formId) => {
       awaitingParticipantsList,
       result: prettyData,
       totalAlreadyFilled: prettyData.length,
-      totalAwaitingResponse: awaitingParticipantsList.length
+      totalAwaitingResponse: awaitingParticipantsList.length,
     };
   } catch (e) {
     console.log(e);

@@ -2,7 +2,7 @@ const noSQLSanitizer = require('mongo-sanitize');
 const { FormAttributeElement } = require('../../models/formAttributeElement');
 const { CustomError } = require('../classes/CustomError');
 
-const validateDynamicFormElementData = (shape)  => {
+const validateDynamicFormElementData = (shape) => {
   const {
     elementTitle,
     datatype,
@@ -26,9 +26,9 @@ const validateDynamicFormElementData = (shape)  => {
   ];
 
   formElementData.forEach((data) => {
-    if (data === undefined) throw new CustomError(`'undefined' value is prohibited in form element data.`);
-  })
-}
+    if (data === undefined) throw new CustomError('\'undefined\' value is prohibited in form element data.');
+  });
+};
 
 const generateDynamicFormShapeFromInput = (formBody) => {
   // this function will fail if when calling 'formElement.validate()' and schema throwing an error.
@@ -63,11 +63,11 @@ const generateDynamicFormShapeFromInput = (formBody) => {
       maxLength,
       minLength,
     });
-    
+
     formElement.validate((err) => {
       if (err) throw err;
     });
-    
+
     formShape.push(formElement);
   });
 
