@@ -66,7 +66,7 @@ const getAwaitingParticipantsList = async (scope, alreadyFilledParticipants) => 
 
   try {
     const { rows } = await testQuery(query, params);
-    const intendedParticipants = extractValueFromArrayOfObject(rows, 'npm');
+    const intendedParticipants = removeAlreadyFilledParticipants(rows, alreadyFilledParticipants);
 
     return intendedParticipants;
   } catch (e) {
@@ -138,17 +138,20 @@ const getDynamicFormRawResult = async (formId) => {
       _id: 0,
       scope: 1,
     });
-    const cleanData = getCleanDataFromRawResult(dynamicFormResultData);
+    
     const fillerData = await getNPMFromDynamicFormFillerNPM(dynamicFormResultData);
-    const intendedParticipants = await getIntendedParticipants(scope);
-
+    const awaitingParticipantsList = await getAwaitingParticipantsList(scope, fillerData);
+    const cleanData = getCleanDataFromRawResult(dynamicFormResultData);
     const prettyData = prettifyData(cleanData, fillerData);
 
     return {
-      intendedParticipants,
-      inputData: prettyData,
+      awaitingParticipantsList,
+      result: prettyData,
+      totalAlreadyFilled: prettyData.length,
+      totalAwaitingResponse: awaitingParticipantsList.length
     };
   } catch (e) {
+    console.log(e);
     throw new CustomError('Server failure to perform query in dynamic form insight', 500);
   }
 };
