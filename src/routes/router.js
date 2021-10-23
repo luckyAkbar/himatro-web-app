@@ -13,6 +13,7 @@ const { getAdminPage } = require('../handler/getAdminPage');
 const { getProfile } = require('../handler/getProfileHandler');
 const { updateProfile } = require('../handler/postUpdateProfileHandler');
 const { getUpdateProfile } = require('../handler/getUpdateProfile');
+const { tokenHandler } = require('../handler/tokenHandler');
 
 const {
   postFeaturePermissionHandler,
@@ -32,7 +33,14 @@ const {
 const {
   loginLimiter,
   uploadLimiter,
+  forgotPasswordRateLimitter,
+  tokenUsageRateLimitter,
 } = require('../middleware/rateLimiter');
+
+const {
+  getForgotPasswordPage,
+  postForgotPasswordIssuingHandler,
+} = require('../handler/forgotPasswordHandler');
 
 const {
   getLoginPage,
@@ -86,6 +94,20 @@ router.route('/form/:formType/:formId')
   .get(getFormHandler)
   .post(postFormHandler);
 
+router.route('/forgot-password')
+  .all(forgotPasswordRateLimitter)
+  .get(getForgotPasswordPage)
+  .post(postForgotPasswordIssuingHandler);
+
+router.route('/token/:tokenType')
+  .all(tokenUsageRateLimitter)
+	.get(tokenHandler);
+
+router.route('/feature/:featureId')
+  .all(authentication)
+  .post(postFeaturePermissionHandler)
+  .get(getFeaturePermissionHandler);
+
 router.post('/kaderisasi/sdm', kaderisasiSdmHandler);
 
 router.get('/kaderisasi/sdm/absensi', getAbsentSdm)
@@ -96,11 +118,6 @@ router.get('/kaderisasi/sdm/absensi/bukti', getBuktiAbsensiSdmHandler);
 router.get('/images/view/:imageId', imageViewHandler);
 
 router.get('/admin', authentication, getAdminPage);
-
-router.route('/feature/:featureId')
-  .all(authentication)
-  .post(postFeaturePermissionHandler)
-  .get(getFeaturePermissionHandler);
 
 router.get('/one-time-signup', getOnetimeSignupHandler)
   .post('/one-time-signup', uploadLimiter, postOnetimeSignupHandler);
