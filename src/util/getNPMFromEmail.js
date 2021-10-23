@@ -1,8 +1,8 @@
 const { CustomError } = require('../classes/CustomError');
 const { testQuery } = require('../../db/connection');
 
-const getNPMFromEmail = async (email) => {
-  const query = 'SELECT npm FROM anggota_biasa WHERE email = $1';
+const getNPMFromEmail = async (email, targetTable = 'anggota_biasa') => {
+  const query = `SELECT npm FROM ${targetTable} WHERE email = $1`;
   const params = [email];
 
   try {
