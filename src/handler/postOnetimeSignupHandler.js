@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const { readDataCsv } = require('../util/readDataCsv');
 const { createHash } = require('../util/cryptoHash');
-const { sendEmail } = require('../util/email');
+const { sendLoginCredentialViaEmail } = require('../util/email');
 const { testQuery } = require('../../db/connection');
 const { checkIsEmailExists } = require('../util/absentFiller');
 const { initDataPengurus } = require('../util/initDataPengurus');
@@ -42,34 +42,6 @@ const initDataAnggotaBiasa = async (data) => {
     await testQuery(query, params);
   } catch (e) {
     console.log(`FAILED TO INSERT DATA ANGGOTA BIASA ${params}`, e);
-  }
-};
-
-const sendLoginCredentialViaEmail = async (password, { email }) => {
-  const message = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: 'Your Login Credentials for Himatro Web App',
-    html: `<h2 style="text-align:center;">Himatro Web App Login Credentials</h2>
-            <p>Thanks for being patience and also thanks for sparing some time to fill out the previous form to get your login credentials.</p>
-            <p>Just a quick reminder, this credentials <strong>SHOULD NEVER SHARED TO ANYONE ELSE</strong> because it's your secret, and it's your responsibility to keep it as secure as possible.</p>
-            <p>This is your credentials: </p>
-            <ul>
-                <li>email: ${formatToLowercase(email)}</li>
-                <li>password: ${password}</li>
-            </ul>
-            <p>One quick thing before you leave, have you mention something that needed to be improved from this web app? Or, do you want to join us in the developers team? Let me know all your thought about this app by simply replying / send us an email trough this mail. <strong>EVERY SINGLE CONTRIBUTION WILL BE MUCH VALUED</strong></p>
-            <br>
-            <p>Regards,</p>
-            <h3>Lucky Akbar</h3>
-            <p>Head of Developers @Himatro Web App developers team</p>
-            `,
-  };
-
-  try {
-    await sendEmail(message);
-  } catch (e) {
-    console.log(e);
   }
 };
 
