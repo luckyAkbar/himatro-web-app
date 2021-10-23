@@ -16,6 +16,7 @@ const {
   modeValidator,
   sortByValidator,
 } = require('../util/validator');
+const { getKegiatanNameFromKegiatanId } = require('../util/getKegiatanNameFromKegiatanId');
 
 const getAbsentFormResult = async (absentId, show, req, res) => {
   let { sortBy } = req.query;
@@ -112,10 +113,11 @@ const getAbsentHandler = async (req, res) => {
       }
 
       const isAlreadyOpen = await checkIsAlreadyOpen(absentId.toLowerCase());
+      const kegiatanName = await getKegiatanNameFromKegiatanId(req, res);
 
       if (!isAlreadyOpen) {
         res.status(403).render('errorPage', {
-          errorMessage: 'Sorry, this form is still locked',
+          errorMessage: `Sorry, absent form for ${kegiatanName} is still locked`,
         });
         return;
       }
@@ -134,7 +136,9 @@ const getAbsentHandler = async (req, res) => {
       });
       return;
     } catch (e) {
-      console.log(chalk.red(e));
+      res.status(400).render('errorPage', {
+        errorMessage: e.message,
+      });
     }
   } else if (mode === 'view') {
     try {
