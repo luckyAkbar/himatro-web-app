@@ -16,5 +16,6 @@
 **2. Signup**<br>
 **3. Login**<br>
 **4. Admin control feature**<br>
-**5. Integration with OCR *coming soon***<br>
-**6. Flexible form creation *coming soon***
+**5. Flexible form creation *Beta Version***
+**6. Forgot password feature *Beta Version***
+**7. Integration with OCR *coming soon***<br>
