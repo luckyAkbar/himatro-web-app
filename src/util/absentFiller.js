@@ -33,6 +33,10 @@ const checkAlreadyFilled = async (ref_id, npm) => {
 };
 
 const checkIsEmailExists = async (email, tableName) => {
+  const err = new Error();
+  console.log('WARNING. checkIsEmailExists function is deprecated. Please change to _checkIsEmailExists.');
+  console.log(JSON.stringify(err));
+  
   const query = `SELECT COUNT(1) FROM ${tableName} WHERE email = $1`;
   const params = [email];
 
@@ -49,6 +53,18 @@ const checkIsEmailExists = async (email, tableName) => {
     throw new Error('Failed to check whether email already exists or not.');
   }
 };
+
+const _checkIsEmailExists = async (email, tableName) => {
+  const query = `SELECT * FROM ${tableName} WHERE email = $1`;
+  const params = [email];
+
+  try {
+    const { rowCount } = await testQuery(query, params);
+    if (rowCount === '0') throw new CustomError('Email not found!');
+  } catch (e) {
+    throw new CustomError('That email is not exists!');
+  }
+}
 
 const checkIsExpired = async (absentId) => {
   const query = 'select tanggal_berakhir from kegiatan where kegiatan_id = $1';
@@ -201,4 +217,5 @@ module.exports = {
   checkIsExpired,
   checkIsAlreadyOpen,
   checkIsEmailExists,
+  _checkIsEmailExists,
 };
