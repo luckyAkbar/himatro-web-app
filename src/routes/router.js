@@ -14,6 +14,8 @@ const { getProfile } = require('../handler/getProfileHandler');
 const { updateProfile } = require('../handler/postUpdateProfileHandler');
 const { getUpdateProfile } = require('../handler/getUpdateProfile');
 const { tokenHandler } = require('../handler/tokenHandler');
+const { getAbsentHandlerInputValidator } = require('../middleware/getAbsentHandlerInputValidator');
+const { postAbsentHandlerInputValidator } = require('../middleware/postAbsentHandlerInputValidator');
 
 const {
   postFeaturePermissionHandler,
@@ -61,16 +63,7 @@ router.get('/tentang', (req, res) => {
   });
 });
 
-router.get('/absensi', getAbsentHandler)
-  .post('/absensi', postAbsentHandler);
-
 router.get('/tahap-pengembangan', (req, res) => {
-  res.status(404).render('errorPage', {
-    errorMessage: 'Halaman sedang dalam proses pengembangan',
-  });
-});
-
-router.get('/kontak', (req, res) => {
   res.status(404).render('errorPage', {
     errorMessage: 'Halaman sedang dalam proses pengembangan',
   });
@@ -101,12 +94,24 @@ router.route('/forgot-password')
 
 router.route('/token/:tokenType')
   .all(tokenUsageRateLimitter)
-	.get(tokenHandler);
+  .get(tokenHandler);
 
 router.route('/feature/:featureId')
   .all(authentication)
   .post(postFeaturePermissionHandler)
   .get(getFeaturePermissionHandler);
+
+router.get('/absensi', (req, res) => {
+  res.status(200).render('absensi', {
+    judulHalaman: 'Silahkan masukan kode absensi dari kegiatan yang akan anda hadiri',
+    action: 'none',
+    fieldName: 'absentId',
+  });
+});
+
+router.route('/absensi/:absentId')
+  .get(getAbsentHandlerInputValidator, getAbsentHandler)
+  .post(postAbsentHandlerInputValidator, postAbsentHandler);
 
 router.post('/kaderisasi/sdm', kaderisasiSdmHandler);
 
