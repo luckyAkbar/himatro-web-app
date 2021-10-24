@@ -197,8 +197,8 @@
       <div class="search-bar">
         <section>
           <form class="example" action="<%= action %>">
-           <input type="text" placeholder="Search.." name="<%= fieldName %>">
-           <button type="submit"><i class="fa fa-search"></i></button>
+           <input type="text" placeholder="Search.." name="<%= fieldName %>" id="absentId">
+           <button type="submit" id="searchAbsentBtn"><i class="fa fa-search"></i></button>
           </form>
         </section>
       </div>
@@ -220,4 +220,23 @@
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const searchAbsentBtn = document.getElementById('searchAbsentBtn');
+
+    searchAbsentBtn.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      const absentId = document.getElementById('absentId').value;
+
+      try {
+        if (absentId.trim() === '') throw new Error('Mohon isi kode absen terlebih dahulu');
+
+        const URL = `/absensi/${absentId}`;
+        window.location = URL;
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+  </script>
 </html>
