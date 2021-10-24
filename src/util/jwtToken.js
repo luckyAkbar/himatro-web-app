@@ -48,13 +48,11 @@ const createDynamicFormToken = (formData) => {
   });
 };
 
-const createForgotPasswordToken = (email) => {
-  return jwt.sign({
-    email
-  }, process.env.SECRET_JWT_TOKEN, {
-    expiresIn: Number(process.env.JWT_TOKEN_FORGOT_PASSWORD_EXPIRES_SEC),
-  });
-};
+const createForgotPasswordToken = (email) => jwt.sign({
+  email,
+}, process.env.SECRET_JWT_TOKEN, {
+  expiresIn: Number(process.env.JWT_TOKEN_FORGOT_PASSWORD_EXPIRES_SEC),
+});
 
 module.exports = {
   createJWTToken,
