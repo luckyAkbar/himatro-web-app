@@ -1,6 +1,5 @@
 // performance result: creating and comparing take ~30ms each
 require('dotenv').config();
-const chalk = require('chalk');
 
 const bcrypt = require('bcrypt');
 
