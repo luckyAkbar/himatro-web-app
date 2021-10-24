@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const nodemailer = require('nodemailer');
 const { getTimeStamp } = require('./getTimeStamp');
-const { formatToLowercase } = require('../util/formatter');
+const { formatToLowercase } = require('./formatter');
 
 const transport = nodemailer.createTransport({
   service: 'gmail',
@@ -61,7 +61,7 @@ const sendForgotPasswordEmailNotif = async (targetEmail, tokenUUID) => {
   try {
     await sendEmail(message);
   } catch (e) {
-    throw new CustomError('Failed to send email for forgot password', 500);
+    throw new Error('Failed to send email for forgot password');
   }
 };
 
