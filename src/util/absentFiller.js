@@ -1,5 +1,6 @@
 const chalk = require('chalk');
 
+const { CustomError } = require('../classes/CustomError');
 const { testQuery } = require('../../db/connection');
 const { AbsentFillerNotRegisteredError } = require('../classes/AbsentFillerNotRegisteredError');
 const { getTimeStamp } = require('./getTimeStamp');
@@ -10,6 +11,10 @@ const keterangan_field = 'keterangan';
 const npm_field = 'npm';
 
 const checkAlreadyFilled = async (ref_id, npm) => {
+  const err = new Error();
+  console.log('WARNING. checkAlreadyFilled function is deprecated. Please change to supported one instead.');
+  console.log(JSON.stringify(err));
+
   const query = `SELECT ${keterangan_field} FROM ${table_name} WHERE ${npm_field} = $1 AND ${ref_id_field} = $2`;
   const params = [npm, ref_id];
 
@@ -36,7 +41,7 @@ const checkIsEmailExists = async (email, tableName) => {
   const err = new Error();
   console.log('WARNING. checkIsEmailExists function is deprecated. Please change to _checkIsEmailExists.');
   console.log(JSON.stringify(err));
-  
+
   const query = `SELECT COUNT(1) FROM ${tableName} WHERE email = $1`;
   const params = [email];
 
@@ -64,9 +69,13 @@ const _checkIsEmailExists = async (email, tableName) => {
   } catch (e) {
     throw new CustomError('That email is not exists!');
   }
-}
+};
 
 const checkIsExpired = async (absentId) => {
+  const err = new Error();
+  console.log('WARNING. checkIsExpired function is deprecated. Please change to supported one.');
+  console.log(JSON.stringify(err));
+
   const query = 'select tanggal_berakhir from kegiatan where kegiatan_id = $1';
   const params = [absentId];
 
@@ -86,6 +95,10 @@ const checkIsExpired = async (absentId) => {
 };
 
 const checkIsAlreadyOpen = async (refId) => {
+  const err = new Error();
+  console.log('WARNING. checkIsAlreadyOpen function is deprecated. Please change to supported one instead.');
+  console.log(JSON.stringify(err));
+
   const query = 'SELECT tanggal_pelaksanaan FROM kegiatan WHERE kegiatan_id = $1';
   const params = [refId];
 
@@ -104,6 +117,10 @@ const checkIsAlreadyOpen = async (refId) => {
 };
 
 const checkRefIdExists = async (refId, tableName, rowName) => {
+  const err = new Error();
+  console.log('WARNING. checkRefIdExists function is deprecated. Please change to supported one instead.');
+  console.log(JSON.stringify(err));
+
   const query = `SELECT COUNT(1) FROM ${tableName} WHERE ${rowName} = $1`;
   const params = [refId];
 
@@ -122,6 +139,10 @@ const checkRefIdExists = async (refId, tableName, rowName) => {
 };
 
 const insertKehadiranRecord = async (data, now) => {
+  const err = new Error();
+  console.log('WARNING. insertKehadiranRecord function is deprecated. Please change to supported one instead.');
+  console.log(JSON.stringify(err));
+
   const {
     npm,
     absentId,
@@ -142,6 +163,10 @@ const insertKehadiranRecord = async (data, now) => {
 };
 
 const absentFiller = async (data, res) => {
+  const err = new Error();
+  console.log('WARNING. absentFiller function is deprecated. Please change to supported one instead.');
+  console.log(JSON.stringify(err));
+
   const {
     absentId,
     npm,
