@@ -14,7 +14,6 @@ const validateTokenId = async (tokenId, userAgent) => {
 
   try {
     const tokenSearchResult = await ForgotPasswordToken.findOneAndDelete({ _id: token });
-    console.log(tokenSearchResult);
 
     if (token.length !== 24) throw err;
     if (tokenSearchResult.issuerUserAgent !== userAgent) throw err;
