@@ -12,7 +12,10 @@ const getSecondsAfterEpoch = () => {
   return Math.floor(now / 1000);
 };
 
+const formatDateToStandartFormat = (datetime) => date.format(datetime, 'YYYY/MM/DD HH:mm:ss');
+
 module.exports = {
   getTimeStamp,
   getSecondsAfterEpoch,
+  formatDateToStandartFormat,
 };
