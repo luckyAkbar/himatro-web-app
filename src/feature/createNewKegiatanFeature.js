@@ -1,55 +1,44 @@
-require('dotenv').config();
-
-const { referensiIdGenerator } = require('../util/generator');
-const { validateAbsentRefData } = require('../util/validator');
-const { QueryError } = require('../classes/QueryError');
 const { generateErrorEmail } = require('../util/email');
+const { validateAbsentFormDetailData } = require('../util/newValidator');
+const { referensiIdGenerator } = require('../util/generator');
+const { CustomError } = require('../classes/CustomError');
 
 const {
   createNewAbsent,
   createNewKegiatan,
 } = require('../util/createNewAbsent');
 
-const absentRefValidator = (req) => {
-  if (!validateAbsentRefData(req.body)) return false;
-
-  return true;
-};
-
-const createNewAbsentRecord = async (refId, data) => {
+const createNewAbsentRecord = async (bodyRequest) => {
+  const refId = referensiIdGenerator('keg');
   try {
     const kegiatanData = {
-      namaKegiatan: data.namaKegiatan,
-      mulai: `${data.tanggalPelaksanaan} ${data.jamPelaksanaan}`,
-      akhir: `${data.tanggalBerakhir} ${data.jamBerakhir}`,
-      lingkup: data.lingkup,
+      namaKegiatan: bodyRequest.namaKegiatan,
+      mulai: `${bodyRequest.tanggalPelaksanaan} ${bodyRequest.jamPelaksanaan}`,
+      akhir: `${bodyRequest.tanggalBerakhir} ${bodyRequest.jamBerakhir}`,
+      lingkup: bodyRequest.lingkup,
     };
 
-    await createNewAbsent(refId, data.lingkup);
+    await createNewAbsent(refId, bodyRequest.lingkup);
     await createNewKegiatan(refId, kegiatanData);
   } catch (e) {
-    console.log(e);
-    if (e instanceof QueryError) {
-      throw new QueryError('failed to create new absent record');
-    }
+    throw new CustomError('System failed to create new absent record');
   }
 };
 
 const createNewKegiatanFeature = async (req, res) => {
-  const validate = absentRefValidator(req);
-
-  if (!validate) {
-    res.status(400).json({ errorMessage: 'Data Kegiatan / Rapat Invalid' });
+  try {
+    validateAbsentFormDetailData(req.body);
+  } catch (e) {
+    console.log(e);
+    res.status(e.httpErrorStatus).json({ errorMessage: e.message });
     return;
   }
 
   res.status(201).json({ successMessage: 'Data diterima, permintaan anda sedang diproses. Silahkan refresh halaman admin untuk melihat ID absesi dari kegiatan yang telah anda buat.' });
 
   try {
-    const refId = referensiIdGenerator('keg');
-    await createNewAbsentRecord(refId, req.body);
+    await createNewAbsentRecord(req.body);
   } catch (e) {
-    console.log(e);
     await generateErrorEmail(`Failed to create new absent record. issuer ${req.email} recently`);
   }
 };
