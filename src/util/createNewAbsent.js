@@ -1,42 +1,34 @@
 const { testQuery } = require('../../db/connection');
-const { QueryError } = require('../classes/QueryError');
+const { CustomError } = require('../classes/CustomError');
 const { readDataCsvForAbsent } = require('./readDataCsv');
 
-const initNewAbsentRecord = async (referensiId, lingkup) => {
+const generateNewAbsentRecordQueryString = (referensiId, lingkup) => {
   const dataPengurusHimatro = readDataCsvForAbsent(`${__dirname}/../../db/data/fullData.csv`, lingkup);
   let fullQuery = '';
 
-  try {
-    dataPengurusHimatro.forEach(async (data) => {
-      const query = `INSERT INTO absensi (referensi_id, npm, nama, divisi) VALUES (
-          '${referensiId}',
-          '${data.npm}',
-          '${data.nama}',
-          '${data.divisi}');
-      `;
-      fullQuery += query;
-    });
-    await testQuery(fullQuery);
-  } catch (e) {
-    console.log(e);
-    throw new QueryError('failed to create new Absent');
-  }
+  dataPengurusHimatro.forEach(async (data) => {
+    const query = `INSERT INTO absensi (referensi_id, npm, nama, divisi) VALUES (
+        '${referensiId}',
+        '${data.npm}',
+        '${data.nama}',
+        '${data.divisi}');
+    `;
+    fullQuery += query;
+  });
+
+  return fullQuery;
 };
 
 const createNewAbsent = async (referensiId, lingkup) => {
+  const query = generateNewAbsentRecordQueryString(referensiId, lingkup);
   try {
-    await initNewAbsentRecord(referensiId, lingkup);
+    await testQuery(query);
   } catch (e) {
-    console.log(e);
-    throw new QueryError('failed to create new absent');
+    throw new CustomError('Server gagal melakukan inisiasi absent form baru.', 500);
   }
 };
 
-const createNewKegiatan = async (refId, {
-  namaKegiatan,
-  mulai,
-  akhir,
-}) => {
+const createNewKegiatan = async (refId, { namaKegiatan, mulai, akhir }) => {
   const query = `INSERT INTO kegiatan (
     kegiatan_id,
     nama_kegiatan,
@@ -54,8 +46,7 @@ const createNewKegiatan = async (refId, {
   try {
     await testQuery(query, params);
   } catch (e) {
-    console.log(e);
-    throw new QueryError('Failed to create new kegiatan');
+    throw new CustomError('Server gagal dalam mendaftarkan kegiatan baru.', 500);
   }
 };
 
