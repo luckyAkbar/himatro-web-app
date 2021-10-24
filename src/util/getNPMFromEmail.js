@@ -6,11 +6,12 @@ const getNPMFromEmail = async (email, targetTable = 'anggota_biasa') => {
   const params = [email];
 
   try {
-    const { rows } = await testQuery(query, params);
-    console.log(rows[0].npm);
+    const { rows, rowCount } = await testQuery(query, params);
+
+    if (rowCount === 0) throw new CustomError('Email not found.', 404);
     return rows[0].npm;
   } catch (e) {
-    throw new CustomError('Server failed to resolve NPM from given email', 500);
+    throw new CustomError(e.message, 404);
   }
 };
 
