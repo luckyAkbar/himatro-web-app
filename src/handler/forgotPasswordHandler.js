@@ -47,11 +47,11 @@ const postForgotPasswordIssuingHandler = async (req, res) => {
     const { _id } = await forgotPasswordToken.save();
     await sendForgotPasswordEmailNotif(userEmail, _id);
 
-    res.status(200).json({ message: 'Sukses. Silahkan buka email anda untuk melanjutkan proses.'});
+    res.status(200).json({ message: 'Sukses. Silahkan buka email anda untuk melanjutkan proses.' });
   } catch (e) {
     res.status(500).json({ errorMessage: 'Server gagal menangani proses penggantian password.' });
   }
-}
+};
 
 module.exports = {
   postForgotPasswordIssuingHandler,
