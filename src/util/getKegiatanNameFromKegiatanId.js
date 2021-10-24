@@ -1,3 +1,6 @@
+'use stict';
+
+const { CustomError } = require('../classes/CustomError');
 const { testQuery } = require('../../db/connection');
 const { refIdValidator } = require('./validator');
 
@@ -14,6 +17,6 @@ const getKegiatanNameFromKegiatanId = async (req, res) => {
   } catch (e) {
     return '-';
   }
-}
+};
 
 module.exports = { getKegiatanNameFromKegiatanId };
