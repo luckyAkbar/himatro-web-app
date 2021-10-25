@@ -1,7 +1,10 @@
-const { checkIsAbsentFormWriteable } = require('../util/newAbsentFiller');
+const {
+  checkIsAbsentFormWriteable,
+  checkIfUserAlreadyFilledAbsentForm,
+} = require('../util/newAbsentFiller');
+
 const {
   sortByAbsentQueryValidator,
-  absentModeValidator,
   absentIdValidator,
 } = require('../util/newValidator');
 
@@ -10,11 +13,10 @@ const getAbsentHandlerInputValidator = async (req, res, next) => {
   // otherwise, it isn't save to use that input.
 
   const { absentId } = req.params;
-  const { mode, sortBy } = req.query;
+  const { sortBy } = req.query;
 
   try {
     absentIdValidator(absentId);
-    absentModeValidator(mode);
     sortByAbsentQueryValidator(sortBy);
     await checkIsAbsentFormWriteable(absentId);
 
@@ -26,4 +28,20 @@ const getAbsentHandlerInputValidator = async (req, res, next) => {
   }
 };
 
-module.exports = { getAbsentHandlerInputValidator };
+const getAbsentResultPageInputValidator = (req, res, next) => {
+  const { absentId } = req.params;
+  const { sortBy } = req.query;
+
+  try {
+    absentIdValidator(absentId);
+    sortByAbsentQueryValidator(sortBy);
+
+    next();
+  } catch (e) {
+    res.status(e.httpErrorStatus).render('errorPage', {
+      errorMessage: e.message,
+    });
+  }
+};
+
+module.exports = { getAbsentHandlerInputValidator, getAbsentResultPageInputValidator };

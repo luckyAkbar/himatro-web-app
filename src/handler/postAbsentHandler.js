@@ -10,7 +10,7 @@ const postAbsentHandler = async (req, res) => {
 
     res.status(200).render('successAbsent', {
       nama,
-      link: '?mode=viewResult',
+      link: `/absensi/${queryParams.absentId}/result`,
     });
   } catch (e) {
     res.status(e.httpErrorStatus).render('errorPage', {
