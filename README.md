@@ -19,3 +19,5 @@
 **5. Flexible form creation *Beta Version***<br>
 **6. Forgot password feature *Beta Version***<br>
 **7. Integration with OCR *coming soon***<br>
+
+# Want to join dev teams? Just contact me!
