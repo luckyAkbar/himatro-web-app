@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { getAbsentHandler } = require('../handler/getAbsentHandler');
 const { postAbsentHandler } = require('../handler/postAbsentHandler');
 const { uploadAbsentSdmHandler } = require('../handler/postUploadAbsentSdmHandler');
 const { kaderisasiSdmHandler } = require('../handler/postKaderisasiSdmHandler');
@@ -14,8 +13,17 @@ const { getProfile } = require('../handler/getProfileHandler');
 const { updateProfile } = require('../handler/postUpdateProfileHandler');
 const { getUpdateProfile } = require('../handler/getUpdateProfile');
 const { tokenHandler } = require('../handler/tokenHandler');
-const { getAbsentHandlerInputValidator } = require('../middleware/getAbsentHandlerInputValidator');
 const { postAbsentHandlerInputValidator } = require('../middleware/postAbsentHandlerInputValidator');
+
+const {
+  getAbsentHandler,
+  renderAbsentResultPage
+} = require('../handler/getAbsentHandler');
+
+const {
+  getAbsentHandlerInputValidator,
+  getAbsentResultPageInputValidator
+} = require('../middleware/getAbsentHandlerInputValidator');
 
 const {
   postFeaturePermissionHandler,
@@ -112,6 +120,9 @@ router.get('/absensi', (req, res) => {
 router.route('/absensi/:absentId')
   .get(getAbsentHandlerInputValidator, getAbsentHandler)
   .post(postAbsentHandlerInputValidator, postAbsentHandler);
+
+router.route('/absensi/:absentId/result')
+  .get(getAbsentResultPageInputValidator, renderAbsentResultPage);
 
 router.post('/kaderisasi/sdm', kaderisasiSdmHandler);
 
