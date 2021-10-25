@@ -53,17 +53,13 @@ const renderAbsentInputPage = (req, res) => {
 };
 
 const getAbsentHandler = async (req, res) => {
-  const { mode } = req.query;
-
   try {
-    if (mode) await renderAbsentResultPage(req, res);
-    else await renderAbsentInputPage(req, res);
+    await renderAbsentInputPage(req, res);
   } catch (e) {
-    console.log(e);
     res.status(e.httpErrorStatus).render('errorPage', {
       errorMessage: e.message,
     });
   }
 };
 
-module.exports = { getAbsentHandler };
+module.exports = { getAbsentHandler, renderAbsentResultPage };
