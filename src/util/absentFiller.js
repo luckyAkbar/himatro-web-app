@@ -59,15 +59,16 @@ const checkIsEmailExists = async (email, tableName) => {
   }
 };
 
-const _checkIsEmailExists = async (email, tableName) => {
+const _checkIsEmailExists = async (email, tableName, throwErrorIfExists) => {
   const query = `SELECT * FROM ${tableName} WHERE email = $1`;
   const params = [email];
 
   try {
     const { rowCount } = await testQuery(query, params);
     if (rowCount === '0') throw new CustomError('Email not found!');
+    if (rowCount !== 0 && throwErrorIfExists) throw new CustomError('Email anda sudah digunakan oleh orang lain. Mohon gunakan yang lain');
   } catch (e) {
-    throw new CustomError('That email is not exists!');
+    throw new CustomError(e.message);
   }
 };
 
