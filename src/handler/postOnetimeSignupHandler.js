@@ -4,8 +4,9 @@ const { readDataCsv } = require('../util/readDataCsv');
 const { createHash } = require('../util/cryptoHash');
 const { sendLoginCredentialViaEmail } = require('../util/email');
 const { testQuery } = require('../../db/connection');
-const { checkIsEmailExists } = require('../util/absentFiller');
+const { _checkIsEmailExists } = require('../util/absentFiller');
 const { initDataPengurus } = require('../util/initDataPengurus');
+const { initOnetimeSignupIdGenerator } = require('../util/generator');
 
 const {
   namaFormatter,
@@ -13,16 +14,12 @@ const {
 } = require('../util/formatter');
 
 const {
-  initOnetimeSignupIdGenerator,
-  userPasswordGenerator,
-} = require('../util/generator');
-
-const {
   namaValidator,
   npmValidator,
   emailValidator,
   commonValidator,
 } = require('../util/validator');
+const { CustomError } = require('../classes/CustomError');
 
 const initDataAnggotaBiasa = async (data) => {
   const {
