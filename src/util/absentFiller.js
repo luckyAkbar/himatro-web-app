@@ -59,7 +59,7 @@ const checkIsEmailExists = async (email, tableName) => {
   }
 };
 
-const _checkIsEmailExists = async (email, tableName, throwErrorIfExists) => {
+const _checkIsEmailExists = async (email, tableName, throwErrorIfExists = false) => {
   const query = `SELECT * FROM ${tableName} WHERE email = $1`;
   const params = [email];
 
