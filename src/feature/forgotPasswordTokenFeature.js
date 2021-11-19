@@ -1,30 +1,15 @@
 const noSQLSanitizer = require('mongo-sanitize');
 const { ForgotPasswordToken } = require('../../models/forgotPassword');
 const { CustomError } = require('../classes/CustomError');
-const { verifyJWTToken } = require('../util/jwtToken');
 const { testQuery } = require('../../db/connection');
-const { getNPMFromEmail } = require('../util/getNPMFromEmail');
-const { userPasswordGenerator } = require('../util/generator');
 const { createHash } = require('../util/cryptoHash');
 const { sendLoginCredentialViaEmail } = require('../util/email');
+const { getUserEmailFromForgotTokenId } = require('../util/getDataFromTokenId');
 
-const validateTokenId = async (tokenId, userAgent) => {
-  const token = String(noSQLSanitizer(tokenId));
-  const err = new Error();
-
-  try {
-    const tokenSearchResult = await ForgotPasswordToken.findOneAndDelete({ _id: token });
-
-    if (token.length !== 24) throw err;
-    if (tokenSearchResult.issuerUserAgent !== userAgent) throw err;
-
-    verifyJWTToken(tokenSearchResult.token);
-
-    return tokenSearchResult.issuerEmail;
-  } catch (e) {
-    throw new CustomError('Forgot password token is not authentic', 403);
-  }
-};
+const {
+  validateNewUserPassword,
+  validateForgotTokenId,
+} = require('../util/newValidator');
 
 const changeUserPasswordOnDatabase = async (userEmail, hashedPassword) => {
   const query = 'UPDATE users SET password = $1 WHERE email = $2';
@@ -37,31 +22,53 @@ const changeUserPasswordOnDatabase = async (userEmail, hashedPassword) => {
   }
 };
 
-const performChangePasswordProcedure = async (emailTarget) => {
-  try {
-    const userNPM = await getNPMFromEmail(emailTarget);
-    const newUserPassword = userPasswordGenerator(userNPM);
-    const hashedPassword = await createHash(newUserPassword);
+const performChangePasswordProcedure = async (req, res) => {
+  const { newPassword } = req.body;
+  const { forgotTokenId } = req.cookies;
 
+  try {
+    const emailTarget = await getUserEmailFromForgotTokenId(forgotTokenId);
+    const hashedPassword = await createHash(newPassword);
     await changeUserPasswordOnDatabase(emailTarget, hashedPassword);
-    await sendLoginCredentialViaEmail(newUserPassword, { email: emailTarget });
+    await sendLoginCredentialViaEmail(newPassword, { email: emailTarget });
+
+    res.status(200).render('commonSuccess', {
+      successMessage: 'Proses penggantian password berhasil. Silahkan login dengan kredensial baru anda.',
+    });
+
+    await ForgotPasswordToken.deleteOne({ _id: forgotTokenId });
   } catch (e) {
     throw new CustomError('System failed to perform password change.', 500);
   }
 };
 
-const forgotPasswordTokenFeature = async (req, res) => {
-  const { tokenId } = noSQLSanitizer(req.query);
-  const userAgent = req.headers['user-agent'];
-
+const postForgotPasswordTokenFeature = async (req, res) => {
   try {
-    const emailTarget = await validateTokenId(tokenId, userAgent);
-    await performChangePasswordProcedure(emailTarget);
-
-    res.status(200).json({ message: 'Proses penggantian password berhasil, silahkan buka email anda untuk kredensial baru anda.' });
+    validateNewUserPassword(req.body);
+    await validateForgotTokenId(req);
+    await performChangePasswordProcedure(req, res);
   } catch (e) {
-    res.status(e.httpErrorStatus).json({ errorMessage: e.message });
+    res.status(e.httpErrorStatus).render('errorPage', {
+      errorMessage: e.message,
+    });
   }
 };
 
-module.exports = { forgotPasswordTokenFeature };
+const getForgotPasswordTokenFeature = async (req, res) => {
+  const tokenId = noSQLSanitizer(req.query.tokenId);
+
+  try {
+    await validateForgotTokenId(req, tokenPlace = 'query');
+    res.cookie('forgotTokenId', tokenId, {
+      maxAge: 300000,
+      httpOnly: true,
+    });
+    res.render('changePassword');
+  } catch (e) {
+    res.status(e.httpErrorStatus).render('errorPage', {
+      errorMessage: e.message
+    });
+  }
+};
+
+module.exports = { postForgotPasswordTokenFeature, getForgotPasswordTokenFeature };
