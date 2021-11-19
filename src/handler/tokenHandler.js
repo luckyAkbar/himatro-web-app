@@ -1,11 +1,14 @@
-const { forgotPasswordTokenFeature } = require('../feature/forgotPasswordTokenFeature');
+const {
+  postForgotPasswordTokenFeature,
+  getForgotPasswordTokenFeature,
+} = require('../feature/forgotPasswordTokenFeature');
 
-const tokenHandler = async (req, res) => {
+const postTokenHandler = async (req, res) => {
   const { tokenType } = req.params;
 
   switch (tokenType) {
     case 'forgot-password':
-      await forgotPasswordTokenFeature(req, res);
+      await postForgotPasswordTokenFeature(req, res);
       break;
 
     default:
@@ -13,4 +16,20 @@ const tokenHandler = async (req, res) => {
   }
 };
 
-module.exports = { tokenHandler };
+const getTokenHandler = async (req, res) => {
+  const { tokenType } = req.params;
+
+  switch (tokenType) {
+    case 'forgot-password':
+      await getForgotPasswordTokenFeature(req, res);
+      break;
+
+    default:
+      res.sendStatus(404);
+  }
+}
+
+module.exports = {
+  postTokenHandler,
+  getTokenHandler,
+};
