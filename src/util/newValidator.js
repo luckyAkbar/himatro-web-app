@@ -1,4 +1,7 @@
 const { CustomError } = require('../classes/CustomError');
+const { getTokenDataFromForgotTokenId } = require('./getDataFromTokenId');
+const { verifyJWTToken } = require('../util/jwtToken');
+const noSQLSanitizer = require('mongo-sanitize');
 
 const superStirctSQLInjectionComparator = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 const namaComparator = /[!@#$%^&*()_+\-=\[\]{};:"\\|<>\/?]+/; /* allowing [. , '] */
@@ -108,6 +111,32 @@ const keteranganAbsentValidator = (inputKeterangan, inputAlasan) => {
   if (inputKeterangan !== 'h' && (alasan === '' || alasan.length < 25)) throw new CustomError('Mohon masukan alasan anda izin / sakit dengan kalimat deskriptif minimal 25 huruf.');
 };
 
+const validateNewUserPassword = (requestBody) => {
+  const newPassword = String(requestBody.newPassword);
+  const newPasswordDuplicate = String(requestBody.newPasswordDuplicate);
+
+  if (newPassword.length < 8 || newPasswordDuplicate.length < 8) throw new CustomError('Password minimal 8 karakter');
+  if (newPassword !== newPasswordDuplicate) throw new CustomError('Password anda tidak sama.');
+};
+
+const validateForgotTokenId = async (req, tokenPlace = 'cookies') => {
+  const { tokenId } = noSQLSanitizer(req.query);
+  const { forgotTokenId } = noSQLSanitizer(req.cookies);
+  const forgotPasswordTokenId = tokenPlace === 'cookies' ? forgotTokenId : tokenId;
+  const userAgent = req.headers['user-agent'];
+
+  try {
+    if (forgotPasswordTokenId.length !== 24) throw new Error('Token tidak valid.');
+    
+    const { issuerUserAgent, token } = await getTokenDataFromForgotTokenId(forgotPasswordTokenId);
+    if (issuerUserAgent !== userAgent) throw new Error('Dilarang menggunakan perangkat yang berbeda pada fitur ini.');
+    
+    verifyJWTToken(token);
+  } catch (e) {
+    throw new CustomError(e.message, 403);
+  }
+};
+
 module.exports = {
   absentIdValidator,
   absentModeValidator,
@@ -116,4 +145,6 @@ module.exports = {
   NPMValidator,
   keteranganAbsentValidator,
   validateAbsentFormDetailData,
+  validateNewUserPassword,
+  validateForgotTokenId,
 };
