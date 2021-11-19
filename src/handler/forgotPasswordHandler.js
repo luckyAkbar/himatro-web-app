@@ -15,7 +15,14 @@ const { createForgotPasswordToken } = require('../util/jwtToken');
 const { emailValidator } = require('../util/validator');
 
 const getForgotPasswordPage = (req, res) => {
-  res.render('forgotPassword');
+  try {
+    checkIfAlreadyLogin(req);
+    res.render('forgotPassword');
+  } catch (e) {
+    res.render('errorPage', {
+      errorMessage: e.message,
+    });
+  }
 };
 
 const postForgotPasswordIssuingHandler = async (req, res) => {
@@ -45,7 +52,9 @@ const postForgotPasswordIssuingHandler = async (req, res) => {
     const { _id } = await forgotPasswordToken.save();
     await sendForgotPasswordEmailNotif(userEmail, _id);
 
-    res.status(200).json({ message: 'Sukses. Silahkan buka email anda untuk melanjutkan proses.' });
+    res.status(200).render('commonSuccess', {
+      successMessage: 'Sukses. Silahkan buka email anda untuk melanjutkan proses.',
+    });
   } catch (e) {
     res.status(500).json({ errorMessage: 'Server gagal menangani proses penggantian password.' });
   }
