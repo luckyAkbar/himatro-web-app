@@ -15,9 +15,7 @@ const { createForgotPasswordToken } = require('../util/jwtToken');
 const { emailValidator } = require('../util/validator');
 
 const getForgotPasswordPage = (req, res) => {
-  res.render('commonSuccess', {
-    successMessage: 'OK',
-  });
+  res.render('forgotPassword');
 };
 
 const postForgotPasswordIssuingHandler = async (req, res) => {
