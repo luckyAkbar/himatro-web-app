@@ -4,7 +4,7 @@ let isAlasanInputAlreadyShow = false;
 
 const appendAlasanForm = () => {
   const alasanFormLabel = document.createElement('label');
-  alasanFormLabel.innerText = 'Alasan Izin: ';
+  alasanFormLabel.innerText = 'Alasan Izin: (Minimal 25 huruf)';
   alasanFormLabel.setAttribute('for', 'alasan');
 
   const alasanFormInput = document.createElement('input');
