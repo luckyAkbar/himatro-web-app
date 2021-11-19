@@ -12,8 +12,12 @@ const { getAdminPage } = require('../handler/getAdminPage');
 const { getProfile } = require('../handler/getProfileHandler');
 const { updateProfile } = require('../handler/postUpdateProfileHandler');
 const { getUpdateProfile } = require('../handler/getUpdateProfile');
-const { tokenHandler } = require('../handler/tokenHandler');
 const { postAbsentHandlerInputValidator } = require('../middleware/postAbsentHandlerInputValidator');
+
+const {
+  postTokenHandler,
+  getTokenHandler,
+} = require('../handler/tokenHandler');
 
 const {
   getAbsentHandler,
@@ -102,7 +106,8 @@ router.route('/forgot-password')
 
 router.route('/token/:tokenType')
   .all(tokenUsageRateLimitter)
-  .get(tokenHandler);
+  .get(getTokenHandler)
+  .post(postTokenHandler);
 
 router.route('/feature/:featureId')
   .all(authentication)
