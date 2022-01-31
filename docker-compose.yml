@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  pgdb:
+    image: postgres:14
+    volumes:
+      - ./pgdb-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+
+  himatro-web-app:
+    build: .
+    ports:
+      - 10000:10000
+    depends_on:
+      - pgdb
