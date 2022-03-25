@@ -12,6 +12,8 @@ services:
       POSTGRES_DB: "himatro"
       POSTGRES_PASSWORD: "@#56luckyGantengPenguasaDuniaWeb1603@#56"
       POSTGRES_USER: "himatro"
+    networks:
+      - internal
 
   himatro-web-app:
     build: .
@@ -19,3 +21,9 @@ services:
       - 14000:10000
     depends_on:
       - pgdb
+    networks:
+      - internal
+
+networks:
+  internal
+    driver: bridge
