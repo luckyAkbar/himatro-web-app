@@ -25,5 +25,5 @@ services:
       - internal
 
 networks:
-  internal
+  internal:
     driver: bridge
