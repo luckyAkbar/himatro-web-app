@@ -1,5 +1,11 @@
 FROM node:14.17.5
 WORKDIR /app
-COPY . .
+
+COPY package.json .
+COPY package-lock.json .
+
 RUN npm install
-CMD ["npm", "run", "start"]
+
+COPY . .
+
+CMD ["node", "index.js"]

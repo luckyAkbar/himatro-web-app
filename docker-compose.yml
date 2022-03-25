@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   pgdb:
@@ -6,14 +6,15 @@ services:
     volumes:
       - ./pgdb-data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 54320:5432
     environment:
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "himatro"
+      POSTGRES_PASSWORD: "@#56luckyGantengPenguasaDuniaWeb1603@#56"
+      POSTGRES_USER: "himatro"
 
   himatro-web-app:
     build: .
     ports:
-      - 4000:4000
+      - 14000:10000
     depends_on:
       - pgdb
