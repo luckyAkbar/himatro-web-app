@@ -4,7 +4,7 @@ services:
   pgdb:
     image: postgres:14
     volumes:
-      - ./pgdb-data:/var/lib/postgresql/data
+      - /var/lib/postgresql/himatro_web_app_psql_data:/var/lib/postgresql/data
     ports:
       - 54320:5432
     environment:
