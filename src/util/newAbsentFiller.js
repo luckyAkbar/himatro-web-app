@@ -67,20 +67,15 @@ const validateAbsentFormWriteableStatusFromDate = ({
   namaKegiatan,
 }) => {
   const now = new Date();
+
+  now.setHours(now.getHours() + 7);
+
   const stillClosedErrorMsg = `Form absen ${namaKegiatan} akan dibuka pada ${formatDateToStandartFormat(
     tanggalPelaksanaan
   )}`;
   const alreadyClosedErrorMsg = `Form absen untuk ${namaKegiatan} sudah ditutup pada ${formatDateToStandartFormat(
     tanggalBerakhir
   )}`;
-
-  console.log("ini target noiw", now);
-  console.log(tanggalPelaksanaan);
-  console.log(tanggalBerakhir);
-
-  console.log(now.toLocaleDateString());
-  console.log(tanggalBerakhir.toLocaleDateString());
-  console.log(tanggalPelaksanaan.toLocaleDateString());
 
   if (tanggalPelaksanaan > now) throw new CustomError(stillClosedErrorMsg);
   if (tanggalBerakhir < now) throw new CustomError(alreadyClosedErrorMsg);
