@@ -1,10 +1,13 @@
-const { testQuery } = require('../../db/connection');
-const { CustomError } = require('../classes/CustomError');
-const { readDataCsvForAbsent } = require('./readDataCsv');
+const { testQuery } = require("../../db/connection");
+const { CustomError } = require("../classes/CustomError");
+const { readDataCsvForAbsent } = require("./readDataCsv");
 
 const generateNewAbsentRecordQueryString = (referensiId, lingkup) => {
-  const dataPengurusHimatro = readDataCsvForAbsent(`${__dirname}/../../db/data/fullData.csv`, lingkup);
-  let fullQuery = '';
+  const dataPengurusHimatro = readDataCsvForAbsent(
+    `${__dirname}/../../db/data/fullData.csv`,
+    lingkup
+  );
+  let fullQuery = "";
 
   dataPengurusHimatro.forEach(async (data) => {
     const query = `INSERT INTO absensi (referensi_id, npm, nama, divisi) VALUES (
@@ -24,7 +27,11 @@ const createNewAbsent = async (referensiId, lingkup) => {
   try {
     await testQuery(query);
   } catch (e) {
-    throw new CustomError('Server gagal melakukan inisiasi absent form baru.', 500);
+    console.log("ini dari create new absent util", e);
+    throw new CustomError(
+      "Server gagal melakukan inisiasi absent form baru.",
+      500
+    );
   }
 };
 
@@ -36,17 +43,16 @@ const createNewKegiatan = async (refId, { namaKegiatan, mulai, akhir }) => {
     tanggal_berakhir
   ) VALUES ($1, $2, $3, $4)`;
 
-  const params = [
-    refId,
-    namaKegiatan,
-    mulai,
-    akhir,
-  ];
+  const params = [refId, namaKegiatan, mulai, akhir];
 
   try {
     await testQuery(query, params);
   } catch (e) {
-    throw new CustomError('Server gagal dalam mendaftarkan kegiatan baru.', 500);
+    console.log("ini dari create new kegiatan util", e);
+    throw new CustomError(
+      "Server gagal dalam mendaftarkan kegiatan baru.",
+      500
+    );
   }
 };
 
