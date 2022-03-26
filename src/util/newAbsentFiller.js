@@ -78,6 +78,10 @@ const validateAbsentFormWriteableStatusFromDate = ({
   console.log(tanggalPelaksanaan);
   console.log(tanggalBerakhir);
 
+  console.log(now.toLocaleDateString());
+  console.log(tanggalBerakhir.toLocaleDateString());
+  console.log(tanggalPelaksanaan.toLocaleDateString());
+
   if (tanggalPelaksanaan > now) throw new CustomError(stillClosedErrorMsg);
   if (tanggalBerakhir < now) throw new CustomError(alreadyClosedErrorMsg);
 };
