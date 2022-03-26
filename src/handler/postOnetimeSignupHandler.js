@@ -2,10 +2,11 @@ require('dotenv').config();
 
 const { readDataCsv } = require('../util/readDataCsv');
 const { createHash } = require('../util/cryptoHash');
-const { sendEmail } = require('../util/email');
+const { sendLoginCredentialViaEmail } = require('../util/email');
 const { testQuery } = require('../../db/connection');
-const { checkIsEmailExists } = require('../util/absentFiller');
+const { _checkIsEmailExists } = require('../util/absentFiller');
 const { initDataPengurus } = require('../util/initDataPengurus');
+const { initOnetimeSignupIdGenerator } = require('../util/generator');
 
 const {
   namaFormatter,
@@ -13,16 +14,12 @@ const {
 } = require('../util/formatter');
 
 const {
-  initOnetimeSignupIdGenerator,
-  userPasswordGenerator,
-} = require('../util/generator');
-
-const {
   namaValidator,
   npmValidator,
   emailValidator,
   commonValidator,
 } = require('../util/validator');
+const { CustomError } = require('../classes/CustomError');
 
 const initDataAnggotaBiasa = async (data) => {
   const {
@@ -42,34 +39,6 @@ const initDataAnggotaBiasa = async (data) => {
     await testQuery(query, params);
   } catch (e) {
     console.log(`FAILED TO INSERT DATA ANGGOTA BIASA ${params}`, e);
-  }
-};
-
-const sendLoginCredentialViaEmail = async (password, { email }) => {
-  const message = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: 'Your Login Credentials for Himatro Web App',
-    html: `<h2 style="text-align:center;">Himatro Web App Login Credentials</h2>
-            <p>Thanks for being patience and also thanks for sparing some time to fill out the previous form to get your login credentials.</p>
-            <p>Just a quick reminder, this credentials <strong>SHOULD NEVER SHARED TO ANYONE ELSE</strong> because it's your secret, and it's your responsibility to keep it as secure as possible.</p>
-            <p>This is your credentials: </p>
-            <ul>
-                <li>email: ${formatToLowercase(email)}</li>
-                <li>password: ${password}</li>
-            </ul>
-            <p>One quick thing before you leave, have you mention something that needed to be improved from this web app? Or, do you want to join us in the developers team? Let me know all your thought about this app by simply replying / send us an email trough this mail. <strong>EVERY SINGLE CONTRIBUTION WILL BE MUCH VALUED</strong></p>
-            <br>
-            <p>Regards,</p>
-            <h3>Lucky Akbar</h3>
-            <p>Head of Developers @Himatro Web App developers team</p>
-            `,
-  };
-
-  try {
-    await sendEmail(message);
-  } catch (e) {
-    console.log(e);
   }
 };
 
@@ -121,16 +90,9 @@ const checkIsNpmExists = async (npm) => {
 
   try {
     const { rows } = await testQuery(query, params);
-
-    if (rows[0].count === '0') {
-      console.log('test');
-      return false;
-    }
-
-    return true;
+    if (rows[0].count === '0') throw new Error();
   } catch (e) {
-    console.log(e);
-    return false;
+    throw new CustomError('NPM anda tidak terdaftar. Silahkan hubungi admin bila ini adalah kesalahan.');
   }
 };
 
@@ -158,47 +120,31 @@ const checkIsAlreadySignup = async (npm) => {
 
   try {
     const { rows } = await testQuery(query, params);
-
-    if (rows[0].nama === 'dummy') {
-      return false;
-    }
-    return true;
+    if (rows[0].nama !== 'dummy') throw new Error();
   } catch (e) {
-    console.log(e);
-    return true;
+    throw new CustomError('Anda tercatat sudah login. Anda tidak bisa melakukannya lagi.');
   }
 };
 
 const validateInputData = (data) => {
+  const err = new Error('Input data yang anda berikan tidak sesuai. Mohon ulangi kembali');
   const {
     nama,
     npm,
     email,
+    password,
     formId,
   } = data;
 
   try {
-    if (Object.keys(data).length !== 4) {
-      return false;
-    }
-
-    if (!commonValidator(formId)) {
-      return false;
-    }
-
-    if (!(nama && npm && email)) {
-      return false;
-    }
-
-    if (!(namaValidator(nama) && npmValidator(npm) && emailValidator(email))) {
-      return false;
-    }
+    if (Object.keys(data).length !== 5) throw err;
+    if (!commonValidator(formId)) throw err;
+    if (!(nama && npm && email)) throw err;
+    if (!(namaValidator(nama) && npmValidator(npm) && emailValidator(email))) throw err;
+    if (String(password).length < 8) throw new CustomError('Password harus lebih dari 8 huruf.');
   } catch (e) {
-    console.log(e);
-    return false;
+    throw new CustomError(e.message);
   }
-
-  return true;
 };
 
 const initOnetimeSignupHandler = async (req, res) => {
@@ -238,75 +184,41 @@ const initOnetimeSignupHandler = async (req, res) => {
 };
 
 const postOnetimeSignupHandler = async (req, res) => {
+  const {
+    npm,
+    email,
+    password,
+    formId,
+  } = req.body;
+
   try {
-    const isDataValid = validateInputData(req.body);
-
-    if (!isDataValid) {
-      res.status(400).render('errorPage', {
-        errorMessage: 'Input data invalid.',
-      });
-      return;
-    }
-
-    const {
-      npm,
-      email,
-      formId,
-    } = req.body;
-
-    const isFormExits = await checkIfFormIdExists(formId);
-
-    if (!isFormExits) {
-      res.status(404).render('errorPage', {
-        errorMessage: 'Not found. This form does not exists!',
-      });
-      return;
-    }
-
-    const isNpmExists = await checkIsNpmExists(npm);
-
-    if (!isNpmExists) {
-      res.status(404).render('errorPage', {
-        errorMessage: 'Sorry, your NPM is not registered. Please contact admin to resolve.',
-      });
-      return;
-    }
-
-    const isAlreadySignup = await checkIsAlreadySignup(npm);
-
-    if (isAlreadySignup) {
-      res.status(403).render('errorPage', {
-        errorMessage: 'Sorry, you can\'t change signup data. Please wait until that feature to be released.',
-      });
-      return;
-    }
-
-    const isEmailExists = await checkIsEmailExists(email, 'signupdata');
-
-    if (isEmailExists) {
-      res.status(400).render('errorPage', {
-        errorMessage: 'Email already taken by another user. Please use a different one.',
-      });
-      return;
-    }
+    validateInputData(req.body);
+    await checkIfFormIdExists(formId);
+    await checkIsNpmExists(npm);
+    await checkIsAlreadySignup(npm);
+    await _checkIsEmailExists(email, 'signupdata', true);
     await insertSignupData(req.body);
 
     const userPassword = userPasswordGenerator(npm);
 
     res.status(200).render('commonSuccess', {
-      successMessage: userPassword,
+      successMessage: 'Berhasil. Silahkan login menggunakan email dan password yang anda telah masukan.',
     });
 
-    
-
-    await generateLoginCredential(req.body, userPassword);
+    await generateLoginCredential(req.body, password);
     await initDataAnggotaBiasa(req.body);
     await initDataPengurus(npm);
-    await sendLoginCredentialViaEmail(userPassword, req.body);
+    
+    setTimeout(async () => {
+      try {
+        await sendLoginCredentialViaEmail(password, req.body);
+      } catch (e) {
+        console.log('System failed to send login credential to email [severity: low]');
+      }
+    }, 3000);
   } catch (e) {
-    console.log(e);
-    res.status(500).render('errorPage', {
-      errorMessage: 'Internal Server Error. Please contact admin to resolve.',
+    res.status(e.httpErrorStatus).render('errorPage', {
+      errorMessage: e.message,
     });
   }
 };

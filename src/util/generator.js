@@ -69,6 +69,13 @@ const socmedPostIdGenerator = () => `smpv${generateUniqueId({
   excludeSymbols: excludedSymbols,
 })}`;
 
+const formIdGenerator = () => `form${generateUniqueId({
+  length: 6,
+  useLetters: true,
+  useNumbers: true,
+  exludeSymbols: excludedSymbols,
+})}`;
+
 module.exports = {
   referensiIdGenerator,
   uploadedImageNameGenerator,
@@ -79,4 +86,5 @@ module.exports = {
   userPasswordGenerator,
   initOnetimeSignupIdGenerator,
   socmedPostIdGenerator,
+  formIdGenerator,
 };

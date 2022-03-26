@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS signupdata;
 DROP TABLE IF EXISTS feature_permission;
 DROP TABLE IF EXISTS socmed_post_validator;
 DROP TABLE IF EXISTS generic_presence_detector;
+DROP TABLE IF EXISTS registered_form;
 
 CREATE TABLE departemen (
   departemen_id VARCHAR(10) PRIMARY KEY,
@@ -277,6 +278,9 @@ INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature00
 INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature002', 29); /* lihat semua kegiatan */
 INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature003', 44); /* buat form socmed post validation form */
 INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature004', 1);  /* isi data form socmed validation */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature005', 31); /* Lihat halaman admin */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature006', 1); /* Get and Post dynamic form data */
+INSERT INTO feature_permission (feature_id, permission_level) VALUES ('feature007', 29); /* create / register new dynamic form & get form insight (form result) */
 
 /*
 INSERT INTO anggota_biasa (npm, nama, email, angkatan) VALUES ('1915061056', 'Lucky', 'm248r4231@dicoding.org', '2019');

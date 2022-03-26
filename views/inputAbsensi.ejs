@@ -29,14 +29,14 @@
     </div>
 
     <div class="form-absent">
-      <form action="/absensi" method="POST" name="absentForm">
+      <form action="/absensi/<%= absentId %>" method="POST" name="absentForm">
         <label for="fname">Nama Lengkap</label>
         <input type="text" id="nama" name="nama" placeholder="Your name..">
 
         <label for="npm">NPM</label>
         <input type="text" id="name" name="npm" placeholder="Your NPM..">
 
-        <label for="keterangan">Keterangan</label>
+        <label for="keterangan">Keterangan (Klik 2x bila memilih izin agar kolom input alasan muncul)</label>
         <select id="keterangan" name="keterangan">
           <option value="h">Hadir</option>
           <option value="i">Izin</option>

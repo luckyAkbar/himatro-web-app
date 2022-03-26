@@ -22,7 +22,29 @@ const uploadLimiter = rateLimit({
   },
 });
 
+const forgotPasswordRateLimitter = rateLimit({
+  windowMs: process.env.FORGOT_PASSWORD_TIME_LIMIT_MS,
+  max: process.env.MAX_FORGOT_PASSWORD_USAGE,
+  handler(req, res) {
+    res.status(429).render('errorPage', {
+      errorMessage: 'Anda sudah 3 kali menggunakan fitur ini. Coba lagi besok.',
+    });
+  },
+});
+
+const tokenUsageRateLimitter = rateLimit({
+  windowMs: process.env.FORGOT_PASSWORD_TIME_LIMIT_MS,
+  max: process.env.MAX_FORGOT_PASSWORD_USAGE,
+  handler(req, res) {
+    res.status(429).render('errorPage', {
+      errorMessage: 'Anda sudah 3 kali menggunakan fitur ini. Coba lagi besok.',
+    });
+  },
+});
+
 module.exports = {
   loginLimiter,
   uploadLimiter,
+  forgotPasswordRateLimitter,
+  tokenUsageRateLimitter,
 };

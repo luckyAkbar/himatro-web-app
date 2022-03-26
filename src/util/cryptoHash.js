@@ -1,6 +1,5 @@
 // performance result: creating and comparing take ~30ms each
 require('dotenv').config();
-const chalk = require('chalk');
 
 const bcrypt = require('bcrypt');
 
@@ -11,7 +10,6 @@ const createHash = async (target) => {
 
     return result;
   } catch (e) {
-    console.log(chalk.red(e));
     throw new Error('Failed hasing target_row');
   }
 };
@@ -21,7 +19,6 @@ const compareHash = async (plain, hashed) => {
     const result = await bcrypt.compare(plain, hashed);
     return result;
   } catch (e) {
-    console.log(chalk.red(e));
     throw new Error('Failed comparing hash');
   }
 };

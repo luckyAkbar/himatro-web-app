@@ -425,7 +425,7 @@ const ipkValidator = (ipk) => {
 
 const lingkupValidator = (lingkup) => {
   try {
-    switch(lingkup) {
+    switch (lingkup) {
       case 'seluruhAnggota':
         return true;
       case 'kpo':
@@ -443,10 +443,10 @@ const lingkupValidator = (lingkup) => {
       default:
         return false;
     }
-  } catch(e) {
+  } catch (e) {
     return false;
   }
-}
+};
 
 const multipleCommonTextValidator = (textArray) => {
   let returnValue = true;

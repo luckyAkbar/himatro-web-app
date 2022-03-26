@@ -4,8 +4,8 @@ let isAlasanInputAlreadyShow = false;
 
 const appendAlasanForm = () => {
   const alasanFormLabel = document.createElement('label');
-  alasanFormLabel.innerText = 'Alasan Izin: ';
-  alasanFormLabel.setAttribute('for', 'alasan')
+  alasanFormLabel.innerText = 'Alasan Izin: (Minimal 25 huruf)';
+  alasanFormLabel.setAttribute('for', 'alasan');
 
   const alasanFormInput = document.createElement('input');
   alasanFormInput.setAttribute('placeholder', 'Masukan alasan anda izin...');
@@ -19,9 +19,9 @@ const appendAlasanForm = () => {
 
 const removeAlasanForm = () => {
   while (alasanForm.hasChildNodes()) {
-    alasanForm.removeChild(alasanForm.firstChild)
+    alasanForm.removeChild(alasanForm.firstChild);
   }
-}
+};
 
 keteranganButton.addEventListener('click', () => {
   if (keteranganButton.value === 'i' && !isAlasanInputAlreadyShow) {

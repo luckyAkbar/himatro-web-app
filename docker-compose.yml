@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  pgdb:
+    image: postgres:14
+    volumes:
+      - /var/lib/postgresql/himatro_web_app_psql_data:/var/lib/postgresql/data
+      - ./db:/app/db
+    ports:
+      - 54320:5432
+    environment:
+      POSTGRES_DB: "himatro"
+      POSTGRES_PASSWORD: "@#56luckyGantengPenguasaDuniaWeb1603@#56"
+      POSTGRES_USER: "himatro"
+    networks:
+      - internal
+
+  himatro-web-app:
+    build: .
+    ports:
+      - 14000:10000
+    depends_on:
+      - pgdb
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge

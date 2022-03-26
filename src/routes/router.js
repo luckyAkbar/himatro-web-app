@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { getAbsentHandler } = require('../handler/getAbsentHandler');
 const { postAbsentHandler } = require('../handler/postAbsentHandler');
 const { uploadAbsentSdmHandler } = require('../handler/postUploadAbsentSdmHandler');
 const { kaderisasiSdmHandler } = require('../handler/postKaderisasiSdmHandler');
@@ -9,11 +8,31 @@ const { getBuktiAbsensiSdmHandler } = require('../handler/getBuktiAbsensiSdmHand
 const { authentication } = require('../middleware/authentication');
 const { getOnetimeSignupHandler } = require('../handler/getOnetimeSignupHandler');
 const { logoutHandler } = require('../handler/logoutHandler');
-const { featurePermissionHandler } = require('../handler/featurePermissionHandler');
 const { getAdminPage } = require('../handler/getAdminPage');
 const { getProfile } = require('../handler/getProfileHandler');
 const { updateProfile } = require('../handler/postUpdateProfileHandler');
 const { getUpdateProfile } = require('../handler/getUpdateProfile');
+const { postAbsentHandlerInputValidator } = require('../middleware/postAbsentHandlerInputValidator');
+
+const {
+  postTokenHandler,
+  getTokenHandler,
+} = require('../handler/tokenHandler');
+
+const {
+  getAbsentHandler,
+  renderAbsentResultPage
+} = require('../handler/getAbsentHandler');
+
+const {
+  getAbsentHandlerInputValidator,
+  getAbsentResultPageInputValidator
+} = require('../middleware/getAbsentHandlerInputValidator');
+
+const {
+  postFeaturePermissionHandler,
+  getFeaturePermissionHandler,
+} = require('../handler/featurePermissionHandler');
 
 const {
   getFormHandler,
@@ -28,7 +47,14 @@ const {
 const {
   loginLimiter,
   uploadLimiter,
+  forgotPasswordRateLimitter,
+  tokenUsageRateLimitter,
 } = require('../middleware/rateLimiter');
+
+const {
+  getForgotPasswordPage,
+  postForgotPasswordIssuingHandler,
+} = require('../handler/forgotPasswordHandler');
 
 const {
   getLoginPage,
@@ -50,20 +76,11 @@ router.get('/tentang', (req, res) => {
   });
 });
 
-router.get('/absensi', getAbsentHandler)
-  .post('/absensi', postAbsentHandler);
-
 router.get('/tahap-pengembangan', (req, res) => {
   res.status(404).render('errorPage', {
     errorMessage: 'Halaman sedang dalam proses pengembangan.'
   })
 })
-
-router.get('/kontak', (req, res) => {
-  res.status(404).render('errorPage', {
-    errorMessage: 'Halaman sedang dalam proses pengembangan',
-  });
-});
 
 router.get('/login', getLoginPage)
   .post('/login', loginLimiter, postLoginHandler);
@@ -83,6 +100,36 @@ router.route('/form/:formType/:formId')
   .get(getFormHandler)
   .post(postFormHandler);
 
+router.route('/forgot-password')
+  .all(forgotPasswordRateLimitter)
+  .get(getForgotPasswordPage)
+  .post(postForgotPasswordIssuingHandler);
+
+router.route('/token/:tokenType')
+  .all(tokenUsageRateLimitter)
+  .get(getTokenHandler)
+  .post(postTokenHandler);
+
+router.route('/feature/:featureId')
+  .all(authentication)
+  .post(postFeaturePermissionHandler)
+  .get(getFeaturePermissionHandler);
+
+router.get('/absensi', (req, res) => {
+  res.status(200).render('absensi', {
+    judulHalaman: 'Silahkan masukan kode absensi dari kegiatan yang akan anda hadiri',
+    action: 'none',
+    fieldName: 'absentId',
+  });
+});
+
+router.route('/absensi/:absentId')
+  .get(getAbsentHandlerInputValidator, getAbsentHandler)
+  .post(postAbsentHandlerInputValidator, postAbsentHandler);
+
+router.route('/absensi/:absentId/result')
+  .get(getAbsentResultPageInputValidator, renderAbsentResultPage);
+
 router.post('/kaderisasi/sdm', kaderisasiSdmHandler);
 
 router.get('/kaderisasi/sdm/absensi', getAbsentSdm)
@@ -93,8 +140,6 @@ router.get('/kaderisasi/sdm/absensi/bukti', getBuktiAbsensiSdmHandler);
 router.get('/images/view/:imageId', imageViewHandler);
 
 router.get('/admin', getAdminPage);
-
-router.post('/feature/:featureId', authentication, featurePermissionHandler);
 
 router.get('/one-time-signup', getOnetimeSignupHandler)
   .post('/one-time-signup', uploadLimiter, postOnetimeSignupHandler);
@@ -114,7 +159,8 @@ router.route('/db/init')
   })
 
 router.get('/newabsensi', (req, res) => {
-  res.render('newAbsensi')});
+  res.render('newAbsensi');
+});
 
 router.all('*', (req, res) => {
   res.status(404).render('errorPage', {

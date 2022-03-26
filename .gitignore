@@ -1,6 +1,8 @@
 node_modules/
 ocr-api/
 api/simple-ocr/__pycache__/
+.env
+db/data
 views/raw/
 views/test/
 api/simple-ocr/.env
@@ -12,3 +14,4 @@ key.sql
 sqlInitSDMAbsent.js
 himatro-web-app.zip
 views/.fuse_hidden0000106c00000003
+pgdb-data
